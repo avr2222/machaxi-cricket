@@ -450,7 +450,6 @@ body {
   align-items: center;
   text-align: center;
   gap: 6px;
-  border-top: 3px solid var(--hero-color, var(--accent));
   transition: box-shadow 0.15s;
 }
 .hero-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
@@ -475,6 +474,35 @@ body {
 .hero-stat-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
 .hero-empty { opacity: 0.5; }
 .hero-empty-msg { font-size: 12px; color: var(--text-muted); }
+
+/* ── Full Stats Table ── */
+.fst-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  font-size: 12px; white-space: nowrap;
+}
+.fst-table thead tr:first-child th {
+  background: var(--header-bg); color: #fff; font-weight: 600;
+  padding: 8px 10px; text-align: center; position: sticky; top: 0; z-index: 2;
+}
+.fst-table thead tr:last-child th {
+  background: #253352; color: rgba(255,255,255,0.8); font-size: 11px;
+  padding: 5px 8px; text-align: center; position: sticky; top: 33px; z-index: 2;
+}
+.fst-group-bat  { background: rgba(56,126,209,0.85) !important; }
+.fst-group-bowl { background: rgba(67,160,71,0.85)  !important; }
+.fst-group-field{ background: rgba(251,140,0,0.85)  !important; }
+.fst-group-mvp  { background: rgba(171,71,188,0.85) !important; }
+.fst-table tbody tr { border-bottom: 1px solid var(--border); }
+.fst-table tbody tr:hover { background: var(--bg-hover); }
+.fst-table tbody tr:nth-child(even) { background: #fafbfc; }
+.fst-table tbody tr:nth-child(even):hover { background: var(--bg-hover); }
+.fst-name { font-weight: 600; color: var(--text-primary); padding: 8px 10px; display: flex; align-items: center; gap: 6px; min-width: 140px; }
+.fst-name-h { text-align: left !important; min-width: 140px; }
+.fst-team { color: var(--text-secondary); padding: 8px 6px; text-align: center; }
+.fst-num  { text-align: center; padding: 8px 8px; color: var(--text-primary); }
+.fst-divider { border-left: 2px solid var(--border); }
+.fst-mvp { font-weight: 700; color: #8e24aa; }
+.table-empty { color: var(--text-muted); text-align: center; padding: 24px; }
 
 /* ── Responsive ── */
 @media (max-width: 1200px) {

@@ -902,6 +902,142 @@ function renderTeamWicketsChart() {
   charts.teamWickets = new Chart(document.getElementById('teamWicketsChart').getContext('2d'), doughnutConfig(rcb, ww, ' wickets'));
 }
 
+/* ── New batting charts ── */
+
+/* Sixes Leaderboard */
+function renderSixes(batting) {
+  destroyChart('sixes');
+  const rows = [...batting].filter(r => num(r['6s']) > 0)
+    .sort((a, b) => num(b['6s']) - num(a['6s'])).slice(0, 12);
+  if (!rows.length) { showEmptyChart('sixesChart', 'No sixes data'); return; }
+  hideEmptyChart('sixesChart');
+  charts.sixes = new Chart(document.getElementById('sixesChart').getContext('2d'),
+    hBarConfig(rows.map(r => r.name), rows.map(r => num(r['6s'])),
+      rows.map(r => barBg(r.name)), rows.map(r => barBorder(r.name))));
+}
+
+/* Balls Faced */
+function renderBallsFaced(batting) {
+  destroyChart('ballsFaced');
+  const rows = [...batting].filter(r => num(r.ball_faced) > 0)
+    .sort((a, b) => num(b.ball_faced) - num(a.ball_faced)).slice(0, 12);
+  if (!rows.length) { showEmptyChart('ballsFacedChart', 'No balls faced data'); return; }
+  hideEmptyChart('ballsFacedChart');
+  charts.ballsFaced = new Chart(document.getElementById('ballsFacedChart').getContext('2d'),
+    hBarConfig(rows.map(r => r.name), rows.map(r => num(r.ball_faced)),
+      rows.map(r => barBg(r.name)), rows.map(r => barBorder(r.name))));
+}
+
+/* ── New bowling charts ── */
+
+/* Dot Balls Bowled */
+function renderDotBalls(bowling) {
+  destroyChart('dotBalls');
+  const rows = [...bowling].filter(r => num(r.dot_balls) > 0)
+    .sort((a, b) => num(b.dot_balls) - num(a.dot_balls)).slice(0, 12);
+  if (!rows.length) { showEmptyChart('dotBallsChart', 'No dot ball data'); return; }
+  hideEmptyChart('dotBallsChart');
+  charts.dotBalls = new Chart(document.getElementById('dotBallsChart').getContext('2d'),
+    hBarConfig(rows.map(r => r.name), rows.map(r => num(r.dot_balls)),
+      rows.map(r => barBg(r.name)), rows.map(r => barBorder(r.name))));
+}
+
+/* Maiden Overs */
+function renderMaidens(bowling) {
+  destroyChart('maidens');
+  const rows = [...bowling].filter(r => num(r.maidens) > 0)
+    .sort((a, b) => num(b.maidens) - num(a.maidens)).slice(0, 12);
+  if (!rows.length) { showEmptyChart('maidensChart', 'No maiden overs data'); return; }
+  hideEmptyChart('maidensChart');
+  charts.maidens = new Chart(document.getElementById('maidensChart').getContext('2d'),
+    hBarConfig(rows.map(r => r.name), rows.map(r => num(r.maidens)),
+      rows.map(r => barBg(r.name)), rows.map(r => barBorder(r.name))));
+}
+
+/* Bowling Strike Rate (ascending = lower is better) */
+function renderBowlingSR(bowling) {
+  destroyChart('bowlingSR');
+  const rows = [...bowling].filter(r => num(r.SR) > 0 && num(r.total_wickets) >= 2)
+    .sort((a, b) => num(a.SR) - num(b.SR)).slice(0, 12);
+  if (!rows.length) { showEmptyChart('bowlingSRChart', 'No bowling SR data (min 2 wkts)'); return; }
+  hideEmptyChart('bowlingSRChart');
+  const n = rows.length;
+  const bgColors = rows.map((_, i) => {
+    const t = n > 1 ? i / (n - 1) : 0;
+    const r = Math.round(34 + t * 205), g = Math.round(197 - t * 148), b = Math.round(94 - t * 72);
+    return `rgba(${r},${g},${b},0.75)`;
+  });
+  charts.bowlingSR = new Chart(document.getElementById('bowlingSRChart').getContext('2d'),
+    hBarConfig(rows.map(r => r.name), rows.map(r => num(r.SR)), bgColors, bgColors.map(c => c.replace('0.75','1'))));
+}
+
+/* Overs Bowled */
+function renderOversBowled(bowling) {
+  destroyChart('oversBowled');
+  const rows = [...bowling].filter(r => num(r.overs) > 0)
+    .sort((a, b) => num(b.overs) - num(a.overs)).slice(0, 12);
+  if (!rows.length) { showEmptyChart('oversBowledChart', 'No overs data'); return; }
+  hideEmptyChart('oversBowledChart');
+  charts.oversBowled = new Chart(document.getElementById('oversBowledChart').getContext('2d'),
+    hBarConfig(rows.map(r => r.name), rows.map(r => num(r.overs)),
+      rows.map(r => barBg(r.name)), rows.map(r => barBorder(r.name))));
+}
+
+/* ── New fielding charts ── */
+
+/* Dismissal Breakdown stacked bar */
+function renderDismissalBreakdown(fielding) {
+  destroyChart('dismissalBreakdown');
+  const rows = [...fielding].filter(r => num(r.total_dismissal) > 0)
+    .sort((a, b) => num(b.total_dismissal) - num(a.total_dismissal)).slice(0, 12);
+  if (!rows.length) { showEmptyChart('dismissalBreakdownChart', 'No fielding data'); return; }
+  hideEmptyChart('dismissalBreakdownChart');
+  const labels = rows.map(r => r.name);
+  const ctx = document.getElementById('dismissalBreakdownChart').getContext('2d');
+  charts.dismissalBreakdown = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Catches',   data: rows.map(r => num(r.catches)),  backgroundColor: 'rgba(56,126,209,0.75)' },
+        { label: 'Run Outs',  data: rows.map(r => num(r.run_outs)), backgroundColor: 'rgba(255,167,38,0.75)' },
+        { label: 'Stumpings', data: rows.map(r => num(r.stumpings)),backgroundColor: 'rgba(102,187,106,0.75)' },
+        { label: 'C&B',       data: rows.map(r => num(r.caught_and_bowl)), backgroundColor: 'rgba(171,71,188,0.75)' },
+      ]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+      scales: {
+        x: { stacked: true, grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } },
+        y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+/* Fielding contribution doughnut */
+function renderFieldingShare(fielding) {
+  destroyChart('fieldingShare');
+  const rows = [...fielding].filter(r => num(r.total_dismissal) > 0)
+    .sort((a, b) => num(b.total_dismissal) - num(a.total_dismissal)).slice(0, 8);
+  if (!rows.length) { showEmptyChart('fieldingShareChart', 'No fielding data'); return; }
+  hideEmptyChart('fieldingShareChart');
+  const palette = ['#387ed1','#e53935','#43a047','#fb8c00','#8e24aa','#00acc1','#f4511e','#6d4c41'];
+  const ctx = document.getElementById('fieldingShareChart').getContext('2d');
+  charts.fieldingShare = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: rows.map(r => r.name),
+      datasets: [{ data: rows.map(r => num(r.total_dismissal)), backgroundColor: palette, borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+    }
+  });
+}
+
 /* Team MVP doughnut */
 function renderTeamMvpChart() {
   destroyChart('teamMvp');
@@ -919,36 +1055,73 @@ function renderTopHeroes(batting, bowling, fielding, mvp) {
   const grid = document.getElementById('topHeroesGrid');
   if (!grid) return;
 
-  const topBat = [...batting].filter(r => num(r.total_runs) > 0)
-    .sort((a, b) => num(b.total_runs) - num(a.total_runs))[0];
-  const topBowl = [...bowling].filter(r => num(r.total_wickets) > 0)
-    .sort((a, b) => num(b.total_wickets) - num(a.total_wickets))[0];
-  const topField = [...fielding].filter(r => num(r.total_dismissal) > 0)
-    .sort((a, b) => num(b.total_dismissal) - num(a.total_dismissal))[0];
-  const topMvp = [...mvp].filter(r => num(r.Total) > 0)
-    .sort((a, b) => num(b.Total) - num(a.Total))[0];
+  /* Helper: get top value and ALL players tied at that value */
+  function topTied(arr, valFn, filterFn) {
+    const filtered = arr.filter(filterFn || (() => true));
+    if (!filtered.length) return { val: null, players: [] };
+    const sorted = [...filtered].sort((a,b) => valFn(b) - valFn(a));
+    const best = valFn(sorted[0]);
+    return { val: best, players: sorted.filter(r => valFn(r) === best) };
+  }
+  /* Helper: for ascending (lower = better) */
+  function topTiedAsc(arr, valFn, filterFn) {
+    const filtered = arr.filter(filterFn || (() => true));
+    if (!filtered.length) return { val: null, players: [] };
+    const sorted = [...filtered].sort((a,b) => valFn(a) - valFn(b));
+    const best = valFn(sorted[0]);
+    return { val: best, players: sorted.filter(r => valFn(r) === best) };
+  }
 
-  function heroCard(icon, label, player, team, stat, statLabel) {
-    if (!player) return `<div class="hero-card hero-empty"><div class="hero-icon">${icon}</div><div class="hero-label">${label}</div><div class="hero-empty-msg">No data</div></div>`;
-    const isRCB = (team || '').includes('RCB');
-    const color = isRCB ? 'var(--rcb)' : 'var(--ww)';
-    const initials = player.split(' ').map(w => w[0] || '').join('').slice(0, 2).toUpperCase();
+  const tBat      = topTied(batting,  r => num(r.total_runs),      r => num(r.total_runs) > 0);
+  const tBowl     = topTied(bowling,  r => num(r.total_wickets),   r => num(r.total_wickets) > 0);
+  const tField    = topTied(fielding, r => num(r.total_dismissal), r => num(r.total_dismissal) > 0);
+  const tMvp      = topTied(mvp,      r => num(r.Total),           r => num(r.Total) > 0);
+  const tSixes    = topTied(batting,  r => num(r['6s']),           r => num(r['6s']) > 0);
+  const tBalls    = topTied(batting,  r => num(r.ball_faced),      r => num(r.ball_faced) > 0);
+  const tDots     = topTied(bowling,  r => num(r.dot_balls),       r => num(r.dot_balls) > 0);
+  const tMaiden   = topTied(bowling,  r => num(r.maidens),         r => num(r.maidens) > 0);
+  const tBowlSR   = topTiedAsc(bowling, r => num(r.SR),           r => num(r.SR) > 0 && num(r.total_wickets) >= 2);
+  const tOvers    = topTied(bowling,  r => num(r.overs),           r => num(r.overs) > 0);
+  const tCatches  = topTied(fielding, r => num(r.catches),         r => num(r.catches) > 0);
+  const tRunOut   = topTied(fielding, r => num(r.run_outs),        r => num(r.run_outs) > 0);
+
+  function heroCard(icon, label, tied, nameKey, teamKey, statLabel) {
+    if (!tied.players.length) return `<div class="hero-card hero-empty"><div class="hero-icon">${icon}</div><div class="hero-label">${label}</div><div class="hero-empty-msg">No data</div></div>`;
+    const names = tied.players.map(r => (nameKey ? r[nameKey] : r.name) || '').filter(Boolean);
+    const team  = tied.players[0][teamKey] || '';
+    const isRCB = team.includes('RCB');
+    const color = tied.players.length > 1 ? '#7b5ea7' : (isRCB ? 'var(--rcb)' : 'var(--ww)');
+    const initials = names.map(n => n.split(' ').map(w => w[0]||'').join('').slice(0,2).toUpperCase()).join('/').slice(0,5);
+    const displayTeam = tied.players.length > 1 ? tied.players.map(r => (r[teamKey]||'').includes('WW')?'WW':'RCB').join(' & ') : (team.includes('WW')?'WW':'RCB');
+    const statVal = tied.val !== null ? (Number.isInteger(tied.val) ? tied.val : parseFloat(tied.val).toFixed(tied.val < 10 ? 2 : 1)) : '—';
     return `
       <div class="hero-card" style="--hero-color:${color}">
         <div class="hero-icon">${icon}</div>
         <div class="hero-label">${label}</div>
         <div class="hero-avatar" style="background:${color}">${initials}</div>
-        <div class="hero-name">${esc(player)}</div>
-        <div class="hero-team">${esc(team || '')}</div>
-        <div class="hero-stat">${stat} <span class="hero-stat-label">${statLabel}</span></div>
+        <div class="hero-name">${names.map(esc).join(' &amp; ')}</div>
+        <div class="hero-team">${esc(displayTeam)}</div>
+        <div class="hero-stat">${statVal} <span class="hero-stat-label">${statLabel}</span></div>
       </div>`;
   }
 
   grid.innerHTML =
-    heroCard('🏏', 'Top Batter',   topBat?.name,              topBat?.team_name,   num(topBat?.total_runs).toLocaleString(),       'runs') +
-    heroCard('🎯', 'Top Bowler',   topBowl?.name,             topBowl?.team_name,  num(topBowl?.total_wickets),                    'wickets') +
-    heroCard('🧤', 'Top Fielder',  topField?.name,            topField?.team_name, num(topField?.total_dismissal),                 'dismissals') +
-    heroCard('🏆', 'Season MVP',   topMvp?.['Player Name'],   topMvp?.['Team Name'], num(topMvp?.Total).toFixed(2),                'pts');
+    /* Row 1 — Main heroes */
+    heroCard('🏏', 'Top Batter',       tBat,     null,          'team_name',   'runs') +
+    heroCard('🎯', 'Top Bowler',       tBowl,    null,          'team_name',   'wickets') +
+    heroCard('🧤', 'Top Fielder',      tField,   null,          'team_name',   'dismissals') +
+    heroCard('🏆', 'Season MVP',       tMvp,     'Player Name', 'Team Name',   'pts') +
+    /* Row 2 — Batting specials */
+    heroCard('💥', 'Six Machine',      tSixes,   null,          'team_name',   'sixes') +
+    heroCard('⏱️', 'Most Balls Faced', tBalls,   null,          'team_name',   'balls') +
+    /* Row 3 — Bowling specials */
+    heroCard('🔒', 'Dot Ball King',    tDots,    null,          'team_name',   'dots') +
+    heroCard('🎖️', 'Maiden Master',   tMaiden,  null,          'team_name',   'maidens') +
+    heroCard('⚡', 'Best Bowl SR',     tBowlSR,  null,          'team_name',   'SR') +
+    heroCard('🏃', 'Workhorse',        tOvers,   null,          'team_name',   'overs') +
+    /* Row 4 — Fielding specials */
+    heroCard('🙌', 'Catch King',       tCatches, null,          'team_name',   'catches') +
+    heroCard('🚀', 'Run Out Hero',     tRunOut,  null,          'team_name',   'run outs');
 }
 
 function renderDashboard() {
@@ -964,17 +1137,120 @@ function renderDashboard() {
   renderStrikeRate(batting);
   renderBattingAvg(batting);
   renderBoundaries(batting);
+  renderSixes(batting);
+  renderBallsFaced(batting);
 
   renderWickets(bowling);
   renderEconomy(bowling);
+  renderDotBalls(bowling);
+  renderMaidens(bowling);
+  renderBowlingSR(bowling);
+  renderOversBowled(bowling);
 
   renderFielding(fielding);
   renderMvp(mvp);
+  renderDismissalBreakdown(fielding);
+  renderFieldingShare(fielding);
 
   /* Team comparison always uses the full unfiltered dataset */
   renderTeamRunsChart();
   renderTeamWicketsChart();
   renderTeamMvpChart();
+
+  renderFullStatsTable(batting, bowling, fielding, mvp);
+}
+
+/* ── Consolidated Full Player Stats Table ── */
+function renderFullStatsTable(batting, bowling, fielding, mvp) {
+  const wrap = document.getElementById('fullStatsTableWrap');
+  if (!wrap) return;
+
+  /* Build a map of all unique player names */
+  const playerMap = {};
+
+  batting.forEach(r => {
+    const key = r.name?.trim(); if (!key) return;
+    if (!playerMap[key]) playerMap[key] = { name: key, team: r.team_name || '' };
+    playerMap[key].bat = r;
+  });
+  bowling.forEach(r => {
+    const key = r.name?.trim(); if (!key) return;
+    if (!playerMap[key]) playerMap[key] = { name: key, team: r.team_name || '' };
+    playerMap[key].bowl = r;
+  });
+  fielding.forEach(r => {
+    const key = r.name?.trim(); if (!key) return;
+    if (!playerMap[key]) playerMap[key] = { name: key, team: r.team_name || '' };
+    playerMap[key].field = r;
+  });
+  mvp.forEach(r => {
+    const key = r['Player Name']?.trim().toLowerCase(); if (!key) return;
+    const match = Object.keys(playerMap).find(k => k.toLowerCase() === key);
+    if (match) playerMap[match].mvp = r;
+  });
+
+  const players = Object.values(playerMap).sort((a, b) => {
+    const aRuns = num(a.bat?.total_runs) || 0;
+    const bRuns = num(b.bat?.total_runs) || 0;
+    return bRuns - aRuns;
+  });
+
+  if (!players.length) { wrap.innerHTML = '<p class="table-empty">No data for this selection.</p>'; return; }
+
+  const teamDot = t => `<span class="pt-team-dot" style="background:${t.includes('WW') ? 'var(--ww)' : 'var(--rcb)'}"></span>`;
+  const d = v => (v !== undefined && v !== null && v !== '' && v !== '-') ? v : '—';
+  const n = (v, dec) => { const x = num(v); return x ? (dec !== undefined ? x.toFixed(dec) : x) : '—'; };
+
+  const rows = players.map(p => {
+    const b = p.bat || {}, bw = p.bowl || {}, f = p.field || {}, m = p.mvp || {};
+    const teamShort = p.team.includes('WW') ? 'WW' : p.team.includes('RCB') ? 'RCB' : p.team;
+    return `<tr>
+      <td class="fst-name">${teamDot(p.team)}${esc(p.name)}</td>
+      <td class="fst-team">${esc(teamShort)}</td>
+      <td class="fst-num">${n(b.total_match || bw.total_match || f.total_match)}</td>
+      <td class="fst-num">${n(b.total_runs)}</td>
+      <td class="fst-num">${d(b.highest_run)}</td>
+      <td class="fst-num">${n(b.average, 2)}</td>
+      <td class="fst-num">${n(b.strike_rate, 1)}</td>
+      <td class="fst-num">${n(b.ball_faced)}</td>
+      <td class="fst-num">${n(b['4s'])}</td>
+      <td class="fst-num">${n(b['6s'])}</td>
+      <td class="fst-num">${n(b['50s'])}</td>
+      <td class="fst-num fst-divider">${n(bw.total_wickets)}</td>
+      <td class="fst-num">${d(bw.overs)}</td>
+      <td class="fst-num">${n(bw.economy, 2)}</td>
+      <td class="fst-num">${n(bw.SR, 1)}</td>
+      <td class="fst-num">${n(bw.maidens)}</td>
+      <td class="fst-num">${n(bw.dot_balls)}</td>
+      <td class="fst-num fst-divider">${n(f.catches)}</td>
+      <td class="fst-num">${n(f.run_outs)}</td>
+      <td class="fst-num">${n(f.stumpings)}</td>
+      <td class="fst-num">${n(f.caught_and_bowl)}</td>
+      <td class="fst-num">${n(f.total_dismissal)}</td>
+      <td class="fst-num fst-divider fst-mvp">${m.Total ? num(m.Total).toFixed(2) : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <table class="fst-table">
+      <thead>
+        <tr>
+          <th rowspan="2" class="fst-name-h">Player</th>
+          <th rowspan="2">Team</th>
+          <th rowspan="2">M</th>
+          <th colspan="8" class="fst-group-bat">Batting</th>
+          <th colspan="6" class="fst-group-bowl">Bowling</th>
+          <th colspan="5" class="fst-group-field">Fielding</th>
+          <th rowspan="2" class="fst-group-mvp">MVP</th>
+        </tr>
+        <tr>
+          <th>Runs</th><th>HS</th><th>Avg</th><th>SR</th><th>Balls</th><th>4s</th><th>6s</th><th>50s</th>
+          <th>Wkts</th><th>Ov</th><th>Econ</th><th>BSR</th><th>Mdn</th><th>Dots</th>
+          <th>Ct</th><th>RO</th><th>St</th><th>C&B</th><th>Dis</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
 }
 
 

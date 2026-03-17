@@ -185,6 +185,20 @@
           </div>
         </div>
       </div>
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Sixes Leaderboard 💥</div>
+          <div class="chart-wrap">
+            <canvas id="sixesChart" role="img" aria-label="Sixes leaderboard chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Balls Faced <span class="chart-note">(top contributors)</span></div>
+          <div class="chart-wrap">
+            <canvas id="ballsFacedChart" role="img" aria-label="Balls faced chart"></canvas>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Bowling Charts -->
@@ -206,6 +220,34 @@
           </div>
         </div>
       </div>
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Dot Balls Bowled 🔒</div>
+          <div class="chart-wrap">
+            <canvas id="dotBallsChart" role="img" aria-label="Dot balls bowled chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Maiden Overs 🎯</div>
+          <div class="chart-wrap">
+            <canvas id="maidensChart" role="img" aria-label="Maiden overs chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Bowling Strike Rate <span class="chart-note">(lower is better)</span></div>
+          <div class="chart-wrap">
+            <canvas id="bowlingSRChart" role="img" aria-label="Bowling strike rate chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Overs Bowled</div>
+          <div class="chart-wrap">
+            <canvas id="oversBowledChart" role="img" aria-label="Overs bowled chart"></canvas>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Fielding & MVP -->
@@ -224,6 +266,20 @@
           <div class="chart-title">MVP Leaderboard</div>
           <div class="chart-wrap">
             <canvas id="mvpChart" role="img" aria-label="MVP leaderboard chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Dismissal Breakdown <span class="chart-note">(catches · run outs · stumpings)</span></div>
+          <div class="chart-wrap">
+            <canvas id="dismissalBreakdownChart" role="img" aria-label="Dismissal breakdown chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Fielding Contribution % per Player</div>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="fieldingShareChart" role="img" aria-label="Fielding share chart"></canvas>
           </div>
         </div>
       </div>
@@ -267,6 +323,16 @@
             <canvas id="teamMvpChart" role="img" aria-label="MVP score share between teams doughnut chart"></canvas>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Full Player Stats Table -->
+    <section class="section" aria-labelledby="fullstats-heading">
+      <div class="section-header">
+        <h2 id="fullstats-heading">📋 Full Player Statistics</h2>
+      </div>
+      <div class="table-scroll-wrap">
+        <div id="fullStatsTableWrap"></div>
       </div>
     </section>
 
