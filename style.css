@@ -379,7 +379,9 @@ body {
 }
 .pt-badge-w { background: var(--green-lt); color: var(--green); }
 .pt-badge-l { background: var(--red-lt);   color: var(--red); }
-.pt-leader-row { background: rgba(56,126,209,0.04); }
+.pt-leader-row { background: rgba(56,126,209,0.07); border-left: 3px solid var(--accent); }
+.pt-leader-cup { font-size: 13px; margin-left: 6px; vertical-align: middle; }
+.pt-leader-row .pt-team-name { font-weight: 700; color: var(--accent); }
 
 /* ── Charts ── */
 .charts-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -418,6 +420,62 @@ body {
   background: var(--bg-card);
 }
 
+/* ── Standings Top (above filters) ── */
+.standings-top {
+  background: var(--bg-page);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 0 0;
+}
+.standings-top-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 20px;
+}
+.standings-top .section-header { margin-bottom: 12px; }
+.standings-top .chart-card { background: var(--bg-card); }
+
+/* ── Top Heroes ── */
+.heroes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.hero-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  border-top: 3px solid var(--hero-color, var(--accent));
+  transition: box-shadow 0.15s;
+}
+.hero-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.hero-icon { font-size: 22px; line-height: 1; }
+.hero-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-secondary);
+}
+.hero-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: #fff;
+  margin: 4px 0;
+}
+.hero-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.hero-team { font-size: 11px; color: var(--text-secondary); }
+.hero-stat {
+  margin-top: 6px;
+  font-size: 20px; font-weight: 700;
+  color: var(--hero-color, var(--accent));
+}
+.hero-stat-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
+.hero-empty { opacity: 0.5; }
+.hero-empty-msg { font-size: 12px; color: var(--text-muted); }
+
 /* ── Responsive ── */
 @media (max-width: 1200px) {
   .kpi-grid { grid-template-columns: repeat(4, minmax(120px, 1fr)); }
@@ -428,6 +486,7 @@ body {
   .kpi-grid { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 700px) {
+  .heroes-grid { grid-template-columns: repeat(2, 1fr); }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .header-title h1 { font-size: 13px; }
   .header-subtitle, .header-divider { display: none; }

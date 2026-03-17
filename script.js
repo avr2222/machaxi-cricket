@@ -710,6 +710,7 @@ function renderPointsTable() {
       `<span class="pt-badge pt-badge-${res.toLowerCase()}">${res}</span>`
     ).join('');
     const leaderCls = i === 0 ? ' pt-leader-row' : '';
+    const leaderCup = i === 0 ? ' <span class="pt-leader-cup">🏆</span>' : '';
 
     return `
       <tr class="${leaderCls}">
@@ -718,7 +719,7 @@ function renderPointsTable() {
           <div class="pt-team">
             <div class="pt-team-dot" style="background:${teamColor(r.team)}"></div>
             <div>
-              <div class="pt-team-name">${esc(r.team)}</div>
+              <div class="pt-team-name">${esc(r.team)}${leaderCup}</div>
             </div>
           </div>
         </td>
@@ -914,6 +915,42 @@ function renderTeamMvpChart() {
    Main render — called on every filter change
    ============================================================ */
 
+function renderTopHeroes(batting, bowling, fielding, mvp) {
+  const grid = document.getElementById('topHeroesGrid');
+  if (!grid) return;
+
+  const topBat = [...batting].filter(r => num(r.total_runs) > 0)
+    .sort((a, b) => num(b.total_runs) - num(a.total_runs))[0];
+  const topBowl = [...bowling].filter(r => num(r.total_wickets) > 0)
+    .sort((a, b) => num(b.total_wickets) - num(a.total_wickets))[0];
+  const topField = [...fielding].filter(r => num(r.total_dismissal) > 0)
+    .sort((a, b) => num(b.total_dismissal) - num(a.total_dismissal))[0];
+  const topMvp = [...mvp].filter(r => num(r.Total) > 0)
+    .sort((a, b) => num(b.Total) - num(a.Total))[0];
+
+  function heroCard(icon, label, player, team, stat, statLabel) {
+    if (!player) return `<div class="hero-card hero-empty"><div class="hero-icon">${icon}</div><div class="hero-label">${label}</div><div class="hero-empty-msg">No data</div></div>`;
+    const isRCB = (team || '').includes('RCB');
+    const color = isRCB ? 'var(--rcb)' : 'var(--ww)';
+    const initials = player.split(' ').map(w => w[0] || '').join('').slice(0, 2).toUpperCase();
+    return `
+      <div class="hero-card" style="--hero-color:${color}">
+        <div class="hero-icon">${icon}</div>
+        <div class="hero-label">${label}</div>
+        <div class="hero-avatar" style="background:${color}">${initials}</div>
+        <div class="hero-name">${esc(player)}</div>
+        <div class="hero-team">${esc(team || '')}</div>
+        <div class="hero-stat">${stat} <span class="hero-stat-label">${statLabel}</span></div>
+      </div>`;
+  }
+
+  grid.innerHTML =
+    heroCard('🏏', 'Top Batter',   topBat?.name,              topBat?.team_name,   num(topBat?.total_runs).toLocaleString(),       'runs') +
+    heroCard('🎯', 'Top Bowler',   topBowl?.name,             topBowl?.team_name,  num(topBowl?.total_wickets),                    'wickets') +
+    heroCard('🧤', 'Top Fielder',  topField?.name,            topField?.team_name, num(topField?.total_dismissal),                 'dismissals') +
+    heroCard('🏆', 'Season MVP',   topMvp?.['Player Name'],   topMvp?.['Team Name'], num(topMvp?.Total).toFixed(2),                'pts');
+}
+
 function renderDashboard() {
   const batting  = filterBatting();
   const bowling  = filterBowling();
@@ -921,9 +958,8 @@ function renderDashboard() {
   const mvp      = filterMvp();
 
   renderKPIs(batting, bowling, fielding, mvp);
+  renderTopHeroes(batting, bowling, fielding, mvp);
   renderPlayerDetail(state.player);
-  renderTopPerformer(state.mvp);  /* always use full season data, never filtered */
-
   renderTopBatters(batting);
   renderStrikeRate(batting);
   renderBattingAvg(batting);

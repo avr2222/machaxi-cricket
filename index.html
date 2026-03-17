@@ -43,6 +43,18 @@
     The <code>file://</code> protocol blocks fetch requests.
   </div>
 
+  <!-- League Standings — above filters -->
+  <div class="standings-top">
+    <div class="standings-top-inner">
+      <div class="section-header">
+        <h2>League Standings — Season 2</h2>
+      </div>
+      <div class="table-scroll-wrap">
+        <div id="pointsTableWrap"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Filters -->
   <nav class="filters-section" aria-label="Dashboard filters">
     <div class="filters-container">
@@ -66,14 +78,6 @@
 
   <!-- Main Content -->
   <main class="main-content" id="main">
-
-    <!-- Top Performer Banner -->
-    <div id="topPerformerBanner" class="top-performer-banner hidden" aria-live="polite">
-      <div class="tp-label">⭐ Season MVP</div>
-      <div class="tp-name" id="tp-name">—</div>
-      <div class="tp-team" id="tp-team"></div>
-      <div class="tp-stats" id="tp-stats"></div>
-    </div>
 
     <!-- KPI Cards -->
     <section class="section" aria-labelledby="kpi-heading">
@@ -132,29 +136,12 @@
       </div>
     </section>
 
-    <!-- League Standings -->
-    <section class="section" aria-labelledby="standings-heading">
+    <!-- Top Heroes -->
+    <section class="section" aria-labelledby="heroes-heading">
       <div class="section-header">
-        <h2 id="standings-heading">League Standings — Season 2</h2>
+        <h2 id="heroes-heading">🏅 Top Heroes</h2>
       </div>
-      <!-- FIX: scroll wrapper prevents overflow on mobile -->
-      <div class="table-scroll-wrap">
-        <div id="pointsTableWrap"></div>
-      </div>
-      <div class="charts-grid-2 mt-16">
-        <div class="chart-card">
-          <div class="chart-title">Win / Loss Record</div>
-          <div class="chart-wrap chart-wrap-sm">
-            <canvas id="winLossChart" role="img" aria-label="Win and loss record bar chart"></canvas>
-          </div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">Net Run Rate (NRR)</div>
-          <div class="chart-wrap chart-wrap-sm">
-            <canvas id="nrrChart" role="img" aria-label="Net run rate comparison chart"></canvas>
-          </div>
-        </div>
-      </div>
+      <div id="topHeroesGrid" class="heroes-grid"></div>
     </section>
 
     <!-- Player Profile (shown only when a player is selected) -->
@@ -247,7 +234,21 @@
       <div class="section-header">
         <h2 id="team-heading">RCB vs WW — Team Comparison</h2>
       </div>
-      <div class="charts-grid-3">
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Win / Loss Record</div>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="winLossChart" role="img" aria-label="Win and loss record bar chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Net Run Rate (NRR)</div>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="nrrChart" role="img" aria-label="Net run rate comparison chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="charts-grid-3 mt-16">
         <div class="chart-card">
           <div class="chart-title">Runs Share</div>
           <div class="chart-wrap chart-wrap-sm">
