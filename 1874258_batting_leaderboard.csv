@@ -1,0 +1,37 @@
+player_id,name,team_id,team_name,total_match,innings,total_runs,highest_run,average,not_out,strike_rate,ball_faced,batting_hand,4s,6s,50s,100s
+43156255,Arun,12519660,Royal Cricket Blasters (RCB),12,11,145,57,14.50,1,128.32,113,-,9,13,1,0
+28100363,Rk,12519693,Weekend Warriors (WW),12,12,131,31,16.38,4,89.73,146,RHB,3,10,0,0
+36284615,Vinay Ks,12519660,Royal Cricket Blasters (RCB),12,11,119,40,13.22,2,98.35,121,RHB,3,9,0,0
+36285742,Manjunath,12519660,Royal Cricket Blasters (RCB),9,9,92,34,23.00,5,70.23,131,RHB,3,5,0,0
+23317861,Seenu,12519693,Weekend Warriors (WW),6,5,70,30,14.00,0,127.27,55,RHB,4,6,0,0
+22711554,Pavan,12519660,Royal Cricket Blasters (RCB),6,6,65,37,16.25,2,104.84,62,RHB,2,6,0,0
+5945797,Venkat A,12519693,Weekend Warriors (WW),12,8,64,23,10.67,2,90.14,71,RHB,1,2,0,0
+7577506,Leela Anna,12519660,Royal Cricket Blasters (RCB),9,8,55,24,7.86,1,82.09,67,RHB,2,4,0,0
+32252331,Rajkumar Muddasu,12519693,Weekend Warriors (WW),9,7,46,15,11.50,3,88.46,52,RHB,0,1,0,0
+42607170,Murali Cn Cricket,12519660,Royal Cricket Blasters (RCB),12,11,44,9,5.50,3,64.71,68,-,1,2,0,0
+24500548,Mahesh,12519693,Weekend Warriors (WW),9,9,42,11,7.00,3,56.76,74,RHB,2,0,0,0
+24920096,Jithin Tj,12519660,Royal Cricket Blasters (RCB),9,7,41,19,8.20,2,91.11,45,RHB,3,2,0,0
+43374562,Subbu,12519693,Weekend Warriors (WW),12,11,41,12,4.10,1,62.12,66,RHB,2,0,0,0
+15990447,Srikanta Maddara,12519693,Weekend Warriors (WW),12,10,35,12,5.00,3,52.24,67,RHB,1,2,0,0
+36285741,Vinod Reddy,12519693,Weekend Warriors (WW),3,3,30,14,-,3,130.43,23,RHB,1,2,0,0
+43156222,Girish Cricket,12519693,Weekend Warriors (WW),9,8,30,11,4.29,1,68.18,44,-,0,1,0,0
+35651267,Ashok Adapala,12519693,Weekend Warriors (WW),6,5,28,12,9.33,2,51.85,54,RHB,0,0,0,0
+42607076,Sudheer Nidiginti,12519693,Weekend Warriors (WW),9,5,26,10,8.67,2,83.87,31,-,1,1,0,0
+48022578,Vishwanath Cricket,12519660,Royal Cricket Blasters (RCB),3,2,22,19,22.00,1,95.65,23,-,1,0,0,0
+42545298,Arun 102raaga,12519660,Royal Cricket Blasters (RCB),6,3,19,18,9.50,1,48.72,39,-,1,1,0,0
+34607385,Gopi,12519660,Royal Cricket Blasters (RCB),9,4,19,13,6.33,1,61.29,31,-,0,2,0,0
+45730696,Firoz,12519693,Weekend Warriors (WW),6,5,16,9,3.20,0,69.57,23,-,1,0,0,0
+36566491,Sudhir Midtown,12519693,Weekend Warriors (WW),6,6,16,10,5.33,3,69.57,23,RHB,0,1,0,0
+23317827,Balaji Balaraju,12519693,Weekend Warriors (WW),6,3,15,13,5.00,0,83.33,18,RHB,0,1,0,0
+23317841,Lokesh Kumar Yc,12519693,Weekend Warriors (WW),12,6,13,10,6.50,4,81.25,16,RHB,0,1,0,0
+27687690,Mahesh,12519660,Royal Cricket Blasters (RCB),6,4,9,4,2.25,0,45.00,20,RHB,0,0,0,0
+36266644,Karthik Reddy,12519693,Weekend Warriors (WW),3,2,8,8,4.00,0,61.54,13,RHB,0,0,0,0
+36285740,Pabitra,12519693,Weekend Warriors (WW),12,4,7,4,2.33,1,43.75,16,RHB,0,0,0,0
+39978351,Mithun,12519660,Royal Cricket Blasters (RCB),3,2,6,6,3.00,0,54.55,11,-,0,0,0,0
+37092656,Vijay 208,12519660,Royal Cricket Blasters (RCB),6,5,6,3,1.50,1,42.86,14,RHB,0,0,0,0
+46521634,Satyam Goyal,12519660,Royal Cricket Blasters (RCB),6,3,5,3,1.67,0,50.00,10,-,0,0,0,0
+32475183,Shaik Azeed,12519660,Royal Cricket Blasters (RCB),6,2,3,2,1.50,0,37.50,8,RHB,0,0,0,0
+36272025,Srinivas Vemulapalli,12519660,Royal Cricket Blasters (RCB),12,4,3,3,1.00,1,30.00,10,RHB,0,0,0,0
+23317824,Ashok,12519693,Weekend Warriors (WW),6,5,3,2,0.60,0,16.67,18,RHB,0,0,0,0
+48699330,Kranthi 202 Midtown Raaga,12519660,Royal Cricket Blasters (RCB),3,1,1,1,1.00,0,50.00,2,-,0,0,0,0
+36285780,Deepak Kumar,12519660,Royal Cricket Blasters (RCB),6,2,0,0,-,1,0.00,1,RHB,0,0,0,0

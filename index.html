@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏏 Machaxi Box Cricket — Season 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+  <!-- Loading Spinner -->
+  <div id="spinner" class="spinner-overlay" role="status" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="spinner-text">Loading cricket data…</p>
+  </div>
+
+  <!-- Header -->
+  <header class="header" role="banner">
+    <div class="header-content">
+      <div class="header-title">
+        <span class="header-logo" aria-hidden="true">🏏</span>
+        <h1>Machaxi Box Cricket — Season 2</h1>
+        <div class="header-divider" aria-hidden="true"></div>
+        <p class="header-subtitle">Analytics Dashboard · RCB vs WW</p>
+      </div>
+      <div class="team-badges" aria-label="Competing teams">
+        <span class="team-badge rcb">RCB</span>
+        <span class="vs-text" aria-hidden="true">vs</span>
+        <span class="team-badge ww">WW</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Server Warning Banner -->
+  <div id="serverWarning" class="server-warning hidden" role="alert">
+    ⚠️ <strong>CSV loading requires a local web server.</strong>
+    Run <code>python -m http.server 8080</code> in this folder, use VS Code Live Server, or host on GitHub Pages.
+    The <code>file://</code> protocol blocks fetch requests.
+  </div>
+
+  <!-- Filters -->
+  <nav class="filters-section" aria-label="Dashboard filters">
+    <div class="filters-container">
+      <div class="filter-group">
+        <label for="teamFilter">Team</label>
+        <select id="teamFilter" aria-label="Filter by team">
+          <option value="ALL">All Teams</option>
+          <option value="Royal Cricket Blasters (RCB)">Royal Cricket Blasters (RCB)</option>
+          <option value="Weekend Warriors (WW)">Weekend Warriors (WW)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="playerFilter">Player</label>
+        <select id="playerFilter" aria-label="Filter by player">
+          <option value="ALL">All Players</option>
+        </select>
+      </div>
+      <button id="resetBtn" class="reset-btn" aria-label="Reset all filters">↺ Reset</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content" id="main">
+
+    <!-- Top Performer Banner -->
+    <div id="topPerformerBanner" class="top-performer-banner hidden" aria-live="polite">
+      <div class="tp-label">⭐ Season MVP</div>
+      <div class="tp-name" id="tp-name">—</div>
+      <div class="tp-team" id="tp-team"></div>
+      <div class="tp-stats" id="tp-stats"></div>
+    </div>
+
+    <!-- KPI Cards -->
+    <section class="section" aria-labelledby="kpi-heading">
+      <div class="section-header">
+        <h2 id="kpi-heading">Key Statistics</h2>
+      </div>
+      <div class="kpi-grid" role="list">
+        <div class="kpi-card" role="listitem">
+          <div class="kpi-icon" aria-hidden="true">🏏</div>
+          <div class="kpi-label">Total Runs</div>
+          <div class="kpi-value" id="val-runs">—</div>
+          <div class="kpi-sub" id="sub-runs"></div>
+        </div>
+        <div class="kpi-card" role="listitem">
+          <div class="kpi-icon" aria-hidden="true">⚡</div>
+          <div class="kpi-label">Highest Score</div>
+          <div class="kpi-value" id="val-highest">—</div>
+          <div class="kpi-sub" id="sub-highest"></div>
+        </div>
+        <div class="kpi-card" role="listitem">
+          <div class="kpi-icon" aria-hidden="true">📊</div>
+          <div class="kpi-label">Best Average</div>
+          <div class="kpi-value" id="val-avg">—</div>
+          <div class="kpi-sub" id="sub-avg"></div>
+        </div>
+        <div class="kpi-card" role="listitem">
+          <div class="kpi-icon" aria-hidden="true">💥</div>
+          <div class="kpi-label">Best Strike Rate</div>
+          <div class="kpi-value" id="val-sr">—</div>
+          <div class="kpi-sub" id="sub-sr"></div>
+        </div>
+        <div class="kpi-card" role="listitem">
+          <div class="kpi-icon" aria-hidden="true">🎯</div>
+          <div class="kpi-label">Total Wickets</div>
+          <div class="kpi-value" id="val-wickets">—</div>
+          <div class="kpi-sub" id="sub-wickets"></div>
+        </div>
+        <div class="kpi-card" role="listitem">
+          <div class="kpi-icon" aria-hidden="true">🔥</div>
+          <div class="kpi-label">Best Economy</div>
+          <div class="kpi-value" id="val-economy">—</div>
+          <div class="kpi-sub" id="sub-economy"></div>
+        </div>
+        <div class="kpi-card" role="listitem">
+          <div class="kpi-icon" aria-hidden="true">🧤</div>
+          <div class="kpi-label">Dismissals</div>
+          <div class="kpi-value" id="val-dismissals">—</div>
+          <div class="kpi-sub" id="sub-dismissals"></div>
+        </div>
+        <div class="kpi-card kpi-highlight" role="listitem">
+          <div class="kpi-icon" aria-hidden="true">🏆</div>
+          <div class="kpi-label">Top MVP</div>
+          <div class="kpi-value" id="val-mvp">—</div>
+          <div class="kpi-sub" id="sub-mvp"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- League Standings -->
+    <section class="section" aria-labelledby="standings-heading">
+      <div class="section-header">
+        <h2 id="standings-heading">League Standings — Season 2</h2>
+      </div>
+      <!-- FIX: scroll wrapper prevents overflow on mobile -->
+      <div class="table-scroll-wrap">
+        <div id="pointsTableWrap"></div>
+      </div>
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Win / Loss Record</div>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="winLossChart" role="img" aria-label="Win and loss record bar chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Net Run Rate (NRR)</div>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="nrrChart" role="img" aria-label="Net run rate comparison chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Player Profile (shown only when a player is selected) -->
+    <section id="playerDetailSection" class="section hidden" aria-labelledby="profile-heading" aria-live="polite">
+      <div class="section-header">
+        <h2 id="profile-heading">Player Profile</h2>
+      </div>
+      <div id="playerDetailCard"></div>
+    </section>
+
+    <!-- Batting Charts -->
+    <section class="section" aria-labelledby="batting-heading">
+      <div class="section-header">
+        <h2 id="batting-heading">Batting Performance</h2>
+      </div>
+      <div class="charts-grid-2">
+        <div class="chart-card">
+          <div class="chart-title">Top Batters by Runs</div>
+          <div class="chart-wrap">
+            <canvas id="topBattersChart" role="img" aria-label="Top batters by runs chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Strike Rate <span class="chart-note">(min 10 balls)</span></div>
+          <div class="chart-wrap">
+            <canvas id="strikeRateChart" role="img" aria-label="Strike rate comparison chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Batting Average <span class="chart-note">(min 2 innings)</span></div>
+          <div class="chart-wrap">
+            <canvas id="battingAvgChart" role="img" aria-label="Batting average comparison chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Boundaries — 4s &amp; 6s</div>
+          <div class="chart-wrap">
+            <canvas id="boundariesChart" role="img" aria-label="Boundaries 4s and 6s chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bowling Charts -->
+    <section class="section" aria-labelledby="bowling-heading">
+      <div class="section-header">
+        <h2 id="bowling-heading">Bowling Performance</h2>
+      </div>
+      <div class="charts-grid-2">
+        <div class="chart-card">
+          <div class="chart-title">Top Wicket Takers</div>
+          <div class="chart-wrap">
+            <canvas id="wicketsChart" role="img" aria-label="Top wicket takers chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Economy Rate <span class="chart-note">(lower is better · min 2 overs)</span></div>
+          <div class="chart-wrap">
+            <canvas id="economyChart" role="img" aria-label="Bowling economy rate chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fielding & MVP -->
+    <section class="section" aria-labelledby="fielding-heading">
+      <div class="section-header">
+        <h2 id="fielding-heading">Fielding &amp; MVP</h2>
+      </div>
+      <div class="charts-grid-2">
+        <div class="chart-card">
+          <div class="chart-title">Fielding Dismissals by Type</div>
+          <div class="chart-wrap">
+            <canvas id="fieldingChart" role="img" aria-label="Fielding dismissals by type chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">MVP Leaderboard</div>
+          <div class="chart-wrap">
+            <canvas id="mvpChart" role="img" aria-label="MVP leaderboard chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Comparison -->
+    <section class="section" aria-labelledby="team-heading">
+      <div class="section-header">
+        <h2 id="team-heading">RCB vs WW — Team Comparison</h2>
+      </div>
+      <div class="charts-grid-3">
+        <div class="chart-card">
+          <div class="chart-title">Runs Share</div>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="teamRunsChart" role="img" aria-label="Runs share between teams doughnut chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Wickets Share</div>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="teamWicketsChart" role="img" aria-label="Wickets share between teams doughnut chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">MVP Score Share</div>
+          <div class="chart-wrap chart-wrap-sm">
+            <canvas id="teamMvpChart" role="img" aria-label="MVP score share between teams doughnut chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    Machaxi Box Cricket Season 2 &nbsp;·&nbsp; Data from CricHeroes &nbsp;·&nbsp; Built with Chart.js &amp; PapaParse
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
