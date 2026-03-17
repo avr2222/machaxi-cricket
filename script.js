@@ -228,7 +228,7 @@ function filterFielding() {
 function filterMvp() {
   return state.mvp
     .filter(r => state.team   === 'ALL' || r['Team Name'] === state.team)
-    .filter(r => state.player === 'ALL' || (r['Player Name'] && r['Player Name'].trim() === state.player));
+    .filter(r => state.player === 'ALL' || (r['Player Name'] && r['Player Name'].trim().toLowerCase() === state.player.toLowerCase()));
 }
 
 
@@ -347,7 +347,7 @@ function renderPlayerDetail(playerName) {
   const bat   = state.batting.find(r  => r.name          && r.name.trim()          === playerName) || {};
   const bowl  = state.bowling.find(r  => r.name          && r.name.trim()          === playerName) || {};
   const field = state.fielding.find(r => r.name          && r.name.trim()          === playerName) || {};
-  const mvpR  = state.mvp.find(r      => r['Player Name'] && r['Player Name'].trim() === playerName) || {};
+  const mvpR  = state.mvp.find(r      => r['Player Name'] && r['Player Name'].trim().toLowerCase() === playerName.toLowerCase()) || {};
 
   const initials  = playerName.split(' ').map(w => w[0] || '').join('').slice(0, 2).toUpperCase();
   const teamName  = bat.team_name || bowl.team_name || '';
