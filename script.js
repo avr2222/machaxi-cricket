@@ -1366,9 +1366,11 @@ function renderFormTracker(matchBatting, matchBowling) {
   function cellBg(d) {
     if (!d) return 'hm-dnb';
     if (d.runs === 0) return 'hm-duck';
-    if (d.runs <= 15) return 'hm-low';
-    if (d.runs <= 30) return 'hm-mid';
-    if (d.runs <= 50) return 'hm-good';
+    if (d.runs <= 9)  return 'hm-r1';
+    if (d.runs <= 19) return 'hm-r2';
+    if (d.runs <= 29) return 'hm-r3';
+    if (d.runs <= 39) return 'hm-r4';
+    if (d.runs <= 49) return 'hm-r5';
     return 'hm-great';
   }
 
@@ -1513,10 +1515,14 @@ function renderBowlingFormTracker(matchBowling, matchBatting) {
   const players = Object.entries(playerMap).sort((a, b) => b[1].totalWkts - a[1].totalWkts);
   const isRCB = t => (t||'').toLowerCase().includes('royal') || (t||'').toLowerCase().includes('rcb');
 
-  /* Cell class by wickets */
+  /* Cell class by wickets + economy (for 0W) */
   function bowlBg(m) {
     if (!m) return 'hm-dnb';
-    if (m.w === 0) return 'hm-b0';
+    if (m.w === 0) {
+      if (m.eco <= 5)  return 'hm-b0-tight';   // 0W but economic — decent
+      if (m.eco <= 7)  return 'hm-b0-avg';     // 0W, average economy
+      return 'hm-b0-exp';                       // 0W and expensive — bad
+    }
     if (m.w === 1) return 'hm-b1';
     if (m.w === 2) return 'hm-b2';
     if (m.w === 3) return 'hm-b3';
@@ -2594,24 +2600,90 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
     tNoBallKing = matchTiedFromMap(Object.entries(nbMap).sort((a,b) => b[1].n - a[1].n));
   }
 
+  /* ── MOM / Best Batter / Best Bowler counts (per match) ── */
+  let tMOM = _emptyTied, tBestBatCount = _emptyTied, tBestBowlCount = _emptyTied;
+
+  if (matchBatting?.length) {
+    const allMatchIds = [...new Set(matchBatting.map(r => String(r.match_id)))];
+
+    /* Best Batter per match: most runs in that match */
+    const bestBatMap = {};
+    allMatchIds.forEach(mid => {
+      const rows = matchBatting.filter(r => String(r.match_id) === mid);
+      const max  = Math.max(...rows.map(r => num(r.runs)));
+      rows.filter(r => num(r.runs) === max).forEach(r => {
+        const p = (r.player || '').trim(); if (!p) return;
+        if (!bestBatMap[p]) bestBatMap[p] = { n: 0, team: r.batting_team };
+        bestBatMap[p].n++;
+      });
+    });
+    tBestBatCount = matchTiedFromMap(Object.entries(bestBatMap).sort((a,b) => b[1].n - a[1].n));
+
+    /* Best Bowler per match: most wickets in that match */
+    if (matchBowling?.length) {
+      const allBowlIds = [...new Set(matchBowling.map(r => String(r.match_id)))];
+      const bestBowlMap = {};
+      allBowlIds.forEach(mid => {
+        const rows = matchBowling.filter(r => String(r.match_id) === mid);
+        const max  = Math.max(...rows.map(r => num(r.wickets)));
+        if (max <= 0) return;
+        rows.filter(r => num(r.wickets) === max).forEach(r => {
+          const p = (r.player || '').trim(); if (!p) return;
+          if (!bestBowlMap[p]) bestBowlMap[p] = { n: 0, team: r.bowling_team };
+          bestBowlMap[p].n++;
+        });
+      });
+      tBestBowlCount = matchTiedFromMap(Object.entries(bestBowlMap).sort((a,b) => b[1].n - a[1].n));
+    }
+
+    /* MOM: best performer from winning team per match */
+    if (state.matchMeta?.length) {
+      const momMap = {};
+      state.matchMeta.forEach(meta => {
+        if (!meta.winner) return;
+        const mid = String(meta.match_id);
+        const winTeam = meta.winner;
+        const winBat  = matchBatting.filter(r => String(r.match_id) === mid && r.batting_team === winTeam);
+        const winBowl = (matchBowling || []).filter(r => String(r.match_id) === mid && r.bowling_team === winTeam);
+        let mom = null, best = -1;
+        winBat.forEach(r => {
+          if (num(r.runs) > best) { best = num(r.runs); mom = { name: r.player, team: r.batting_team }; }
+        });
+        winBowl.forEach(r => {
+          const score = num(r.wickets) * 20 + (100 - num(r.economy));   /* wickets weighted more */
+          if (score > best) { best = score; mom = { name: r.player, team: r.bowling_team }; }
+        });
+        if (mom) {
+          const p = (mom.name || '').trim(); if (!p) return;
+          if (!momMap[p]) momMap[p] = { n: 0, team: mom.team };
+          momMap[p].n++;
+        }
+      });
+      tMOM = matchTiedFromMap(Object.entries(momMap).sort((a,b) => b[1].n - a[1].n));
+    }
+  }
+
   grid.innerHTML =
-    /* Row 1 — Main heroes */
-    heroCard('🏏', 'Top Batter',        tBat,          null,          'team_name',   'runs') +
-    heroCard('🎯', 'Top Bowler',        tBowl,         null,          'team_name',   'wickets') +
+    /* Row 1 — Match awards */
+    heroCard('🏅', 'Man of the Match',  tMOM,          null,          'team_name',   'times MOM') +
+    heroCard('🏏', 'Best Batter',       tBestBatCount, null,          'team_name',   'times top scorer') +
+    heroCard('🎳', 'Best Bowler',       tBestBowlCount,null,          'team_name',   'times top wicket taker') +
+    /* Row 2 — Season totals */
+    heroCard('📊', 'Most Runs',         tBat,          null,          'team_name',   'runs') +
+    heroCard('🎯', 'Most Wickets',      tBowl,         null,          'team_name',   'wickets') +
     heroCard('🧤', 'Top Fielder',       tField,        null,          'team_name',   'dismissals') +
     heroCard('🏆', 'Season MVP',        tMvp,          'Player Name', 'Team Name',   'pts') +
-    /* Row 2 — Batting specials */
+    /* Row 3 — Batting specials */
     heroCard('💥', 'Six Machine',       tSixes,        null,          'team_name',   'sixes') +
     heroCard('⏱️', 'Most Balls Faced',  tBalls,        null,          'team_name',   'balls') +
-    /* Row 3 — Bowling specials */
+    /* Row 4 — Bowling specials */
     heroCard('🔒', 'Dot Ball King',     tDots,         null,          'team_name',   'dots bowled') +
     heroCard('🎖️', 'Maiden Master',    tMaiden,       null,          'team_name',   'maidens') +
     heroCard('⚡', 'Best Bowl SR',      tBowlSR,       null,          'team_name',   'SR') +
     heroCard('🏃', 'Workhorse',         tOvers,        null,          'team_name',   'overs') +
-    /* Row 4 — Fielding specials */
+    /* Row 5 — Fielding specials */
     heroCard('🙌', 'Catch King',        tCatches,      null,          'team_name',   'catches') +
     heroCard('🚀', 'Run Out Hero',      tRunOut,       null,          'team_name',   'run outs');
-    /* Duck King, Wide Man, No-Ball King, Run-Out Magnet, Run-Out Caller, Dot Absorber → Fun Awards section */
 }
 
 /* ══════════════════════════════════════════════════════

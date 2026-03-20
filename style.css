@@ -583,6 +583,24 @@ body.loading .chart-wrap::after {
 .hero-empty { opacity: 0.5; }
 .hero-empty-msg { font-size: 12px; color: var(--text-muted); }
 
+/* MOM featured card — gold accent, full-width on its row */
+.hero-card-mom {
+  grid-column: 1 / -1;                        /* span full row */
+  flex-direction: row;                         /* horizontal layout */
+  justify-content: center;
+  gap: 24px;
+  border: 2px solid #fbbf24;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  padding: 24px 32px;
+}
+.hero-card-mom .hero-icon { font-size: 36px; }
+.hero-card-mom .hero-avatar { width: 64px; height: 64px; font-size: 20px; }
+.hero-card-mom .hero-name  { font-size: 18px; }
+.hero-card-mom .hero-stat  { font-size: 28px; color: #b45309; }
+.hero-card-mom .hero-label { color: #92400e; font-size: 11px; letter-spacing: 0.1em; }
+.hero-card-mom .hero-team  { color: #a16207; }
+.hero-card-mom .hero-stat-label { color: #92400e; }
+
 /* ── Full Stats Table ── */
 .fst-table {
   width: 100%; border-collapse: separate; border-spacing: 0;
@@ -719,54 +737,60 @@ body.loading .chart-wrap::after {
   border-left: 1px solid var(--border); background: rgba(255,255,255,0.02);
 }
 /* ── Batting cell colours ── */
-.hm-dnb  { background: #0f172a; color: #475569; font-size: 0.68rem; }
+.hm-dnb  { background: #1a2332; color: #4a6080; font-size: 0.68rem; }
 .hm-abs  { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
            color: #4b5563 !important; border: 1px dashed #374151 !important; }
-.hm-duck { background: linear-gradient(135deg,#7f1d1d,#b91c1c);
-           color: #fecaca; border: 1px solid #f87171 !important;
-           text-shadow: 0 0 8px rgba(248,113,113,.65); font-weight: 800; }
-.hm-low  { background: linear-gradient(135deg,#7c2d12,#c2410c);
-           color: #fdba74; font-weight: 600; }
-.hm-mid  { background: linear-gradient(135deg,#78350f,#b45309);
-           color: #fde047; font-weight: 700;
-           border: 1px solid #d97706 !important; }
-.hm-good { background: linear-gradient(135deg,#14532d,#15803d);
-           color: #4ade80; font-weight: 700;
-           border: 1px solid #22c55e !important; }
-.hm-great{ background: linear-gradient(135deg,#064e3b,#065f46);
-           color: #ffffff; font-weight: 900;
-           text-shadow: 0 0 12px rgba(52,211,153,.95);
-           border: 2px solid #34d399 !important;
-           box-shadow: inset 0 0 10px rgba(52,211,153,.15); }
-/* ── Bowling cell colours — same ramp as batting (bad→good) ── */
-.hm-b0  { background: linear-gradient(135deg,#7f1d1d,#b91c1c);          /* 0W  = red   (like duck)  */
-           color: #fecaca; border: 1px solid #f87171 !important;
-           text-shadow: 0 0 8px rgba(248,113,113,.65); font-weight: 800; }
-.hm-b1  { background: linear-gradient(135deg,#7c2d12,#c2410c);          /* 1W  = orange (like 1-15) */
-           color: #fdba74; font-weight: 700; }
-.hm-b2  { background: linear-gradient(135deg,#78350f,#b45309);          /* 2W  = amber  (like 16-30) */
-           color: #fde047; font-weight: 700;
-           border: 1px solid #d97706 !important; }
-.hm-b3  { background: linear-gradient(135deg,#14532d,#15803d);          /* 3W  = green  (like 31-50) */
-           color: #4ade80; font-weight: 800;
-           border: 1px solid #22c55e !important; }
-.hm-b4  { background: linear-gradient(135deg,#064e3b,#065f46);          /* 4W+ = emerald (like 51+) */
-           color: #ffffff; font-weight: 900;
-           text-shadow: 0 0 12px rgba(52,211,153,.95);
-           border: 2px solid #34d399 !important;
-           box-shadow: inset 0 0 10px rgba(52,211,153,.15); }
+/* Duck = vivid red */
+.hm-duck { background: #dc2626; color: #fff; font-weight: 800; }
+/* 1–9 = orange-red */
+.hm-r1   { background: #ea580c; color: #fff; font-weight: 600; }
+/* 10–19 = amber */
+.hm-r2   { background: #d97706; color: #fff; font-weight: 600; }
+/* 20–29 = yellow-green */
+.hm-r3   { background: #65a30d; color: #fff; font-weight: 700; }
+/* 30–39 = green */
+.hm-r4   { background: #16a34a; color: #fff; font-weight: 700; }
+/* 40–49 = deeper green */
+.hm-r5   { background: #15803d; color: #fff; font-weight: 700; }
+/* 50+ = gold milestone */
+.hm-great{ background: #b45309; color: #fef08a; font-weight: 900;
+           border: 2px solid #fbbf24 !important;
+           box-shadow: inset 0 0 8px rgba(251,191,36,.25); }
+
+/* ── Bowling cell colours ── */
+/* 0W tight (eco ≤ 5) — decent even without wickets */
+.hm-b0-tight { background: #166534; color: #86efac; font-weight: 600; }
+/* 0W average (eco 5–7) — nothing special */
+.hm-b0-avg   { background: #78350f; color: #fcd34d; font-weight: 600; }
+/* 0W expensive (eco > 7) — costly and wicketless = bad */
+.hm-b0-exp   { background: #991b1b; color: #fca5a5; font-weight: 600; }
+/* 1W = lime green */
+.hm-b1  { background: #65a30d; color: #fff; font-weight: 700; }
+/* 2W = green */
+.hm-b2  { background: #16a34a; color: #fff; font-weight: 700; }
+/* 3W = deeper green */
+.hm-b3  { background: #15803d; color: #fff; font-weight: 800; }
+/* 4W+ = gold haul */
+.hm-b4  { background: #b45309; color: #fef08a; font-weight: 900;
+           border: 2px solid #fbbf24 !important;
+           box-shadow: inset 0 0 8px rgba(251,191,36,.25); }
+
 /* ── Legend swatches ── */
-.hm-swatch.hm-dnb  { background: #0f172a; color: #475569; border-color: #1e293b !important; }
-.hm-swatch.hm-duck { background: #b91c1c; color: #fecaca; border-color: #f87171 !important; }
-.hm-swatch.hm-low  { background: #c2410c; color: #fdba74; }
-.hm-swatch.hm-mid  { background: #b45309; color: #fde047; border-color: #d97706 !important; }
-.hm-swatch.hm-good { background: #15803d; color: #4ade80; border-color: #22c55e !important; }
-.hm-swatch.hm-great{ background: #065f46; color: #ffffff; border-color: #34d399 !important; }
-.hm-swatch.hm-b0   { background: #b91c1c; color: #fecaca; border-color: #f87171 !important; }
-.hm-swatch.hm-b1   { background: #c2410c; color: #fdba74; }
-.hm-swatch.hm-b2   { background: #b45309; color: #fde047; border-color: #d97706 !important; }
-.hm-swatch.hm-b3   { background: #15803d; color: #4ade80; border-color: #22c55e !important; }
-.hm-swatch.hm-b4   { background: #065f46; color: #ffffff; border-color: #34d399 !important; }
+.hm-swatch.hm-dnb  { background: #1a2332; color: #4a6080; border-color: #2d3f55 !important; }
+.hm-swatch.hm-duck { background: #dc2626; color: #fff; }
+.hm-swatch.hm-r1   { background: #ea580c; color: #fff; }
+.hm-swatch.hm-r2   { background: #d97706; color: #fff; }
+.hm-swatch.hm-r3   { background: #65a30d; color: #fff; }
+.hm-swatch.hm-r4   { background: #16a34a; color: #fff; }
+.hm-swatch.hm-r5   { background: #15803d; color: #fff; }
+.hm-swatch.hm-great{ background: #b45309; color: #fef08a; border-color: #fbbf24 !important; }
+.hm-swatch.hm-b0-tight { background: #166534; color: #86efac; }
+.hm-swatch.hm-b0-avg   { background: #78350f; color: #fcd34d; }
+.hm-swatch.hm-b0-exp   { background: #991b1b; color: #fca5a5; }
+.hm-swatch.hm-b1   { background: #65a30d; color: #fff; }
+.hm-swatch.hm-b2   { background: #16a34a; color: #fff; }
+.hm-swatch.hm-b3   { background: #15803d; color: #fff; }
+.hm-swatch.hm-b4   { background: #b45309; color: #fef08a; border-color: #fbbf24 !important; }
 /* Detail chart panel */
 .hm-detail-wrap {
   margin-top: 20px; background: var(--surface);
