@@ -1,13 +1,13 @@
 match_id,match_date,innings1_team,innings2_team,toss_winner,toss_decision,result,winner,margin
-22632660,,Royal Cricket Blasters,Weekend Warriors,,,,,
-22632661,,Royal Cricket Blasters,Weekend Warriors,,,,,
-22632662,,Royal Cricket Blasters,Weekend Warriors,,,,,
-22786417,,Royal Cricket Blasters,Weekend Warriors,,,,,
-22786418,,Royal Cricket Blasters,Weekend Warriors,,,,,
-22786419,,Royal Cricket Blasters,Weekend Warriors,,,,,
-22943979,,Weekend Warriors,Royal Cricket Blasters,,,,,
-22943980,,Weekend Warriors,Royal Cricket Blasters,,,,,
-22943981,,Royal Cricket Blasters,Weekend Warriors,,,,,
-23064193,,Weekend Warriors,Royal Cricket Blasters,,,,,
-23064208,,Royal Cricket Blasters,Weekend Warriors,,,,,
-23110064,,Weekend Warriors,Royal Cricket Blasters,,,,,
+22632660,2026-02-22,Royal Cricket Blasters,Weekend Warriors,Royal Cricket Blasters,bat,Weekend Warriors Won By 4 wickets,Weekend Warriors,4 wickets
+22632661,2026-02-22,Royal Cricket Blasters,Weekend Warriors,Royal Cricket Blasters,bat,,,
+22632662,2026-02-22,Royal Cricket Blasters,Weekend Warriors,Royal Cricket Blasters,bat,Weekend Warriors Won By 7 wickets,Weekend Warriors,7 wickets
+22786417,2026-03-01,Royal Cricket Blasters,Weekend Warriors,Royal Cricket Blasters,bat,Weekend Warriors Won By 5 wickets,Weekend Warriors,5 wickets
+22786418,2026-03-01,Royal Cricket Blasters,Weekend Warriors,Weekend Warriors,field,Royal Cricket Blasters Won By 37 runs,Royal Cricket Blasters,37 runs
+22786419,2026-03-01,Royal Cricket Blasters,Weekend Warriors,Royal Cricket Blasters,bat,Weekend Warriors Won By 3 wickets,Weekend Warriors,3 wickets
+22943979,2026-03-08,Weekend Warriors,Royal Cricket Blasters,Weekend Warriors,bat,Royal Cricket Blasters Won By 4 wickets,Royal Cricket Blasters,4 wickets
+22943980,2026-03-08,Weekend Warriors,Royal Cricket Blasters,Royal Cricket Blasters,field,Weekend Warriors Won By 4 runs,Weekend Warriors,4 runs
+22943981,2026-03-08,Royal Cricket Blasters,Weekend Warriors,Weekend Warriors,field,Royal Cricket Blasters Won By 40 runs,Royal Cricket Blasters,40 runs
+23064193,2026-03-14,Weekend Warriors,Royal Cricket Blasters,Royal Cricket Blasters,field,Weekend Warriors Won By 4 runs,Weekend Warriors,4 runs
+23064208,2026-03-14,Royal Cricket Blasters,Weekend Warriors,Royal Cricket Blasters,bat,Weekend Warriors Won By 5 wickets,Weekend Warriors,5 wickets
+23110064,2026-03-14,Weekend Warriors,Royal Cricket Blasters,Royal Cricket Blasters,field,Royal Cricket Blasters Won By 7 wickets,Royal Cricket Blasters,7 wickets

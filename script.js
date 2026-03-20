@@ -2505,22 +2505,33 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
   const tCatches  = topTied(fielding, r => num(r.catches),         r => num(r.catches) > 0);
   const tRunOut   = topTied(fielding, r => num(r.run_outs),        r => num(r.run_outs) > 0);
 
-  function heroCard(icon, label, tied, nameKey, teamKey, statLabel) {
-    if (!tied.players.length) return `<div class="hero-card hero-empty"><div class="hero-icon">${icon}</div><div class="hero-label">${label}</div><div class="hero-empty-msg">No data</div></div>`;
+  function heroCard(icon, label, tied, nameKey, teamKey, statLabel, extraClass = '') {
+    if (!tied.players.length) return `<div class="hero-card hero-empty${extraClass ? ' ' + extraClass : ''}"><div class="hero-icon">${icon}</div><div class="hero-label">${label}</div><div class="hero-empty-msg">No data</div></div>`;
     const names = tied.players.map(r => (nameKey ? r[nameKey] : r.name) || '').filter(Boolean);
     const team  = tied.players[0][teamKey] || '';
-    const isRCB = team.includes('RCB');
-    const color = tied.players.length > 1 ? '#7b5ea7' : (isRCB ? 'var(--rcb)' : 'var(--ww)');
-    const initials = names.map(n => n.split(' ').map(w => w[0]||'').join('').slice(0,2).toUpperCase()).join('/').slice(0,5);
-    const displayTeam = tied.players.length > 1 ? tied.players.map(r => (r[teamKey]||'').includes('WW')?'WW':'RCB').join(' & ') : (team.includes('WW')?'WW':'RCB');
+    const isWW  = t => t.includes('WW') || t.toLowerCase().includes('weekend');
+    const isRCB = !isWW(team);
+    const count = tied.players.length;
+    const color = count > 1 ? '#7b5ea7' : (isRCB ? 'var(--rcb)' : 'var(--ww)');
+    // Avatar: initials for solo, count badge for ties
+    const initials = count > 1
+      ? `×${count}`
+      : (names[0] || '').split(' ').map(w => w[0]||'').join('').slice(0,2).toUpperCase();
+    // Name: first name only + "& N others" if 3+, or "A & B" if exactly 2
+    const displayName = count === 1 ? names[0]
+      : count === 2 ? names.slice(0,2).map(esc).join(' &amp; ')
+      : `${esc(names[0])} <span class="hero-tied-rest">&amp; ${count - 1} others tied</span>`;
+    // Team: unique teams only
+    const uniqueTeams = [...new Set(tied.players.map(r => isWW(r[teamKey]||'')?'WW':'RCB'))];
+    const displayTeam = uniqueTeams.join(' &amp; ');
     const statVal = tied.val !== null ? (Number.isInteger(tied.val) ? tied.val : parseFloat(tied.val).toFixed(tied.val < 10 ? 2 : 1)) : '—';
     return `
-      <div class="hero-card" style="--hero-color:${color}">
+      <div class="hero-card${extraClass ? ' ' + extraClass : ''}" style="--hero-color:${color}">
         <div class="hero-icon">${icon}</div>
         <div class="hero-label">${label}</div>
         <div class="hero-avatar" style="background:${color}">${initials}</div>
-        <div class="hero-name">${names.map(esc).join(' &amp; ')}</div>
-        <div class="hero-team">${esc(displayTeam)}</div>
+        <div class="hero-name">${displayName}</div>
+        <div class="hero-team">${displayTeam}</div>
         <div class="hero-stat">${statVal} <span class="hero-stat-label">${statLabel}</span></div>
       </div>`;
   }
@@ -2636,26 +2647,64 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
       tBestBowlCount = matchTiedFromMap(Object.entries(bestBowlMap).sort((a,b) => b[1].n - a[1].n));
     }
 
-    /* MOM: best performer from winning team per match */
+    /* MOM: CricHeroes MVP formula applied to winning team only.
+       Batting MVP  = runs/10  + SR bonus (8% for T20, only if player SR > team SR)
+       Bowling MVP  = wickets × 1.4  + maiden bonus (1.4/maiden)
+                    + milestone bonus (+0.5 for 3wkts)
+                    + economy bonus (8% of wicket pts if eco < team eco)
+       All-rounders accumulate both batting + bowling MVP.
+       Player with highest total MVP from winning team = MOM. */
     if (state.matchMeta?.length) {
       const momMap = {};
       state.matchMeta.forEach(meta => {
         if (!meta.winner) return;
-        const mid = String(meta.match_id);
+        const mid     = String(meta.match_id);
         const winTeam = meta.winner;
         const winBat  = matchBatting.filter(r => String(r.match_id) === mid && r.batting_team === winTeam);
-        const winBowl = (matchBowling || []).filter(r => String(r.match_id) === mid && r.bowling_team === winTeam);
-        let mom = null, best = -1;
+        const winBowl = (matchBowling  || []).filter(r => String(r.match_id) === mid && r.bowling_team === winTeam);
+
+        // Team SR for the batting innings of winning team
+        const teamRuns  = winBat.reduce((s, r) => s + num(r.runs),  0);
+        const teamBalls = winBat.reduce((s, r) => s + num(r.balls), 0);
+        const teamSR    = teamBalls > 0 ? (teamRuns / teamBalls) * 100 : 100;
+
+        // Team economy for the bowling innings of winning team
+        const teamBowlRuns  = winBowl.reduce((s, r) => s + num(r.runs),  0);
+        const teamBowlOvers = winBowl.reduce((s, r) => s + num(r.overs), 0);
+        const teamEco       = teamBowlOvers > 0 ? teamBowlRuns / teamBowlOvers : 6;
+
+        // Build per-player MVP map (handles all-rounders)
+        const mvpMap = {};
+        const addMvp = (name, team, pts) => {
+          if (!name || pts <= 0) return;
+          if (!mvpMap[name]) mvpMap[name] = { mvp: 0, team };
+          mvpMap[name].mvp += pts;
+        };
+
         winBat.forEach(r => {
-          if (num(r.runs) > best) { best = num(r.runs); mom = { name: r.player, team: r.batting_team }; }
+          const basic   = num(r.runs) / 10;
+          const playerSR = num(r.strike_rate);
+          const srBonus  = playerSR > teamSR ? (playerSR / teamSR) * 0.08 * basic : 0;
+          addMvp(r.player, r.batting_team, basic + srBonus);
         });
+
         winBowl.forEach(r => {
-          const score = num(r.wickets) * 20 + (100 - num(r.economy));   /* wickets weighted more */
-          if (score > best) { best = score; mom = { name: r.player, team: r.bowling_team }; }
+          const wkts      = num(r.wickets);
+          const wicketPts = wkts * 1.4;                        // 12-over box cricket
+          const milestone = wkts >= 3 ? 0.5 : 0;
+          const maiden    = num(r.maidens) * 1.4;
+          const playerEco = num(r.economy);
+          const ecoBonus  = (wicketPts > 0 && playerEco < teamEco)
+            ? (teamEco / playerEco - 1) * 0.08 * wicketPts : 0;
+          addMvp(r.player, r.bowling_team, wicketPts + milestone + maiden + ecoBonus);
         });
-        if (mom) {
-          const p = (mom.name || '').trim(); if (!p) return;
-          if (!momMap[p]) momMap[p] = { n: 0, team: mom.team };
+
+        // Winner = highest MVP from winning team
+        const sorted = Object.entries(mvpMap).sort((a, b) => b[1].mvp - a[1].mvp);
+        if (sorted.length) {
+          const [momName, momData] = sorted[0];
+          const p = momName.trim(); if (!p) return;
+          if (!momMap[p]) momMap[p] = { n: 0, team: momData.team };
           momMap[p].n++;
         }
       });
@@ -2665,7 +2714,7 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
 
   grid.innerHTML =
     /* Row 1 — Match awards */
-    heroCard('🏅', 'Man of the Match',  tMOM,          null,          'team_name',   'times MOM') +
+    heroCard('🏅', 'Man of the Match',  tMOM,          null,          'team_name',   'times MOM', 'hero-card-mom') +
     heroCard('🏏', 'Best Batter',       tBestBatCount, null,          'team_name',   'times top scorer') +
     heroCard('🎳', 'Best Bowler',       tBestBowlCount,null,          'team_name',   'times top wicket taker') +
     /* Row 2 — Season totals */
@@ -3860,6 +3909,7 @@ const _trimDismissal = name => (name || '')
 
 /** Re-render only the sections that depend on per-match scorecard data. */
 function renderScorecardSections() {
+  renderWeekHeroes(state.matchBatting, state.matchBowling);
   renderFormTracker(state.matchBatting, state.matchBowling);
   renderBowlingFormTracker(state.matchBowling, state.matchBatting);
   renderScorecardViewer(state.matchMeta, state.matchBatting, state.matchBowling);
@@ -3877,6 +3927,99 @@ function renderScorecardSections() {
     filterBatting(), filterBowling(), filterFielding(), filterMvp(),
     state.matchBatting, state.matchBowling
   );
+}
+
+function renderWeekHeroes(matchBatting, matchBowling) {
+  const wrap = document.getElementById('weekHeroesWrap');
+  const grid = document.getElementById('weekHeroesGrid');
+  const title = document.getElementById('weekHeroesTitle');
+  if (!wrap || !grid || !matchBatting?.length) return;
+
+  // Find the most recent match date
+  const dates = [...new Set(matchBatting.map(r => r.match_date))].filter(Boolean).sort();
+  if (!dates.length) return;
+  const latestDate = dates[dates.length - 1];
+
+  // Top 3 batters this week: by runs
+  const weekBat = matchBatting.filter(r => r.match_date === latestDate);
+  const batMap = {};
+  weekBat.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!batMap[p]) batMap[p] = { runs: 0, balls: 0, team: r.batting_team };
+    batMap[p].runs  += num(r.runs);
+    batMap[p].balls += num(r.balls);
+  });
+  const top3bat = Object.entries(batMap)
+    .sort((a, b) => b[1].runs - a[1].runs || a[1].balls - b[1].balls)
+    .slice(0, 3);
+
+  // Top 3 bowlers this week: by wickets then economy
+  const weekBowl = (matchBowling || []).filter(r => r.match_date === latestDate);
+  const bowlMap = {};
+  weekBowl.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!bowlMap[p]) bowlMap[p] = { wickets: 0, runs: 0, overs: 0, team: r.bowling_team };
+    bowlMap[p].wickets += num(r.wickets);
+    bowlMap[p].runs    += num(r.runs);
+    bowlMap[p].overs   += num(r.overs);
+  });
+  const top3bowl = Object.entries(bowlMap)
+    .sort((a, b) => {
+      if (b[1].wickets !== a[1].wickets) return b[1].wickets - a[1].wickets;
+      const ecoA = a[1].overs > 0 ? a[1].runs / a[1].overs : 99;
+      const ecoB = b[1].overs > 0 ? b[1].runs / b[1].overs : 99;
+      return ecoA - ecoB;
+    })
+    .slice(0, 3);
+
+  if (!top3bat.length && !top3bowl.length) return;
+
+  // Format date nicely
+  const d = new Date(latestDate);
+  const dateLabel = isNaN(d) ? latestDate
+    : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  title.textContent = `⚡ This Week's Heroes — ${dateLabel}`;
+
+  const rankClass = i => ['gold','silver','bronze'][i] || '';
+  const isWW = t => (t||'').includes('WW') || (t||'').toLowerCase().includes('weekend');
+  const teamAbbr = t => isWW(t) ? 'WW' : 'RCB';
+  const teamColor = t => isWW(t) ? 'var(--ww)' : 'var(--rcb)';
+  const initials = name => name.split(' ').map(w => w[0]||'').join('').slice(0,2).toUpperCase();
+
+  const batCards = top3bat.map(([name, d], i) => `
+    <div class="week-hero-card">
+      <div class="week-hero-rank ${rankClass(i)}">${i+1}</div>
+      <div class="week-hero-avatar" style="background:${teamColor(d.team)}">${initials(name)}</div>
+      <div class="week-hero-info">
+        <div class="week-hero-name">${esc(name)}</div>
+        <div class="week-hero-team">${teamAbbr(d.team)}</div>
+      </div>
+      <div class="week-hero-stat">${d.runs}<span>runs</span></div>
+    </div>`).join('');
+
+  const bowlCards = top3bowl.map(([name, d], i) => {
+    const eco = d.overs > 0 ? (d.runs / d.overs).toFixed(1) : '—';
+    return `
+    <div class="week-hero-card">
+      <div class="week-hero-rank ${rankClass(i)}">${i+1}</div>
+      <div class="week-hero-avatar" style="background:${teamColor(d.team)}">${initials(name)}</div>
+      <div class="week-hero-info">
+        <div class="week-hero-name">${esc(name)}</div>
+        <div class="week-hero-team">${teamAbbr(d.team)}</div>
+      </div>
+      <div class="week-hero-stat">${d.wickets}W<span>eco ${eco}</span></div>
+    </div>`;
+  }).join('');
+
+  grid.innerHTML = `
+    <div class="week-section-label">🏏 Top Batters</div>
+    <div></div>
+    <div class="week-section-label bowl">🎳 Top Bowlers</div>
+    ${batCards}
+    <div class="week-divider"></div>
+    ${bowlCards}
+  `;
+  wrap.style.display = '';
 }
 
 /**

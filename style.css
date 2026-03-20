@@ -542,6 +542,63 @@ body.loading .chart-wrap::after {
 .standings-top .section-header { margin-bottom: 12px; }
 .standings-top .chart-card { background: var(--bg-card); }
 
+/* ── Current Week Heroes ── */
+.week-heroes-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4px 24px 20px;
+}
+.week-heroes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) 1px repeat(3, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+.week-divider {
+  background: var(--border);
+  margin: 0 8px;
+  align-self: stretch;
+}
+.week-hero-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  min-width: 0;
+}
+.week-hero-rank {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 22px;
+  text-align: center;
+}
+.week-hero-rank.gold   { color: #f59e0b; }
+.week-hero-rank.silver { color: #94a3b8; }
+.week-hero-rank.bronze { color: #b45309; }
+.week-hero-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.week-hero-info { min-width: 0; flex: 1; }
+.week-hero-name  { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.week-hero-team  { font-size: 11px; color: var(--text-secondary); }
+.week-hero-stat  { font-size: 18px; font-weight: 700; color: var(--accent); text-align: right; white-space: nowrap; }
+.week-hero-stat span { font-size: 10px; font-weight: 400; color: var(--text-muted); display: block; }
+.week-section-label {
+  grid-column: 1 / 4;
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--text-secondary);
+  padding: 2px 0 2px 2px;
+}
+.week-section-label.bowl { grid-column: 5 / 8; }
+
 /* ── Top Heroes ── */
 .heroes-grid {
   display: grid;
@@ -580,6 +637,7 @@ body.loading .chart-wrap::after {
   color: var(--hero-color, var(--accent));
 }
 .hero-stat-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
+.hero-tied-rest  { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
 .hero-empty { opacity: 0.5; }
 .hero-empty-msg { font-size: 12px; color: var(--text-muted); }
 

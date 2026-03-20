@@ -68,18 +68,30 @@ def group_into_rows(words, tolerance=TOLERANCE):
 def parse_page1(rows):
     full = "\n".join(r["text"] for r in rows)
 
+    # Date: "2026-02-22, ..." or "22 Feb 2026"
     match_date = ""
-    m = re.search(r'\b(\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4})\b',
-                  full, re.I)
+    m = re.search(r'\b(\d{4}-\d{2}-\d{2})\b', full)
     if m:
         match_date = m.group(1)
+    else:
+        m = re.search(r'\b(\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4})\b',
+                      full, re.I)
+        if m:
+            match_date = m.group(1)
 
+    # Venue: "Ground Machaxi J Sports, ..."  or "at <venue>"
     venue = ""
     for row in rows:
-        m = re.search(r'\bat\s+(.+)', row["text"], re.I)
-        if m and len(m.group(1).strip()) > 3:
+        m = re.search(r'^Ground\s+(.+)', row["text"], re.I)
+        if m:
             venue = m.group(1).strip().split(",")[0].strip()
             break
+    if not venue:
+        for row in rows:
+            m = re.search(r'\bat\s+(.+)', row["text"], re.I)
+            if m and len(m.group(1).strip()) > 3:
+                venue = m.group(1).strip().split(",")[0].strip()
+                break
     if not venue:
         for row in rows:
             t = row["text"].lower()
@@ -87,24 +99,35 @@ def parse_page1(rows):
                 venue = row["text"].strip()
                 break
 
+    # Toss: "Toss Royal Cricket Blasters (RCB) opt to bat/field"
+    #    or old format: "Royal Cricket Blasters Won The Toss and Chose To Bat"
     toss_winner = toss_decision = ""
     m = re.search(
-        r'(Royal Cricket Blasters|Weekend Warriors)[^.]*Won The Toss and Chose To (Bat|Field)',
+        r'Toss\s+(Royal Cricket Blasters|Weekend Warriors)\s*(?:\([^)]+\))?\s*opt\s+to\s+(bat|field)',
         full, re.I)
     if m:
         toss_winner   = m.group(1)
         toss_decision = m.group(2).lower()
+    else:
+        m = re.search(
+            r'(Royal Cricket Blasters|Weekend Warriors)[^.]*Won The Toss and Chose To (Bat|Field)',
+            full, re.I)
+        if m:
+            toss_winner   = m.group(1)
+            toss_decision = m.group(2).lower()
 
+    # Result: "Result Weekend Warriors (WW) won by 4 wickets"
+    #      or "Royal Cricket Blasters Won By 5 Runs"
     result = winner = margin = ""
     if re.search(r'Match\s+Tied', full, re.I):
         result = "Match Tied"
     else:
         m = re.search(
-            r'(Royal Cricket Blasters|Weekend Warriors)\s+Won\s+By\s+([\d]+\s+(?:Wicket|Run)[s]*)',
+            r'(Royal Cricket Blasters|Weekend Warriors)\s*(?:\([^)]+\))?\s*won\s+by\s+([\d]+\s+(?:wickets?|runs?))',
             full, re.I)
         if m:
-            winner = m.group(1)
-            margin = m.group(2)
+            winner = m.group(1).strip()
+            margin = m.group(2).strip()
             result = f"{winner} Won By {margin}"
 
     return dict(match_date=match_date, venue=venue, toss_winner=toss_winner,
@@ -341,9 +364,21 @@ def write_csv(path, headers, rows):
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
+    debug = "--debug" in sys.argv
     pdf_files = sorted(glob.glob(os.path.join(SCORECARD_DIR, "Scorecard_*.pdf")))
     if not pdf_files:
         print(f"No PDF files found in {SCORECARD_DIR}/")
+        return
+
+    if debug:
+        # Print page-1 text of first PDF to diagnose result/date parsing
+        first = pdf_files[0]
+        print(f"\n=== DEBUG: Page 1 text of {os.path.basename(first)} ===\n")
+        with pdfplumber.open(first) as pdf:
+            rows = group_into_rows(extract_words(pdf.pages[0]))
+            for r in rows:
+                print(repr(r["text"]))
+        print("\n=== END DEBUG ===\n")
         return
 
     print(f"Found {len(pdf_files)} PDF(s) in {SCORECARD_DIR}/\n")

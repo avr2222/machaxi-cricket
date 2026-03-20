@@ -36,7 +36,11 @@
       "Bash(python -c \"import pdfplumber; print\\(''ok''\\)\")",
       "Bash(pip install:*)",
       "Bash(python extract_scorecards.py)",
-      "Bash(python -c \":*)"
+      "Bash(python -c \":*)",
+      "Bash(python extract_scorecards.py --debug)",
+      "WebSearch",
+      "WebFetch(domain:blog.cricheroes.com)",
+      "WebFetch(domain:medium.com)"
     ]
   }
 }
