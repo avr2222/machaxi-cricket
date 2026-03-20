@@ -71,23 +71,111 @@ body {
 ::-webkit-scrollbar-thumb { background: #cdd3da; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #b0b8c1; }
 
-/* ── Spinner ── */
-.spinner-overlay {
-  position: fixed; inset: 0;
-  background: rgba(240,243,245,0.93);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  z-index: 9999; gap: 14px;
+/* ── Top loading bar (replaces full-screen spinner) ── */
+.top-load-bar {
+  position: fixed; top: 48px; left: 0; right: 0;
+  height: 3px; z-index: 9999;
+  background: var(--border);
+  transition: opacity 0.4s ease;
 }
-.spinner-overlay.hidden { display: none; }
-.spinner {
-  width: 36px; height: 36px;
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
+.top-load-bar.hidden { opacity: 0; pointer-events: none; }
+.top-load-bar-fill {
+  height: 100%; width: 30%;
+  background: linear-gradient(90deg, var(--accent), #22c55e);
+  border-radius: 0 2px 2px 0;
+  animation: indeterminate 1.4s ease-in-out infinite;
+}
+@keyframes indeterminate {
+  0%   { margin-left: -30%; width: 30%; }
+  60%  { margin-left: 80%; width: 30%; }
+  100% { margin-left: 110%; width: 30%; }
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+/* KPI skeleton — while body has .loading class */
+body.loading .kpi-value {
+  color: transparent !important;
+  position: relative;
+  display: inline-block; min-width: 60px; min-height: 22px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #e7e7e7 25%, #f0f3f5 50%, #e7e7e7 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+body.loading .kpi-sub { opacity: 0; }
+
+/* Chart area skeleton */
+body.loading .chart-wrap {
+  position: relative;
+}
+body.loading .chart-wrap canvas { opacity: 0; }
+body.loading .chart-wrap::after {
+  content: '';
+  position: absolute; inset: 10px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #e7e7e7 25%, #f0f3f5 50%, #e7e7e7 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* Section fade-in when data arrives */
+.section { animation: fadeUp 0.3s ease both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Extraction progress toast ── */
+.extraction-toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #172035; color: #fff;
+  border-radius: var(--radius-lg); padding: 14px 16px;
+  width: 300px; z-index: 9998;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.extraction-toast.hidden {
+  opacity: 0; pointer-events: none;
+  transform: translateY(12px);
+}
+.toast-header {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 10px;
+}
+.toast-title { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.toast-spinner {
+  width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-top-color: #22c55e;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
-.spinner-text { color: var(--text-secondary); font-size: 12px; letter-spacing: 0.3px; }
+.toast-done-icon { color: #22c55e; font-size: 13px; }
+.toast-dismiss {
+  background: none; border: none;
+  color: rgba(255,255,255,0.4); cursor: pointer;
+  padding: 0; font-size: 16px; line-height: 1;
+}
+.toast-dismiss:hover { color: #fff; }
+.toast-bar-track {
+  height: 3px; background: rgba(255,255,255,0.12);
+  border-radius: 2px; overflow: hidden;
+}
+.toast-bar-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--accent), #22c55e);
+  border-radius: 2px; transition: width 0.4s ease;
+}
+.toast-sub {
+  margin-top: 8px; font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Header ── */

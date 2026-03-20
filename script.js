@@ -159,8 +159,38 @@ async function loadCSV(path) {
 /* ============================================================
    Spinner
    ============================================================ */
-const showSpinner = () => document.getElementById('spinner').classList.remove('hidden');
-const hideSpinner = () => document.getElementById('spinner').classList.add('hidden');
+/* Page-level loading state — shows skeleton shimmer in KPI cards and charts */
+const showSpinner = () => {
+  document.body.classList.add('loading');
+  document.getElementById('topLoadBar').classList.remove('hidden');
+};
+const hideSpinner = () => {
+  document.body.classList.remove('loading');
+  document.getElementById('topLoadBar').classList.add('hidden');
+};
+
+/* ── Scorecard extraction toast ── */
+function showExtractionToast(msg) {
+  const toast = document.getElementById('extractionToast');
+  document.getElementById('toastTitleText').textContent = 'Loading scorecards';
+  document.getElementById('toastSpinner').style.display = '';
+  document.getElementById('toastSub').textContent = msg || 'Discovering PDF files…';
+  document.getElementById('toastBarFill').style.width = '0%';
+  toast.classList.remove('hidden');
+  document.getElementById('toastDismiss').onclick = () => toast.classList.add('hidden');
+}
+function updateExtractionToast(done, total, matchId) {
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('toastBarFill').style.width = pct + '%';
+  document.getElementById('toastSub').textContent = `Match ${matchId} (${done}/${total})`;
+}
+function hideExtractionToast() {
+  document.getElementById('toastSpinner').style.display = 'none';
+  document.getElementById('toastTitleText').textContent = 'Scorecards ready ✓';
+  document.getElementById('toastBarFill').style.width = '100%';
+  document.getElementById('toastSub').textContent = `All matches loaded`;
+  setTimeout(() => document.getElementById('extractionToast').classList.add('hidden'), 2500);
+}
 
 
 /* ============================================================
@@ -1680,7 +1710,7 @@ function renderScorecardViewer(matchMeta, matchBatting, matchBowling) {
     content.innerHTML = `
       <div class="sc-placeholder">
         <div class="sc-placeholder-icon">📋</div>
-        <div>Run <strong>extract.html</strong> and place the CSVs in <code>data/</code> to view match scorecards.</div>
+        <div>Scorecard data is being extracted — refresh the page to check again.</div>
       </div>`;
     return;
   }
@@ -1852,7 +1882,7 @@ function renderBowlingDiscipline(matchBowling) {
 function renderExtrasPerBowler(matchBowling) {
   destroyChart('extrasPerBowler');
   if (!matchBowling || matchBowling.length === 0) {
-    showEmptyChart('extrasPerBowlerChart', 'Run extract.html to unlock bowling discipline charts');
+    showEmptyChart('extrasPerBowlerChart', 'Scorecard data loading…');
     return;
   }
   hideEmptyChart('extrasPerBowlerChart');
@@ -1903,7 +1933,7 @@ function renderExtrasPerBowler(matchBowling) {
 function renderDotPct(matchBowling) {
   destroyChart('dotPct');
   if (!matchBowling || matchBowling.length === 0) {
-    showEmptyChart('dotPctChart', 'Run extract.html to unlock dot ball % chart');
+    showEmptyChart('dotPctChart', 'Scorecard data loading…');
     return;
   }
   hideEmptyChart('dotPctChart');
@@ -1966,7 +1996,7 @@ function renderDotPct(matchBowling) {
 function renderBoundaryPct(matchBowling) {
   destroyChart('boundaryPct');
   if (!matchBowling || matchBowling.length === 0) {
-    showEmptyChart('boundaryPctChart', 'Run extract.html to unlock boundary % chart');
+    showEmptyChart('boundaryPctChart', 'Scorecard data loading…');
     return;
   }
   hideEmptyChart('boundaryPctChart');
@@ -2030,7 +2060,7 @@ function renderBoundaryPct(matchBowling) {
 function renderWicketTypePie(matchBatting) {
   destroyChart('wicketTypePie');
   if (!matchBatting || matchBatting.length === 0) {
-    showEmptyChart('wicketTypePieChart', 'Run extract.html to see wicket types');
+    showEmptyChart('wicketTypePieChart', 'Scorecard data loading…');
     return;
   }
   hideEmptyChart('wicketTypePieChart');
@@ -2090,7 +2120,7 @@ function renderDismissalAnalysis(matchBatting) {
 function renderDismissalTypePie(matchBatting) {
   destroyChart('dismissalTypePie');
   if (!matchBatting || matchBatting.length === 0) {
-    showEmptyChart('dismissalTypePieChart', 'Run extract.html to unlock dismissal analysis');
+    showEmptyChart('dismissalTypePieChart', 'Scorecard data loading…');
     return;
   }
   hideEmptyChart('dismissalTypePieChart');
@@ -2146,7 +2176,7 @@ function renderDismissalTypePie(matchBatting) {
 function renderNotOutPct(matchBatting) {
   destroyChart('notOutPct');
   if (!matchBatting || matchBatting.length === 0) {
-    showEmptyChart('notOutPctChart', 'Run extract.html to unlock not-out % chart');
+    showEmptyChart('notOutPctChart', 'Scorecard data loading…');
     return;
   }
   hideEmptyChart('notOutPctChart');
@@ -2204,7 +2234,7 @@ function renderNotOutPct(matchBatting) {
 function renderTossAnalysis(matchMeta) {
   destroyChart('tossAnalysis');
   if (!matchMeta || matchMeta.length === 0) {
-    showEmptyChart('tossAnalysisChart', 'Run extract.html to unlock toss analysis');
+    showEmptyChart('tossAnalysisChart', 'Scorecard data loading…');
     return;
   }
   hideEmptyChart('tossAnalysisChart');
@@ -2287,7 +2317,7 @@ function renderTossAnalysis(matchMeta) {
 function renderExtrasTeamChart(matchBowling) {
   destroyChart('extrasTeam');
   if (!matchBowling || matchBowling.length === 0) {
-    showEmptyChart('extrasTeamChart', 'Run extract.html to unlock extras chart');
+    showEmptyChart('extrasTeamChart', 'Scorecard data loading…');
     return;
   }
   hideEmptyChart('extrasTeamChart');
@@ -3123,19 +3153,9 @@ function renderDashboard() {
   renderTeamWicketsChart();
   renderTeamMvpChart();
 
-  /* New match-data powered sections */
-  renderFormTracker(state.matchBatting, state.matchBowling);
-  renderBowlingFormTracker(state.matchBowling, state.matchBatting);
-  renderScorecardViewer(state.matchMeta, state.matchBatting, state.matchBowling);
-  renderBowlingDiscipline(state.matchBowling);
-  renderDismissalAnalysis(state.matchBatting);
-  renderTossAnalysis(state.matchMeta);
-  renderExtrasTeamChart(state.matchBowling);
-  renderFunAwards(state.matchBatting, state.matchBowling);
-  renderMatchRecords(state.matchBatting, state.matchBowling, state.matchMeta);
-  renderExtrasLeaderboard(state.matchBowling);
-  renderRunOutAnalysis(state.matchBatting);
-  renderMatchupTable(state.matchBatting);
+  /* Scorecard-dependent sections — rendered separately by renderScorecardSections()
+     after background PDF extraction completes */
+  renderScorecardSections();
 
   renderFullStatsTable(batting, bowling, fielding, mvp);
 }
@@ -3385,20 +3405,26 @@ function parsePointsTable(rows) {
                       "No Bowler O M R W 0s 4s 6s WD NB Eco"
    ============================================================ */
 
-const SCORECARD_PDFS = [
-  { path: './MatchScoreCards/Scorecard_22632660.pdf', matchId: '22632660' },
-  { path: './MatchScoreCards/Scorecard_22632661.pdf', matchId: '22632661' },
-  { path: './MatchScoreCards/Scorecard_22632662.pdf', matchId: '22632662' },
-  { path: './MatchScoreCards/Scorecard_22786417.pdf', matchId: '22786417' },
-  { path: './MatchScoreCards/Scorecard_22786418.pdf', matchId: '22786418' },
-  { path: './MatchScoreCards/Scorecard_22786419.pdf', matchId: '22786419' },
-  { path: './MatchScoreCards/Scorecard_22943979.pdf', matchId: '22943979' },
-  { path: './MatchScoreCards/Scorecard_22943980.pdf', matchId: '22943980' },
-  { path: './MatchScoreCards/Scorecard_22943981.pdf', matchId: '22943981' },
-  { path: './MatchScoreCards/Scorecard_23064193.pdf', matchId: '23064193' },
-  { path: './MatchScoreCards/Scorecard_23064208.pdf', matchId: '23064208' },
-  { path: './MatchScoreCards/Scorecard_23110064.pdf', matchId: '23110064' },
-];
+const SCORECARD_DIR = './CricHeroesStats/';
+
+/**
+ * Auto-discover all Scorecard_*.pdf files by fetching the directory listing.
+ * Works with `python -m http.server` which returns an HTML directory listing.
+ * Returns an array of { path, matchId } objects sorted by matchId.
+ */
+async function discoverScorecardPDFs() {
+  try {
+    const resp = await fetch(SCORECARD_DIR);
+    if (!resp.ok) return [];
+    const html = await resp.text();
+    const found = [...html.matchAll(/href="(Scorecard_(\d+)\.pdf)"/gi)];
+    return found
+      .map(m => ({ path: SCORECARD_DIR + m[1], matchId: m[2] }))
+      .sort((a, b) => a.matchId.localeCompare(b.matchId));
+  } catch {
+    return [];
+  }
+}
 
 /** Group PDF text items into rows by Y coordinate (top→bottom). */
 function groupIntoRows(items, tolerance = 4) {
@@ -3700,30 +3726,118 @@ async function extractScorecardPDF({ path, matchId }) {
   return { meta, batting: allBatting, bowling: allBowling };
 }
 
-/** Extract all 12 scorecards, returning combined arrays. */
+/** Per-match localStorage cache helpers */
+function getMatchCache(matchId) {
+  try {
+    const raw = localStorage.getItem(`cricDash_m_${matchId}`);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+function setMatchCache(matchId, data) {
+  try { localStorage.setItem(`cricDash_m_${matchId}`, JSON.stringify(data)); } catch(_) {}
+}
+
+/**
+ * Discover and extract all scorecards.
+ * - Auto-discovers PDFs from the directory listing (no hardcoded list).
+ * - Loads each match from per-match localStorage cache if available.
+ * - Only fetches and parses PDFs that are not yet cached (e.g. new weekly additions).
+ * - Calls onProgress(done, total, matchId) after each match.
+ */
 async function extractAllScorecards(onProgress) {
+  const pdfs = await discoverScorecardPDFs();
+  if (!pdfs.length) return { matchMeta: [], matchBatting: [], matchBowling: [] };
+
   const allMeta = [], allBatting = [], allBowling = [];
-  for (let i = 0; i < SCORECARD_PDFS.length; i++) {
-    const entry = SCORECARD_PDFS[i];
-    if (onProgress) onProgress(i + 1, SCORECARD_PDFS.length, entry.matchId);
-    try {
-      const result = await extractScorecardPDF(entry);
-      if (result) {
-        allMeta.push(result.meta);
-        allBatting.push(...result.batting);
-        allBowling.push(...result.bowling);
+
+  for (let i = 0; i < pdfs.length; i++) {
+    const entry = pdfs[i];
+    if (onProgress) onProgress(i + 1, pdfs.length, entry.matchId);
+
+    /* Try per-match cache first — skips already-processed PDFs instantly */
+    let matchData = getMatchCache(entry.matchId);
+
+    if (!matchData) {
+      try {
+        const result = await extractScorecardPDF(entry);
+        if (result) {
+          matchData = { meta: result.meta, batting: result.batting, bowling: result.bowling };
+          setMatchCache(entry.matchId, matchData);
+        }
+      } catch (e) {
+        console.warn(`Extraction failed for match ${entry.matchId}:`, e);
+        continue;
       }
-    } catch (e) {
-      console.warn(`Extraction failed for match ${entry.matchId}:`, e);
+    }
+
+    if (matchData) {
+      if (matchData.meta)    allMeta.push(matchData.meta);
+      if (matchData.batting) allBatting.push(...matchData.batting);
+      if (matchData.bowling) allBowling.push(...matchData.bowling);
     }
   }
   return { matchMeta: allMeta, matchBatting: allBatting, matchBowling: allBowling };
 }
 
+const _trimDismissal = name => (name || '')
+  .replace(/\s+st\b.*/i,      '')   // "X st Keeper"    → "X"
+  .replace(/\s+c&?\s*.*/i,    '')   // "X c& Bowler"    → "X"
+  .replace(/\s+run\s*out.*/i, '')   // "X run out …"    → "X"
+  .replace(/\s+b\s+\w+$/i,    '')   // "X b Bowler"     → "X"  (trailing only)
+  .trim();
+
+/** Re-render only the sections that depend on per-match scorecard data. */
+function renderScorecardSections() {
+  renderFormTracker(state.matchBatting, state.matchBowling);
+  renderBowlingFormTracker(state.matchBowling, state.matchBatting);
+  renderScorecardViewer(state.matchMeta, state.matchBatting, state.matchBowling);
+  renderBowlingDiscipline(state.matchBowling);
+  renderDismissalAnalysis(state.matchBatting);
+  renderTossAnalysis(state.matchMeta);
+  renderExtrasTeamChart(state.matchBowling);
+  renderFunAwards(state.matchBatting, state.matchBowling);
+  renderMatchRecords(state.matchBatting, state.matchBowling, state.matchMeta);
+  renderExtrasLeaderboard(state.matchBowling);
+  renderRunOutAnalysis(state.matchBatting);
+  renderMatchupTable(state.matchBatting);
+  /* Re-render top heroes — it uses match data for recent form */
+  renderTopHeroes(
+    filterBatting(), filterBowling(), filterFielding(), filterMvp(),
+    state.matchBatting, state.matchBowling
+  );
+}
+
+/**
+ * Phase 2 — runs in background after the base dashboard is visible.
+ * Discovers all PDFs in CricHeroesStats/ automatically, loads cached matches
+ * instantly, and only extracts new PDFs (e.g. 3 added this week).
+ */
+async function loadScorecards() {
+  showExtractionToast('Discovering PDF files…');
+  try {
+    const { matchMeta, matchBatting, matchBowling } = await extractAllScorecards(
+      (done, total, matchId) => updateExtractionToast(done, total, matchId)
+    );
+
+    state.matchMeta    = matchMeta;
+    state.matchBatting = matchBatting;
+    state.matchBowling = matchBowling;
+
+    state.matchBatting.forEach(r => { r.player = _trimDismissal(r.player); });
+    state.matchBowling.forEach(r => { r.player = _trimDismissal(r.player); });
+
+    renderScorecardSections();
+    hideExtractionToast();
+  } catch (e) {
+    console.warn('Scorecard load failed:', e);
+    document.getElementById('extractionToast').classList.add('hidden');
+  }
+}
+
 async function init() {
   showSpinner();
   try {
-    /* Load player CSVs and attempt PDF points table in parallel */
+    /* ── Phase 1: Load leaderboard CSVs → render base dashboard immediately ── */
     const [batting, bowling, fielding, mvp, pdfTable] = await Promise.all([
       loadCSV(CSV_FILES.batting),
       loadCSV(CSV_FILES.bowling),
@@ -3737,86 +3851,12 @@ async function init() {
     state.mvp      = mvp;
 
     if (pdfTable && pdfTable.length) {
-      /* PDF parsed successfully */
       POINTS_TABLE = pdfTable;
     } else {
-      /* Fall back to points_table.csv */
       const ptRows = await loadCSV(CSV_FILES.pointsTable).catch(() => []);
       POINTS_TABLE = parsePointsTable(ptRows);
     }
 
-    /* Try pre-extracted CSVs first (instant if available) */
-    const [mbResult, mbowlResult, mmetaResult] = await Promise.allSettled([
-      loadCSV(CSV_FILES.matchBatting),
-      loadCSV(CSV_FILES.matchBowling),
-      loadCSV(CSV_FILES.matchMeta)
-    ]);
-
-    const csvBat  = mbResult.status    === 'fulfilled' && mbResult.value?.length    > 0 && mbResult.value[0].match_id    !== undefined ? mbResult.value    : null;
-    const csvBowl = mbowlResult.status === 'fulfilled' && mbowlResult.value?.length > 0 && mbowlResult.value[0].match_id !== undefined ? mbowlResult.value : null;
-    const csvMeta = mmetaResult.status === 'fulfilled' && mmetaResult.value?.length > 0 && mmetaResult.value[0].match_id !== undefined ? mmetaResult.value : null;
-
-    /* ── Cache key: changes if PDF list changes, forcing a fresh extraction ── */
-    const CACHE_KEY = 'cricDash_v1_' + SCORECARD_PDFS.map(e => e.matchId).join('_');
-
-    if (csvBat && csvBowl && csvMeta) {
-      /* Pre-extracted CSVs exist — use them and also warm the cache */
-      state.matchBatting = csvBat;
-      state.matchBowling = csvBowl;
-      state.matchMeta    = csvMeta;
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          meta: csvMeta, batting: csvBat, bowling: csvBowl
-        }));
-      } catch(_) {}
-    } else {
-      /* Try localStorage cache first */
-      let cached = null;
-      try { cached = JSON.parse(localStorage.getItem(CACHE_KEY)); } catch(_) {}
-
-      if (cached && cached.meta?.length && cached.batting?.length && cached.bowling?.length) {
-        /* Instant load from cache — no PDF parsing needed */
-        state.matchMeta    = cached.meta;
-        state.matchBatting = cached.batting;
-        state.matchBowling = cached.bowling;
-      } else {
-        /* First load — extract from PDFs and cache the result */
-        const spinnerText = document.querySelector('.spinner-text');
-        const { matchMeta, matchBatting, matchBowling } = await extractAllScorecards((done, total) => {
-          if (spinnerText) spinnerText.textContent = `Extracting scorecards… ${done}/${total} (first load only)`;
-        });
-        state.matchMeta    = matchMeta;
-        state.matchBatting = matchBatting;
-        state.matchBowling = matchBowling;
-        if (spinnerText) spinnerText.textContent = 'Saving to cache…';
-        try {
-          localStorage.setItem(CACHE_KEY, JSON.stringify({
-            meta: matchMeta, batting: matchBatting, bowling: matchBowling
-          }));
-        } catch(_) {
-          console.warn('localStorage cache failed (quota exceeded?) — will re-extract next load');
-        }
-        if (spinnerText) spinnerText.textContent = 'Loading cricket data…';
-      }
-    }
-
-    /* ── Sanitise extracted player names ──
-       PDF parsing sometimes includes dismissal text in the player name field
-       e.g. "Arun st Ashok adapala" should just be "Arun".
-       Strip any trailing dismissal fragments here so every downstream
-       feature (form tracker, run-out analysis, matchup table, etc.) gets
-       clean names without needing individual fixes everywhere.            */
-    const _trimDismissal = name => (name || '')
-      .replace(/\s+st\b.*/i,      '')   // "X st Keeper"    → "X"
-      .replace(/\s+c&?\s*.*/i,    '')   // "X c& Bowler"    → "X"
-      .replace(/\s+run\s*out.*/i, '')   // "X run out …"    → "X"
-      .replace(/\s+b\s+\w+$/i,    '')   // "X b Bowler"     → "X"  (trailing only)
-      .trim();
-    state.matchBatting.forEach(r => { r.player = _trimDismissal(r.player); });
-    /* matchBowling names are generally clean, but apply same pass for safety */
-    state.matchBowling.forEach(r => { r.player = _trimDismissal(r.player); });
-
-    /* Static renders — only need to run once */
     renderPointsTable();
     renderWinLossChart();
     renderNRRChart();
@@ -3828,6 +3868,9 @@ async function init() {
   } finally {
     hideSpinner();
   }
+
+  /* ── Phase 2: Load scorecards in background — dashboard already visible ── */
+  loadScorecards();
 }
 
 init();

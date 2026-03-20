@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m http.server 8080)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/index.html)",
+      "Bash(ls \"c:\\\\Users\\\\venkateswara.rao\\\\Documents\\\\GitHub\\\\machaxi-cricket/\"*.csv)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/CricHeroesStats/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/)",
+      "Bash(curl -s http://localhost:8080/CricHeroesStats/)",
+      "Bash(curl -sv \"http://localhost:8080/CricHeroesStats\")",
+      "Bash(curl -s \"http://localhost:8080/\")",
+      "Bash(curl -s \"http://localhost:8080/1874258_batting_leaderboard.csv\")",
+      "Bash(curl -sv \"http://localhost:8080/CricHeroesStats/Scorecard_22632660.pdf\")",
+      "Bash(taskkill /F /FI 'WINDOWTITLE eq python*')",
+      "Bash(netstat -ano)",
+      "Read(//c/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/**)",
+      "Bash(xargs -r taskkill /PID /F)",
+      "Bash(curl -s \"http://localhost:8080/CricHeroesStats/Scorecard_22632660.pdf\" -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -v \"http://localhost:8080/\")",
+      "Bash(taskkill /PID 25988 /F)",
+      "Bash(taskkill /PID 60792 /F)",
+      "Bash(taskkill /PID 62348 /F)",
+      "Bash(python -m http.server 8080 --directory \"c:\\\\Users\\\\venkateswara.rao\\\\Documents\\\\GitHub\\\\machaxi-cricket\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\" \"http://localhost:8080/CricHeroesStats\")",
+      "Bash(python3 -c \":*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8080/CricHeroesStats/Scorecard_22632660.pdf\")",
+      "Bash(for pid:*)",
+      "Bash(do taskkill:*)",
+      "Bash(done)",
+      "Bash(taskkill /IM python.exe /F)",
+      "Bash(taskkill /IM python3.exe /F)",
+      "Bash(python -m http.server 8090 --directory \"C:/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8090/CricHeroesStats/Scorecard_22632660.pdf\")",
+      "Bash(curl -s \"http://localhost:8090/CricHeroesStats/\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8090/index.html\")"
+    ]
+  }
+}

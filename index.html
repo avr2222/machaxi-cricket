@@ -11,12 +11,26 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
-<body>
+<body class="loading">
 
-  <!-- Loading Spinner -->
-  <div id="spinner" class="spinner-overlay" role="status" aria-live="polite">
-    <div class="spinner" aria-hidden="true"></div>
-    <p class="spinner-text">Loading cricket data…</p>
+  <!-- Top loading bar (replaces full-screen spinner) -->
+  <div id="topLoadBar" class="top-load-bar" role="status" aria-label="Loading data">
+    <div class="top-load-bar-fill"></div>
+  </div>
+
+  <!-- Scorecard extraction progress toast -->
+  <div id="extractionToast" class="extraction-toast hidden" role="status" aria-live="polite">
+    <div class="toast-header">
+      <span class="toast-title">
+        <span class="toast-spinner" id="toastSpinner"></span>
+        <span id="toastTitleText">Loading scorecards</span>
+      </span>
+      <button class="toast-dismiss" id="toastDismiss" aria-label="Dismiss">✕</button>
+    </div>
+    <div class="toast-bar-track">
+      <div class="toast-bar-fill" id="toastBarFill"></div>
+    </div>
+    <div class="toast-sub" id="toastSub">Discovering PDF files…</div>
   </div>
 
   <!-- Header -->
@@ -458,7 +472,7 @@
     <!-- F. Bowler vs Batsman Matchup — NEW -->
     <section class="section" aria-labelledby="matchup-heading">
       <div class="section-header"><h2 id="matchup-heading">⚔️ Bowler vs Batsman Matchups</h2></div>
-      <div id="matchupBanner" class="matchup-banner hidden">Run extract.html and add match CSVs to data/ to unlock matchup data.</div>
+      <div id="matchupBanner" class="matchup-banner hidden">Matchup data requires scorecard extraction — refresh if scorecards just loaded.</div>
       <div class="table-scroll-wrap"><div id="matchupTableWrap"></div></div>
     </section>
 
