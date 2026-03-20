@@ -32,7 +32,10 @@ const CSV_FILES = {
   bowling:      './1874258_bowling_leaderboard.csv',
   fielding:     './1874258_fielding_leaderboard.csv',
   mvp:          './1874258_mvp_leaderboard.csv',
-  pointsTable:  './points_table.csv'
+  pointsTable:  './points_table.csv',
+  matchBatting: './data/match_batting.csv',
+  matchBowling: './data/match_bowling.csv',
+  matchMeta:    './data/match_meta.csv'
 };
 
 /* ── Team colour palette — Kite-toned ── */
@@ -50,16 +53,23 @@ Chart.defaults.font.size    = 11;
 
 /* ── Application state ── */
 const state = {
-  batting:  [],
-  bowling:  [],
-  fielding: [],
-  mvp:      [],
-  team:     'ALL',
-  player:   'ALL'
+  batting:       [],
+  bowling:       [],
+  fielding:      [],
+  mvp:           [],
+  team:          'ALL',
+  player:        'ALL',
+  matchBatting:  [],
+  matchBowling:  [],
+  matchMeta:     [],
+  selectedMatchId: ''
 };
 
 /* Chart instances — destroyed before recreation */
 const charts = {};
+
+/* Currently selected form player */
+let formSelectedPlayer = '';
 
 
 /* ============================================================
@@ -121,21 +131,6 @@ function hideEmptyChart(canvasId) {
   if (empty) empty.remove();
 }
 
-/** Render the Season MVP banner */
-function renderTopPerformer(mvp) {
-  const banner = document.getElementById('topPerformerBanner');
-  if (!banner) return;
-  const rows = [...mvp].filter(r => num(r.Total) > 0).sort((a, b) => num(b.Total) - num(a.Total));
-  if (!rows.length) { banner.classList.add('hidden'); return; }
-  const top = rows[0];
-  document.getElementById('tp-name').textContent  = top['Player Name'] || '—';
-  document.getElementById('tp-team').textContent  = top['Team Name']   || '';
-  document.getElementById('tp-stats').innerHTML =
-    `<span class="tp-stat">MVP ${num(top.Total).toFixed(2)} pts</span>` +
-    (top['Player Role'] ? `<span class="tp-stat">${esc(top['Player Role'])}</span>` : '') +
-    `<span class="tp-stat">${top.Matches || 0} matches</span>`;
-  banner.classList.remove('hidden');
-}
 
 
 /* ============================================================
@@ -314,7 +309,11 @@ function renderKPIs(batting, bowling, fielding, mvp) {
     const valEl = document.getElementById(`val-${id}`);
     const subEl = document.getElementById(`sub-${id}`);
     if (valEl) { valEl.textContent = val; flash(valEl, 'kpi-pop'); }
-    if (subEl)   subEl.textContent = sub ?? '';
+    if (subEl) {
+      const text = sub ?? '';
+      subEl.textContent = text;
+      subEl.style.display = text ? '' : 'none'; /* hide pill when empty — no blank badge */
+    }
   }
 
   set('runs',       totalRuns.toLocaleString(),                    '');
@@ -336,6 +335,184 @@ function renderKPIs(batting, bowling, fielding, mvp) {
 /* ============================================================
    Player Profile Card
    ============================================================ */
+
+function computeMatchAwards() {
+  /* Returns { mom, bestBat, bestBowl } — each is { matchId: playerName } */
+  const metaByMatch = {};
+  (state.matchMeta||[]).forEach(m => metaByMatch[m.match_id] = m);
+
+  const mom = {}, bestBat = {}, bestBowl = {};
+  const allMids = [...new Set([
+    ...(state.matchBatting||[]).map(r => r.match_id),
+    ...(state.matchBowling||[]).map(r => r.match_id)
+  ])];
+
+  allMids.forEach(mid => {
+    const meta      = metaByMatch[mid] || {};
+    const winnerStr = meta.winner || '';
+    const batInM    = (state.matchBatting||[]).filter(r => r.match_id === mid);
+    const bowlInM   = (state.matchBowling||[]).filter(r => r.match_id === mid);
+
+    /* Best Batsman — most runs */
+    const topBatter = batInM.reduce((best, r) =>
+      (parseInt(r.runs)||0) > (parseInt(best?.runs)||0) ? r : best, null);
+    if (topBatter && (parseInt(topBatter.runs)||0) > 0)
+      bestBat[mid] = (topBatter.player||'').trim();
+
+    /* Best Bowler — most wickets, tie-break by economy */
+    const topBowler = [...bowlInM].sort((a, b) => {
+      const wd = (parseInt(b.wickets)||0) - (parseInt(a.wickets)||0);
+      return wd !== 0 ? wd : (parseFloat(a.economy)||99) - (parseFloat(b.economy)||99);
+    })[0];
+    if (topBowler && (parseInt(topBowler.wickets)||0) > 0)
+      bestBowl[mid] = (topBowler.player||'').trim();
+
+    /* Man of the Match — best scorer from winning team */
+    if (winnerStr) {
+      /* build player → team map from batting records */
+      const playerTeam = {};
+      batInM.forEach(r => {
+        const p = (r.player||'').trim();
+        if (p) playerTeam[p] = r.batting_team || '';
+      });
+
+      const scores = {};
+      batInM.forEach(r => {
+        const p = (r.player||'').trim();
+        if (p && winnerStr.includes(playerTeam[p]||'__')) {
+          scores[p] = (scores[p]||0) + (parseInt(r.runs)||0);
+        }
+      });
+      bowlInM.forEach(r => {
+        const p = (r.player||'').trim();
+        if (p && winnerStr.includes(playerTeam[p]||'__')) {
+          scores[p] = (scores[p]||0) + (parseInt(r.wickets)||0) * 15;
+        }
+      });
+
+      const topMOM = Object.entries(scores).sort((a,b) => b[1]-a[1])[0];
+      if (topMOM && topMOM[1] > 0) mom[mid] = topMOM[0];
+    }
+  });
+
+  return { mom, bestBat, bestBowl };
+}
+
+function buildPlayerHighlights(playerName) {
+  const _pLower  = (playerName||'').toLowerCase();
+  const batRows  = (state.matchBatting  || []).filter(r => (r.player||'').trim().toLowerCase() === _pLower);
+  const bowlRows = (state.matchBowling  || []).filter(r => (r.player||'').trim().toLowerCase() === _pLower);
+  if (!batRows.length && !bowlRows.length) return '';
+
+  /* ── MATCH AWARDS ── */
+  const awards    = computeMatchAwards();
+  const momCount  = Object.values(awards.mom).filter(p => p.toLowerCase() === _pLower).length;
+  const bbatCount = Object.values(awards.bestBat).filter(p => p.toLowerCase() === _pLower).length;
+  const bbowlCount= Object.values(awards.bestBowl).filter(p => p.toLowerCase() === _pLower).length;
+
+  const awardTiles = [
+    momCount  > 0 ? `<div class="hl-tile hl-tile-gold"><div class="hl-tile-val">${momCount}</div><div class="hl-tile-lbl">🏆 Man of Match</div></div>` : '',
+    bbatCount > 0 ? `<div class="hl-tile hl-tile-blue"><div class="hl-tile-val">${bbatCount}</div><div class="hl-tile-lbl">🏏 Best Batsman</div></div>` : '',
+    bbowlCount> 0 ? `<div class="hl-tile hl-tile-purple"><div class="hl-tile-val">${bbowlCount}</div><div class="hl-tile-lbl">🎳 Best Bowler</div></div>` : '',
+  ].filter(Boolean).join('');
+
+
+  const parts = [];
+
+  /* ── MATCH AWARDS SECTION ── */
+  if (awardTiles) {
+    parts.push(`<div class="hl-section hl-section-awards">
+      <div class="hl-section-title">🏆 Match Awards</div>
+      <div class="hl-tiles">${awardTiles}</div>
+    </div>`);
+  }
+
+  /* ── BATTING HIGHLIGHTS ── */
+  if (batRows.length) {
+    const dismCounts  = {};
+    const dismissedBy = {};
+    const caughtBy    = {};
+
+    batRows.forEach(r => {
+      const dt = (r.dismissal_type || 'unknown').toLowerCase();
+      dismCounts[dt] = (dismCounts[dt] || 0) + 1;
+      const db = (r.dismissed_by || '').trim();
+      if (db && dt !== 'not_out' && dt !== 'run_out') dismissedBy[db] = (dismissedBy[db] || 0) + 1;
+      const cb = (r.caught_by || '').trim();
+      if (cb && (dt === 'caught' || dt === 'stumped')) caughtBy[cb] = (caughtBy[cb] || 0) + 1;
+    });
+
+    /* Dismissal tiles */
+    const DMAP = [
+      ['caught',  '🫴 Caught'],  ['bowled', '🎳 Bowled'],
+      ['run_out', '🏃 Run Out'], ['lbw',    '🦵 LBW'],
+      ['stumped', '🧤 Stumped'], ['not_out','✅ Not Out']
+    ];
+    const tiles = DMAP.filter(([k]) => dismCounts[k])
+      .map(([k, lbl]) =>
+        `<div class="hl-tile"><div class="hl-tile-val">${dismCounts[k]}</div><div class="hl-tile-lbl">${lbl}</div></div>`)
+      .join('');
+
+    /* Nemesis bowler */
+    const topBowler = Object.entries(dismissedBy).sort((a,b)=>b[1]-a[1])[0];
+
+    /* Best innings */
+    const bestInn = batRows.reduce((best, r) => {
+      const x = parseInt(r.runs)||0;
+      return x > (best?.runs||0) ? { runs:x, notOut: r.dismissal_type==='not_out', mid: r.match_id } : best;
+    }, null);
+
+    /* Season totals from match data */
+    const totalFours  = batRows.reduce((s,r)=>s+(parseInt(r.fours)||0),0);
+    const totalSixes  = batRows.reduce((s,r)=>s+(parseInt(r.sixes)||0),0);
+    const ducks       = batRows.filter(r=>parseInt(r.runs)===0 && r.dismissal_type!=='not_out').length;
+
+    /* Top catcher */
+    const topCatcher = Object.entries(caughtBy).sort((a,b)=>b[1]-a[1])[0];
+
+    let html = `<div class="hl-section"><div class="hl-section-title">🏏 Batting Highlights</div>`;
+    if (tiles) html += `<div class="hl-tiles">${tiles}</div>`;
+    if (topBowler) html += `<div class="hl-fact">😤 <b>Nemesis bowler:</b> <span class="hl-name">${esc(topBowler[0])}</span> dismissed him <b>${topBowler[1]}×</b></div>`;
+    if (topCatcher && topCatcher[1] >= 2) html += `<div class="hl-fact">🧤 <b>Caught most by:</b> <span class="hl-name">${esc(topCatcher[0])}</span> (${topCatcher[1]} times)</div>`;
+    if (bestInn && bestInn.runs > 0) html += `<div class="hl-fact">⭐ <b>Best innings:</b> <span class="hl-name">${bestInn.runs}${bestInn.notOut?'*':''}</span> runs</div>`;
+    if (totalFours || totalSixes) html += `<div class="hl-fact">💥 <b>Season boundaries:</b> <b>${totalFours}</b> fours &nbsp;·&nbsp; <b>${totalSixes}</b> sixes</div>`;
+    if (ducks >= 1) html += `<div class="hl-fact">🦆 <b>Ducks this season:</b> <b>${ducks}</b></div>`;
+    html += `</div>`;
+    parts.push(html);
+  }
+
+  /* ── BOWLING HIGHLIGHTS ── */
+  if (bowlRows.length) {
+    /* Who did this bowler dismiss? — scan matchBatting dismissed_by */
+    const victims = {};
+    (state.matchBatting||[]).forEach(r => {
+      const db = (r.dismissed_by||'').trim().toLowerCase();
+      if (db === _pLower) {
+        const v = (r.player||'').trim();
+        if (v) victims[v] = (victims[v]||0)+1;
+      }
+    });
+    const topVictim = Object.entries(victims).sort((a,b)=>b[1]-a[1])[0];
+
+    /* Best spell (most wickets in a single match) */
+    const bestSpell = bowlRows.reduce((best,r) => {
+      const w = parseInt(r.wickets)||0;
+      return w > (best?.w||0) ? { w, r: parseInt(r.runs)||0, mid: r.match_id } : best;
+    }, null);
+
+    /* Maiden count */
+    const totalMaidens = bowlRows.reduce((s,r)=>s+(parseInt(r.maidens)||0),0);
+
+    let html = `<div class="hl-section"><div class="hl-section-title">🎳 Bowling Highlights</div>`;
+    if (topVictim) html += `<div class="hl-fact">🎯 <b>Favourite victim:</b> <span class="hl-name">${esc(topVictim[0])}</span> (dismissed <b>${topVictim[1]}×</b>)</div>`;
+    if (bestSpell && bestSpell.w > 0) html += `<div class="hl-fact">⚡ <b>Best spell:</b> <span class="hl-name">${bestSpell.w}/${bestSpell.r}</span></div>`;
+    if (totalMaidens > 0) html += `<div class="hl-fact">🔒 <b>Maiden overs:</b> <b>${totalMaidens}</b></div>`;
+    html += `</div>`;
+    parts.push(html);
+  }
+
+  return parts.length ? `<div class="player-highlights">${parts.join('')}</div>` : '';
+}
 
 function renderPlayerDetail(playerName) {
   const section = document.getElementById('playerDetailSection');
@@ -396,6 +573,7 @@ function renderPlayerDetail(playerName) {
     </div>
   ` : '';
 
+  const highlights = buildPlayerHighlights(playerName);
   card.innerHTML = `
     <div class="player-avatar">${esc(initials)}</div>
     <div class="player-info">
@@ -411,6 +589,7 @@ function renderPlayerDetail(playerName) {
         ${batStats}${bowlStats}${fieldStats}${mvpStat}
       </div>
     </div>
+    ${highlights}
   `;
 }
 
@@ -724,8 +903,8 @@ function renderPointsTable() {
           </div>
         </td>
         <td class="td-center">${r.M}</td>
-        <td class="td-center" style="color:var(--green);font-weight:600">${r.W}</td>
-        <td class="td-center" style="color:var(--red);font-weight:600">${r.L}</td>
+        <td class="td-center pt-wins-col">${r.W}</td>
+        <td class="td-center pt-loss-col">${r.L}</td>
         <td class="td-center">${r.D}</td>
         <td class="td-center">${r.NR}</td>
         <td class="td-center"><span class="${nrrClass}">${nrrSign}${r.NRR.toFixed(3)}</span></td>
@@ -1048,10 +1227,1208 @@ function renderTeamMvpChart() {
 
 
 /* ============================================================
+   NEW RENDER FUNCTIONS — Match Scorecard CSV powered
+   ============================================================ */
+
+/* ─────────────────────────────────────────
+   Tooltip defaults for new charts
+───────────────────────────────────────── */
+const TOOLTIP_DEFAULTS = {
+  backgroundColor: '#172035',
+  titleColor: '#ffffff',
+  bodyColor: '#b0bec5',
+  borderColor: '#2c3e60',
+  borderWidth: 1,
+  padding: 8
+};
+
+/* ─────────────────────────────────────────
+   Helper: get team color for a player name
+   using matchBatting/matchBowling data
+───────────────────────────────────────── */
+function matchPlayerTeam(playerName, matchBatting, matchBowling) {
+  const batRow  = matchBatting.find(r => r.player && r.player.trim() === playerName);
+  const bowlRow = matchBowling.find(r => r.player && r.player.trim() === playerName);
+  const team = (batRow && batRow.batting_team) || (bowlRow && bowlRow.bowling_team) || '';
+  if (team.includes('RCB')) return { bg: TEAM_COLORS.rcb.bg, border: TEAM_COLORS.rcb.border, chipClass: 'rcb-chip' };
+  if (team.includes('WW'))  return { bg: TEAM_COLORS.ww.bg,  border: TEAM_COLORS.ww.border,  chipClass: 'ww-chip' };
+  return { bg: TEAM_COLORS.def.bg, border: TEAM_COLORS.def.border, chipClass: '' };
+}
+
+/* ─────────────────────────────────────────
+   Helper: parse "DD Mon YYYY" → Date object
+   for chronological sorting
+───────────────────────────────────────── */
+function parseMatchDate(dateStr) {
+  if (!dateStr) return new Date(0);
+  const months = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11 };
+  const parts = dateStr.trim().split(/\s+/);
+  if (parts.length === 3) {
+    const d = parseInt(parts[0], 10);
+    const m = months[parts[1].toLowerCase().slice(0,3)];
+    const y = parseInt(parts[2], 10);
+    if (!isNaN(d) && m !== undefined && !isNaN(y)) return new Date(y, m, d);
+  }
+  return new Date(dateStr) || new Date(0);
+}
+
+/* ─────────────────────────────────────────
+   A. Form Tracker
+───────────────────────────────────────── */
+
+function renderFormTracker(matchBatting, matchBowling) {
+  const wrap = document.getElementById('formHeatMap');
+  if (!wrap) return;
+
+  if (!matchBatting || matchBatting.length === 0) {
+    wrap.innerHTML = '<p class="sc-placeholder">No match data available.</p>';
+    return;
+  }
+
+  /* ── Build sorted match list — most recent FIRST (M-last★ on left, M1 on right) ── */
+  const _chronoIds = [...new Set(matchBatting.map(r => r.match_id))]
+    .sort((a, b) => parseInt(a) - parseInt(b));          // oldest → newest
+  const matchIds = [..._chronoIds].reverse();             // newest → oldest (display order)
+  const _n = _chronoIds.length;
+  const matchLabel = (id, i) => {
+    const num = _n - i;                                   // M12, M11 … M1
+    return i === 0 ? `M${num} ★` : `M${num}`;
+  };
+
+  const matchDates = {};
+  matchBatting.forEach(r => { matchDates[r.match_id] = r.match_date || ''; });
+
+  /* ── Presence maps: match-level AND date-level ──
+     Rule: if a player appeared in ANY match on the same day, they were
+     present for ALL matches that day (same-day = always in squad).        */
+  const presenceMap     = {}; /* playerName → Set<matchId>  */
+  const datePresentMap  = {}; /* playerName → Set<normDate> */
+  const _normDate = d => (d || '').trim().replace(/\s+\d{4}$/, '').toLowerCase(); /* "14 Mar 2026"→"14 mar" */
+  const _addPresence = (rows) => rows.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!presenceMap[p])    presenceMap[p]    = new Set();
+    if (!datePresentMap[p]) datePresentMap[p] = new Set();
+    presenceMap[p].add(r.match_id);
+    datePresentMap[p].add(_normDate(r.match_date));
+  });
+  _addPresence(matchBatting);
+  if (matchBowling) _addPresence(matchBowling);
+
+  /* ── Collect all players with per-match batting data ── */
+  const playerMap = {}; /* { player: { team, totalRuns, matches: { matchId: { runs, balls, dismissal } } } } */
+  matchBatting.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!playerMap[p]) playerMap[p] = { team: r.batting_team, totalRuns: 0, matches: {} };
+    playerMap[p].totalRuns += parseInt(r.runs) || 0;
+    playerMap[p].matches[r.match_id] = {
+      runs:      parseInt(r.runs) || 0,
+      balls:     parseInt(r.balls) || 0,
+      dismissal: r.dismissal_type || ''
+    };
+  });
+
+  /* Sort players: by total runs desc */
+  const players = Object.entries(playerMap).sort((a, b) => b[1].totalRuns - a[1].totalRuns);
+
+  const isRCB = t => (t || '').toLowerCase().includes('royal') || (t || '').toLowerCase().includes('rcb');
+
+  /* ── Cell background colour based on runs ── */
+  function cellBg(d) {
+    if (!d) return 'hm-dnb';
+    if (d.runs === 0) return 'hm-duck';
+    if (d.runs <= 15) return 'hm-low';
+    if (d.runs <= 30) return 'hm-mid';
+    if (d.runs <= 50) return 'hm-good';
+    return 'hm-great';
+  }
+
+  /* ── Build header ── */
+  const headerCells = matchIds.map((id, i) =>
+    `<th class="hm-match-th" title="${matchDates[id]}">${matchLabel(id, i)}</th>`
+  ).join('');
+
+  /* ── Build rows ── */
+  const bodyRows = players.map(([name, d]) => {
+    const teamCls = isRCB(d.team) ? 'hm-rcb' : 'hm-ww';
+    const cells = matchIds.map(id => {
+      const m = d.matches[id];
+      if (!m) {
+        const present = presenceMap[name]?.has(id)
+                     || datePresentMap[name]?.has(_normDate(matchDates[id]));
+        return present
+          ? `<td class="hm-cell hm-dnb" title="Did not bat">—</td>`
+          : `<td class="hm-cell hm-dnb hm-abs" title="Absent / Did not play">A</td>`;
+      }
+      const notOut = m.dismissal === 'not_out' ? '*' : '';
+      const isDuck = m.runs === 0 && m.dismissal !== 'not_out';
+      const tip = `${m.runs}${notOut} (${m.balls}b) · ${(m.dismissal || '').replace('_', ' ')}`;
+      return `<td class="hm-cell ${cellBg(m)}" title="${tip}">${m.runs}${notOut}</td>`;
+    }).join('');
+
+    return `<tr class="hm-row" data-player="${esc(name)}">
+      <td class="hm-name ${teamCls}">${esc(name)}</td>
+      ${cells}
+      <td class="hm-total">${d.totalRuns}</td>
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <table class="hm-table">
+      <thead>
+        <tr>
+          <th class="hm-name-th">Player</th>
+          ${headerCells}
+          <th class="hm-total-th">Total</th>
+        </tr>
+        <tr class="hm-date-row">
+          <td></td>
+          ${matchIds.map(id => `<td class="hm-date-cell">${matchDates[id]?.replace(' 2026','') || ''}</td>`).join('')}
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>${bodyRows}</tbody>
+    </table>`;
+
+  /* ── Click row → show detail chart ── */
+  const detailWrap = document.getElementById('formDetailWrap');
+  const closeBtn   = document.getElementById('formDetailClose');
+  const titleEl    = document.getElementById('formDetailTitle');
+
+  wrap.querySelectorAll('.hm-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const player = row.dataset.player;
+      wrap.querySelectorAll('.hm-row').forEach(r => r.classList.remove('hm-row-active'));
+      row.classList.add('hm-row-active');
+      if (titleEl) titleEl.textContent = `📈 ${player} — Match-by-Match`;
+      if (detailWrap) detailWrap.style.display = '';
+      renderFormChart(player, matchBatting, matchBowling);
+    });
+  });
+
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      if (detailWrap) detailWrap.style.display = 'none';
+      wrap.querySelectorAll('.hm-row').forEach(r => r.classList.remove('hm-row-active'));
+      document.querySelectorAll('.hm-row').forEach(r => r.classList.remove('hm-row-active'));
+      destroyChart('form');
+    };
+  }
+
+  /* ── Tab switching ── */
+  document.querySelectorAll('.hm-tab').forEach(tab => {
+    tab.onclick = () => {
+      const target = tab.dataset.hmTab;
+      document.querySelectorAll('.hm-tab').forEach(t => t.classList.remove('hm-tab-active'));
+      tab.classList.add('hm-tab-active');
+      document.querySelectorAll('.hm-pane').forEach(p => p.style.display = 'none');
+      const pane = document.getElementById('hmPane-' + target);
+      if (pane) pane.style.display = '';
+      if (detailWrap) detailWrap.style.display = 'none';
+      destroyChart('form');
+    };
+  });
+}
+
+/* ── Bowling Heat Map ── */
+function renderBowlingFormTracker(matchBowling, matchBatting) {
+  const wrap = document.getElementById('bowlHeatMap');
+  if (!wrap) return;
+  if (!matchBowling?.length) {
+    wrap.innerHTML = '<p class="sc-placeholder">No bowling data available.</p>';
+    return;
+  }
+
+  /* Sorted match list — most recent FIRST */
+  const _chronoIds = [...new Set(matchBowling.map(r => r.match_id))]
+    .sort((a, b) => parseInt(a) - parseInt(b));          // oldest → newest
+  const matchIds = [..._chronoIds].reverse();             // newest → oldest (display order)
+  const _n = _chronoIds.length;
+  const matchLabel = (id, i) => {
+    const num = _n - i;
+    return i === 0 ? `M${num} ★` : `M${num}`;
+  };
+
+  const matchDates = {};
+  matchBowling.forEach(r => { matchDates[r.match_id] = r.match_date || ''; });
+
+  /* ── Presence maps: match-level AND date-level (same day = in squad all day) ── */
+  const presenceMap    = {};
+  const datePresentMap = {};
+  const _normDate = d => (d || '').trim().replace(/\s+\d{4}$/, '').toLowerCase();
+  const _addP = (rows) => rows.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!presenceMap[p])    presenceMap[p]    = new Set();
+    if (!datePresentMap[p]) datePresentMap[p] = new Set();
+    presenceMap[p].add(r.match_id);
+    datePresentMap[p].add(_normDate(r.match_date));
+  });
+  _addP(matchBowling);
+  if (matchBatting) _addP(matchBatting);
+
+  /* Build player map: { player: { team, totalWkts, matches: { matchId: {w,r,o,eco} } } } */
+  const playerMap = {};
+  matchBowling.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!playerMap[p]) playerMap[p] = { team: r.bowling_team, totalWkts: 0, matches: {} };
+    playerMap[p].totalWkts += parseInt(r.wickets) || 0;
+    playerMap[p].matches[r.match_id] = {
+      w:   parseInt(r.wickets)  || 0,
+      r:   parseInt(r.runs)     || 0,
+      o:   parseFloat(r.overs)  || 0,
+      eco: parseFloat(r.economy)|| 0
+    };
+  });
+
+  /* Sort players by total wickets desc */
+  const players = Object.entries(playerMap).sort((a, b) => b[1].totalWkts - a[1].totalWkts);
+  const isRCB = t => (t||'').toLowerCase().includes('royal') || (t||'').toLowerCase().includes('rcb');
+
+  /* Cell class by wickets */
+  function bowlBg(m) {
+    if (!m) return 'hm-dnb';
+    if (m.w === 0) return 'hm-b0';
+    if (m.w === 1) return 'hm-b1';
+    if (m.w === 2) return 'hm-b2';
+    if (m.w === 3) return 'hm-b3';
+    return 'hm-b4';
+  }
+
+  const headerCells = matchIds.map((id, i) =>
+    `<th class="hm-match-th" title="${matchDates[id]}">${matchLabel(id, i)}</th>`
+  ).join('');
+
+  const bodyRows = players.map(([name, d]) => {
+    const teamCls = isRCB(d.team) ? 'hm-rcb' : 'hm-ww';
+    const cells = matchIds.map(id => {
+      const m = d.matches[id];
+      if (!m) {
+        const present = presenceMap[name]?.has(id)
+                     || datePresentMap[name]?.has(_normDate(matchDates[id]));
+        return present
+          ? `<td class="hm-cell hm-dnb" title="Did not bowl">—</td>`
+          : `<td class="hm-cell hm-dnb hm-abs" title="Absent / Did not play">A</td>`;
+      }
+      const tip = `${m.w}W / ${m.r}R · ${m.o}ov · Eco ${m.eco}`;
+      return `<td class="hm-cell ${bowlBg(m)}" title="${tip}">${m.w}/${m.r}</td>`;
+    }).join('');
+    return `<tr class="hm-row" data-player="${esc(name)}">
+      <td class="hm-name ${teamCls}">${esc(name)}</td>
+      ${cells}
+      <td class="hm-total">${d.totalWkts}W</td>
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <table class="hm-table">
+      <thead>
+        <tr>
+          <th class="hm-name-th">Player</th>
+          ${headerCells}
+          <th class="hm-total-th">Total</th>
+        </tr>
+        <tr class="hm-date-row">
+          <td></td>
+          ${matchIds.map(id => `<td class="hm-date-cell">${(matchDates[id]||'').replace(' 2026','')}</td>`).join('')}
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>${bodyRows}</tbody>
+    </table>`;
+
+  /* Row click → detail chart */
+  const detailWrap = document.getElementById('formDetailWrap');
+  const titleEl    = document.getElementById('formDetailTitle');
+  wrap.querySelectorAll('.hm-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const player = row.dataset.player;
+      wrap.querySelectorAll('.hm-row').forEach(r => r.classList.remove('hm-row-active'));
+      row.classList.add('hm-row-active');
+      if (titleEl) titleEl.textContent = `🎳 ${player} — Bowling by Match`;
+      if (detailWrap) detailWrap.style.display = '';
+      renderFormChart(player, state.matchBatting, state.matchBowling);
+    });
+  });
+}
+
+function renderFormChart(playerName, matchBatting, matchBowling) {
+  destroyChart('form');
+  const canvas = document.getElementById('formChart');
+  if (!canvas) return;
+
+  /* Collect all match dates, sorted chronologically */
+  const dateSet = new Set();
+  matchBatting.forEach(r => { if (r.match_date) dateSet.add(r.match_date); });
+  matchBowling.forEach(r => { if (r.match_date) dateSet.add(r.match_date); });
+
+  const sortedDates = [...dateSet].sort((a, b) => parseMatchDate(a) - parseMatchDate(b));
+
+  /* Aggregate runs & wickets per match date for this player */
+  const runsPerDate = {};
+  const wicketsPerDate = {};
+  sortedDates.forEach(d => { runsPerDate[d] = 0; wicketsPerDate[d] = 0; });
+
+  matchBatting
+    .filter(r => r.player && r.player.trim() === playerName)
+    .forEach(r => {
+      if (r.match_date in runsPerDate) runsPerDate[r.match_date] += num(r.runs);
+    });
+
+  matchBowling
+    .filter(r => r.player && r.player.trim() === playerName)
+    .forEach(r => {
+      if (r.match_date in wicketsPerDate) wicketsPerDate[r.match_date] += num(r.wickets);
+    });
+
+  const tc = matchPlayerTeam(playerName, matchBatting, matchBowling);
+  const runsColor    = tc.border || '#387ed1';
+  const wicketsColor = '#fb8c00';
+
+  const ctx = canvas.getContext('2d');
+  charts.form = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: sortedDates,
+      datasets: [
+        {
+          label: 'Runs',
+          data: sortedDates.map(d => runsPerDate[d]),
+          borderColor: runsColor,
+          backgroundColor: runsColor.replace(')', ', 0.08)').replace('rgb', 'rgba').replace('#', 'rgba(') || 'rgba(56,126,209,0.08)',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          tension: 0.3,
+          fill: true,
+          yAxisID: 'yRuns'
+        },
+        {
+          label: 'Wickets',
+          data: sortedDates.map(d => wicketsPerDate[d]),
+          borderColor: wicketsColor,
+          backgroundColor: 'rgba(251,140,0,0.08)',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          tension: 0.3,
+          borderDash: [4, 3],
+          yAxisID: 'yWkts'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      animation: { duration: 350 },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: { color: '#7a7a7a', font: { size: 11 }, boxWidth: 12, padding: 16 }
+        },
+        tooltip: {
+          ...TOOLTIP_DEFAULTS,
+          callbacks: {
+            title: items => `Match: ${items[0].label}`,
+            label: item => `  ${item.dataset.label}: ${item.raw}`
+          }
+        },
+        title: {
+          display: true,
+          text: playerName,
+          color: '#383838',
+          font: { size: 12, weight: '600' },
+          padding: { bottom: 8 }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: '#f0f3f5' },
+          ticks: { color: '#7a7a7a', font: { size: 10 }, maxRotation: 45 }
+        },
+        yRuns: {
+          type: 'linear',
+          position: 'left',
+          grid: { color: '#f0f3f5' },
+          ticks: { color: '#7a7a7a', font: { size: 11 }, stepSize: 5 },
+          title: { display: true, text: 'Runs', color: '#7a7a7a', font: { size: 10 } }
+        },
+        yWkts: {
+          type: 'linear',
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: { color: wicketsColor, font: { size: 11 }, stepSize: 1 },
+          title: { display: true, text: 'Wickets', color: wicketsColor, font: { size: 10 } },
+          min: 0
+        }
+      }
+    }
+  });
+}
+
+
+/* ─────────────────────────────────────────
+   B. Scorecard Viewer
+───────────────────────────────────────── */
+
+function renderScorecardViewer(matchMeta, matchBatting, matchBowling) {
+  const sel     = document.getElementById('matchSelect');
+  const content = document.getElementById('scorecardContent');
+  if (!sel || !content) return;
+
+  if (!matchMeta || matchMeta.length === 0) {
+    content.innerHTML = `
+      <div class="sc-placeholder">
+        <div class="sc-placeholder-icon">📋</div>
+        <div>Run <strong>extract.html</strong> and place the CSVs in <code>data/</code> to view match scorecards.</div>
+      </div>`;
+    return;
+  }
+
+  /* Sort matches — most recent first */
+  const sorted = [...matchMeta].sort((a, b) => parseMatchDate(b.match_date) - parseMatchDate(a.match_date));
+
+  /* Populate dropdown */
+  sel.innerHTML = '<option value="">— Select a match —</option>';
+  sorted.forEach((m, i) => {
+    const opt = document.createElement('option');
+    opt.value = m.match_id;
+    const t1  = m.innings1_team ? (m.innings1_team.includes('RCB') ? 'RCB' : 'WW') : '?';
+    const t2  = m.innings2_team ? (m.innings2_team.includes('RCB') ? 'RCB' : 'WW') : '?';
+    const label = i === 0 ? `Match ${i + 1} ★ Latest` : `Match ${i + 1}`;
+    opt.textContent = `${label} — ${t1} vs ${t2} (${m.match_date || 'Unknown date'})`;
+    sel.appendChild(opt);
+  });
+
+  /* Restore previously selected match if still present */
+  if (state.selectedMatchId && [...sel.options].some(o => o.value === state.selectedMatchId)) {
+    sel.value = state.selectedMatchId;
+    renderScorecardForMatch(state.selectedMatchId, matchMeta, matchBatting, matchBowling);
+  } else {
+    content.innerHTML = `
+      <div class="sc-placeholder">
+        <div class="sc-placeholder-icon">📋</div>
+        <div>Select a match above to view the scorecard.</div>
+      </div>`;
+  }
+
+  sel.addEventListener('change', e => {
+    state.selectedMatchId = e.target.value;
+    if (!state.selectedMatchId) {
+      content.innerHTML = `<div class="sc-placeholder"><div class="sc-placeholder-icon">📋</div><div>Select a match above to view the scorecard.</div></div>`;
+      return;
+    }
+    renderScorecardForMatch(state.selectedMatchId, matchMeta, matchBatting, matchBowling);
+  });
+}
+
+function renderScorecardForMatch(matchId, matchMeta, matchBatting, matchBowling) {
+  const content = document.getElementById('scorecardContent');
+  if (!content) return;
+
+  const meta = matchMeta.find(m => String(m.match_id) === String(matchId));
+  if (!meta) {
+    content.innerHTML = `<div class="sc-placeholder"><div class="sc-placeholder-icon">❓</div><div>Match not found.</div></div>`;
+    return;
+  }
+
+  const innings1Bat  = matchBatting.filter(r => String(r.match_id) === String(matchId) && String(r.innings) === '1');
+  const innings2Bat  = matchBatting.filter(r => String(r.match_id) === String(matchId) && String(r.innings) === '2');
+  const innings1Bowl = matchBowling.filter(r => String(r.match_id) === String(matchId) && String(r.innings) === '1');
+  const innings2Bowl = matchBowling.filter(r => String(r.match_id) === String(matchId) && String(r.innings) === '2');
+
+  function calcScore(batRows) {
+    const runs  = batRows.reduce((s, r) => s + num(r.runs), 0);
+    const wkts  = batRows.filter(r => r.dismissal_type && r.dismissal_type !== 'not_out' && r.dismissal_type !== 'unknown' && r.dismissal_type !== 'retired_hurt').length;
+    return runs ? `${runs}/${wkts}` : '';
+  }
+
+  function dismissalText(row) {
+    switch (row.dismissal_type) {
+      case 'not_out':      return `<span class="sc-not-out">not out</span>`;
+      case 'retired_hurt': return `<span class="sc-dis">retired hurt</span>`;
+      case 'bowled':       return `<span class="sc-dis">b ${esc(row.dismissed_by || '')}</span>`;
+      case 'caught':       return `<span class="sc-dis">c ${esc(row.caught_by || '')} b ${esc(row.dismissed_by || '')}</span>`;
+      case 'lbw':          return `<span class="sc-dis">lbw b ${esc(row.dismissed_by || '')}</span>`;
+      case 'run_out':      return `<span class="sc-dis">run out${row.dismissed_by ? ' (' + esc(row.dismissed_by) + ')' : ''}</span>`;
+      case 'stumped':      return `<span class="sc-dis">st ${esc(row.caught_by || '')} b ${esc(row.dismissed_by || '')}</span>`;
+      default:             return `<span class="sc-dis">${esc(row.dismissal_type || '')}</span>`;
+    }
+  }
+
+  function buildBattingTable(batRows) {
+    if (!batRows.length) return '<p style="padding:12px;color:#b0b0b0;font-size:12px;">No batting data.</p>';
+    const sorted = [...batRows].sort((a, b) => num(a.position) - num(b.position));
+    const rows = sorted.map(r => `
+      <tr>
+        <td>${num(r.position) || ''}</td>
+        <td style="text-align:left;font-weight:600;">${esc(r.player)}<br>${dismissalText(r)}</td>
+        <td><strong>${num(r.runs)}</strong></td>
+        <td>${num(r.balls)}</td>
+        <td>${num(r.fours)}</td>
+        <td>${num(r.sixes)}</td>
+        <td>${num(r.strike_rate) ? num(r.strike_rate).toFixed(1) : '—'}</td>
+      </tr>`).join('');
+    const totalRuns = sorted.reduce((s, r) => s + num(r.runs), 0);
+    const totalWkts = sorted.filter(r => r.dismissal_type && r.dismissal_type !== 'not_out' && r.dismissal_type !== 'unknown' && r.dismissal_type !== 'retired_hurt').length;
+    return `
+      <table class="sc-table">
+        <thead><tr>
+          <th>#</th><th style="text-align:left;min-width:160px;">Batter</th>
+          <th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr class="sc-total-row">
+          <td></td><td style="text-align:left;font-weight:700;">Total</td>
+          <td><strong>${totalRuns}/${totalWkts}</strong></td>
+          <td colspan="4"></td>
+        </tr></tfoot>
+      </table>`;
+  }
+
+  function buildBowlingTable(bowlRows) {
+    if (!bowlRows.length) return '<p style="padding:12px;color:#b0b0b0;font-size:12px;">No bowling data.</p>';
+    const rows = bowlRows.map(r => `
+      <tr>
+        <td style="text-align:left;font-weight:600;">${esc(r.player)}</td>
+        <td>${num(r.overs)}</td>
+        <td>${num(r.maidens)}</td>
+        <td>${num(r.runs)}</td>
+        <td><strong>${num(r.wickets)}</strong></td>
+        <td>${num(r.dot_balls)}</td>
+        <td>${num(r.fours_conceded)}</td>
+        <td>${num(r.sixes_conceded)}</td>
+        <td>${num(r.wides)}</td>
+        <td>${num(r.no_balls)}</td>
+        <td>${num(r.economy) ? num(r.economy).toFixed(2) : '—'}</td>
+      </tr>`).join('');
+    return `
+      <table class="sc-table">
+        <thead><tr>
+          <th style="text-align:left;min-width:140px;">Bowler</th>
+          <th>O</th><th>M</th><th>R</th><th>W</th>
+          <th>Dots</th><th>4s</th><th>6s</th><th>WD</th><th>NB</th><th>Eco</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  function buildInningsBlock(inningsNum, battingTeam, batRows, bowlRows) {
+    const teamShort = battingTeam ? (battingTeam.includes('RCB') ? 'RCB' : battingTeam.includes('WW') ? 'WW' : battingTeam) : `Inn ${inningsNum}`;
+    const score     = calcScore(batRows);
+    return `
+      <div class="scorecard-innings-block">
+        <div class="sc-innings-header">
+          <span class="sc-innings-title">${inningsNum === 1 ? '1st' : '2nd'} Innings — ${esc(teamShort)}</span>
+          ${score ? `<span class="sc-innings-score">${score}</span>` : ''}
+        </div>
+        <div class="sc-section-label">Batting</div>
+        ${buildBattingTable(batRows)}
+        <div class="sc-section-label">Bowling</div>
+        ${buildBowlingTable(bowlRows)}
+      </div>`;
+  }
+
+  const resultLine = meta.result ? `<div style="padding:8px 16px 4px;font-size:11px;color:#7a7a7a;font-style:italic;">${esc(meta.result)}${meta.toss_winner ? ` · Toss: ${esc(meta.toss_winner.includes('RCB') ? 'RCB' : 'WW')} chose to ${esc(meta.toss_decision || '')}` : ''}</div>` : '';
+
+  content.innerHTML =
+    resultLine +
+    buildInningsBlock(1, meta.innings1_team, innings1Bat, innings1Bowl) +
+    buildInningsBlock(2, meta.innings2_team, innings2Bat, innings2Bowl);
+}
+
+
+/* ─────────────────────────────────────────
+   C. Bowling Discipline
+───────────────────────────────────────── */
+
+function renderBowlingDiscipline(matchBowling) {
+  renderExtrasPerBowler(matchBowling);
+  renderDotPct(matchBowling);
+  renderBoundaryPct(matchBowling);
+  renderWicketTypePie(state.matchBatting);
+}
+
+function renderExtrasPerBowler(matchBowling) {
+  destroyChart('extrasPerBowler');
+  if (!matchBowling || matchBowling.length === 0) {
+    showEmptyChart('extrasPerBowlerChart', 'Run extract.html to unlock bowling discipline charts');
+    return;
+  }
+  hideEmptyChart('extrasPerBowlerChart');
+
+  /* Aggregate per bowler */
+  const totals = {};
+  matchBowling.forEach(r => {
+    const p = (r.player || '').trim();
+    if (!p) return;
+    if (!totals[p]) totals[p] = { wides: 0, noBalls: 0 };
+    totals[p].wides   += num(r.wides);
+    totals[p].noBalls += num(r.no_balls);
+  });
+
+  const sorted = Object.entries(totals)
+    .map(([name, v]) => ({ name, total: v.wides + v.noBalls, ...v }))
+    .filter(r => r.total > 0)
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 12);
+
+  if (!sorted.length) { showEmptyChart('extrasPerBowlerChart', 'No extras data'); return; }
+
+  const ctx = document.getElementById('extrasPerBowlerChart').getContext('2d');
+  charts.extrasPerBowler = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(r => r.name),
+      datasets: [
+        { label: 'Wides',    data: sorted.map(r => r.wides),   backgroundColor: 'rgba(229,57,53,0.75)',  borderColor: '#e53935', borderWidth: 1, borderRadius: 3 },
+        { label: 'No-Balls', data: sorted.map(r => r.noBalls), backgroundColor: 'rgba(251,140,0,0.75)',  borderColor: '#fb8c00', borderWidth: 1, borderRadius: 3 }
+      ]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      animation: { duration: 380 },
+      plugins: {
+        legend: { display: true, labels: { color: '#7a7a7a', font: { size: 11 }, boxWidth: 10 } },
+        tooltip: { ...TOOLTIP_DEFAULTS }
+      },
+      scales: {
+        x: { stacked: false, grid: { color: '#f0f3f5' }, ticks: { color: '#7a7a7a', font: { size: 11 } } },
+        y: { grid: { display: false }, ticks: { color: '#383838', font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function renderDotPct(matchBowling) {
+  destroyChart('dotPct');
+  if (!matchBowling || matchBowling.length === 0) {
+    showEmptyChart('dotPctChart', 'Run extract.html to unlock dot ball % chart');
+    return;
+  }
+  hideEmptyChart('dotPctChart');
+
+  const totals = {};
+  matchBowling.forEach(r => {
+    const p = (r.player || '').trim();
+    if (!p) return;
+    if (!totals[p]) totals[p] = { dots: 0, balls: 0 };
+    totals[p].dots  += num(r.dot_balls);
+    totals[p].balls += Math.round(num(r.overs) * 6);
+  });
+
+  const sorted = Object.entries(totals)
+    .filter(([, v]) => v.balls > 0)
+    .map(([name, v]) => ({ name, pct: parseFloat(((v.dots / v.balls) * 100).toFixed(1)) }))
+    .sort((a, b) => b.pct - a.pct)
+    .slice(0, 12);
+
+  if (!sorted.length) { showEmptyChart('dotPctChart', 'No dot ball data'); return; }
+
+  const n = sorted.length;
+  const bgColors = sorted.map((_, i) => {
+    const t = n > 1 ? i / (n - 1) : 0;
+    /* Green (high %) → Red (low %) */
+    const rv = Math.round(34  + (1 - t) * 205);
+    const gv = Math.round(197 - (1 - t) * 148);
+    const bv = Math.round(94  - (1 - t) * 72);
+    return `rgba(${rv},${gv},${bv},0.75)`;
+  });
+
+  const ctx = document.getElementById('dotPctChart').getContext('2d');
+  charts.dotPct = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(r => r.name),
+      datasets: [{
+        label: 'Dot %',
+        data: sorted.map(r => r.pct),
+        backgroundColor: bgColors,
+        borderColor: bgColors.map(c => c.replace('0.75', '1')),
+        borderWidth: 1, borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      animation: { duration: 380 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { ...TOOLTIP_DEFAULTS, callbacks: { label: ctx => `  ${ctx.raw}%` } }
+      },
+      scales: {
+        x: { grid: { color: '#f0f3f5' }, ticks: { color: '#7a7a7a', font: { size: 11 }, callback: v => v + '%' } },
+        y: { grid: { display: false }, ticks: { color: '#383838', font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function renderBoundaryPct(matchBowling) {
+  destroyChart('boundaryPct');
+  if (!matchBowling || matchBowling.length === 0) {
+    showEmptyChart('boundaryPctChart', 'Run extract.html to unlock boundary % chart');
+    return;
+  }
+  hideEmptyChart('boundaryPctChart');
+
+  const totals = {};
+  matchBowling.forEach(r => {
+    const p = (r.player || '').trim();
+    if (!p) return;
+    if (!totals[p]) totals[p] = { fours: 0, sixes: 0, balls: 0 };
+    totals[p].fours += num(r.fours_conceded);
+    totals[p].sixes += num(r.sixes_conceded);
+    totals[p].balls += Math.round(num(r.overs) * 6);
+  });
+
+  const sorted = Object.entries(totals)
+    .filter(([, v]) => v.balls > 0)
+    .map(([name, v]) => ({ name, pct: parseFloat((((v.fours + v.sixes) / v.balls) * 100).toFixed(1)) }))
+    .sort((a, b) => a.pct - b.pct)  /* ascending — lower is better */
+    .slice(0, 12);
+
+  if (!sorted.length) { showEmptyChart('boundaryPctChart', 'No boundary conceded data'); return; }
+
+  const n = sorted.length;
+  const bgColors = sorted.map((_, i) => {
+    /* Ascending order: best (green) first, worst (red) last */
+    const t = n > 1 ? i / (n - 1) : 0;
+    const rv = Math.round(34  + t * 205);
+    const gv = Math.round(197 - t * 148);
+    const bv = Math.round(94  - t * 72);
+    return `rgba(${rv},${gv},${bv},0.75)`;
+  });
+
+  const ctx = document.getElementById('boundaryPctChart').getContext('2d');
+  charts.boundaryPct = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(r => r.name),
+      datasets: [{
+        label: 'Boundary %',
+        data: sorted.map(r => r.pct),
+        backgroundColor: bgColors,
+        borderColor: bgColors.map(c => c.replace('0.75', '1')),
+        borderWidth: 1, borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      animation: { duration: 380 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { ...TOOLTIP_DEFAULTS, callbacks: { label: ctx => `  ${ctx.raw}%` } }
+      },
+      scales: {
+        x: { grid: { color: '#f0f3f5' }, ticks: { color: '#7a7a7a', font: { size: 11 }, callback: v => v + '%' } },
+        y: { grid: { display: false }, ticks: { color: '#383838', font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function renderWicketTypePie(matchBatting) {
+  destroyChart('wicketTypePie');
+  if (!matchBatting || matchBatting.length === 0) {
+    showEmptyChart('wicketTypePieChart', 'Run extract.html to see wicket types');
+    return;
+  }
+  hideEmptyChart('wicketTypePieChart');
+
+  const counts = { bowled: 0, caught: 0, lbw: 0, run_out: 0, stumped: 0, other: 0 };
+  matchBatting.forEach(r => {
+    const dt = (r.dismissal_type || '').toLowerCase();
+    if (dt === 'not_out' || dt === 'retired_hurt' || dt === 'unknown' || dt === '') return;
+    if (dt in counts) counts[dt]++;
+    else counts.other++;
+  });
+
+  const labels = Object.keys(counts).filter(k => counts[k] > 0);
+  const data   = labels.map(k => counts[k]);
+  const colorMap = {
+    bowled:  '#e53935', caught: '#1976d2', lbw: '#fb8c00',
+    run_out: '#43a047', stumped: '#ab47bc', other: '#9e9e9e'
+  };
+  const bgColors = labels.map(l => colorMap[l] || '#9e9e9e');
+
+  if (!data.length) { showEmptyChart('wicketTypePieChart', 'No wicket type data'); return; }
+
+  const ctx = document.getElementById('wicketTypePieChart').getContext('2d');
+  charts.wicketTypePie = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels.map(l => l.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())),
+      datasets: [{
+        data,
+        backgroundColor: bgColors.map(c => c + 'bf'),
+        borderColor: bgColors,
+        borderWidth: 2, hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '55%',
+      animation: { duration: 450 },
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: '#7a7a7a', padding: 10, font: { size: 11 }, boxWidth: 10 } },
+        tooltip: { ...TOOLTIP_DEFAULTS, callbacks: { label: ctx => `  ${ctx.label}: ${ctx.raw}` } }
+      }
+    }
+  });
+}
+
+
+/* ─────────────────────────────────────────
+   D. Dismissal Analysis
+───────────────────────────────────────── */
+
+function renderDismissalAnalysis(matchBatting) {
+  renderDismissalTypePie(matchBatting);
+  renderNotOutPct(matchBatting);
+}
+
+function renderDismissalTypePie(matchBatting) {
+  destroyChart('dismissalTypePie');
+  if (!matchBatting || matchBatting.length === 0) {
+    showEmptyChart('dismissalTypePieChart', 'Run extract.html to unlock dismissal analysis');
+    return;
+  }
+  hideEmptyChart('dismissalTypePieChart');
+
+  const colorMap = {
+    bowled:       '#e53935',
+    caught:       '#1976d2',
+    lbw:          '#fb8c00',
+    run_out:      '#43a047',
+    not_out:      '#9e9e9e',
+    retired_hurt: '#ab47bc',
+    stumped:      '#00acc1',
+    unknown:      '#cfd8dc'
+  };
+
+  const counts = {};
+  matchBatting.forEach(r => {
+    const dt = (r.dismissal_type || 'unknown').toLowerCase();
+    counts[dt] = (counts[dt] || 0) + 1;
+  });
+
+  const order = ['bowled','caught','lbw','run_out','stumped','not_out','retired_hurt','unknown'];
+  const labels = order.filter(k => (counts[k] || 0) > 0);
+  const data   = labels.map(k => counts[k]);
+  const bgColors = labels.map(l => colorMap[l] || '#9e9e9e');
+
+  if (!data.length) { showEmptyChart('dismissalTypePieChart', 'No dismissal data'); return; }
+
+  const ctx = document.getElementById('dismissalTypePieChart').getContext('2d');
+  charts.dismissalTypePie = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels.map(l => l.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())),
+      datasets: [{
+        data,
+        backgroundColor: bgColors.map(c => c + 'bf'),
+        borderColor: bgColors,
+        borderWidth: 2, hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '55%',
+      animation: { duration: 450 },
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: '#7a7a7a', padding: 10, font: { size: 11 }, boxWidth: 10 } },
+        tooltip: { ...TOOLTIP_DEFAULTS, callbacks: { label: ctx => `  ${ctx.label}: ${ctx.raw}` } }
+      }
+    }
+  });
+}
+
+function renderNotOutPct(matchBatting) {
+  destroyChart('notOutPct');
+  if (!matchBatting || matchBatting.length === 0) {
+    showEmptyChart('notOutPctChart', 'Run extract.html to unlock not-out % chart');
+    return;
+  }
+  hideEmptyChart('notOutPctChart');
+
+  const playerData = {};
+  matchBatting.forEach(r => {
+    const p = (r.player || '').trim();
+    if (!p) return;
+    if (!playerData[p]) playerData[p] = { innings: 0, notOuts: 0 };
+    playerData[p].innings++;
+    if ((r.dismissal_type || '').toLowerCase() === 'not_out') playerData[p].notOuts++;
+  });
+
+  const sorted = Object.entries(playerData)
+    .filter(([, v]) => v.innings >= 3)
+    .map(([name, v]) => ({ name, pct: parseFloat(((v.notOuts / v.innings) * 100).toFixed(1)) }))
+    .sort((a, b) => b.pct - a.pct)
+    .slice(0, 12);
+
+  if (!sorted.length) { showEmptyChart('notOutPctChart', 'No data (min 3 innings)'); return; }
+
+  const ctx = document.getElementById('notOutPctChart').getContext('2d');
+  charts.notOutPct = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(r => r.name),
+      datasets: [{
+        label: 'Not Out %',
+        data: sorted.map(r => r.pct),
+        backgroundColor: 'rgba(0,162,91,0.70)',
+        borderColor: '#00a25b',
+        borderWidth: 1, borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      animation: { duration: 380 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { ...TOOLTIP_DEFAULTS, callbacks: { label: ctx => `  ${ctx.raw}%` } }
+      },
+      scales: {
+        x: { grid: { color: '#f0f3f5' }, max: 100, ticks: { color: '#7a7a7a', font: { size: 11 }, callback: v => v + '%' } },
+        y: { grid: { display: false }, ticks: { color: '#383838', font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+
+/* ─────────────────────────────────────────
+   E. Toss Analysis
+───────────────────────────────────────── */
+
+function renderTossAnalysis(matchMeta) {
+  destroyChart('tossAnalysis');
+  if (!matchMeta || matchMeta.length === 0) {
+    showEmptyChart('tossAnalysisChart', 'Run extract.html to unlock toss analysis');
+    return;
+  }
+  hideEmptyChart('tossAnalysisChart');
+
+  /* Per team: toss wins, matches won when won toss, matches won when lost toss */
+  const teams = {
+    RCB: { tossWins: 0, wonWhenTossWin: 0, wonWhenTossLoss: 0 },
+    WW:  { tossWins: 0, wonWhenTossWin: 0, wonWhenTossLoss: 0 }
+  };
+
+  matchMeta.forEach(m => {
+    const tossTeam   = m.toss_winner || '';
+    const winner     = m.winner || '';
+    const tossIsRCB  = tossTeam.includes('Royal Cricket Blasters') || tossTeam.includes('RCB');
+    const tossIsWW   = tossTeam.includes('Weekend Warriors') || tossTeam.includes('WW');
+    const winnerIsRCB= winner.includes('Royal Cricket Blasters') || winner.includes('RCB');
+    const winnerIsWW = winner.includes('Weekend Warriors') || winner.includes('WW');
+
+    if (tossIsRCB) {
+      teams.RCB.tossWins++;
+      if (winnerIsRCB) teams.RCB.wonWhenTossWin++;
+      if (winnerIsWW)  teams.WW.wonWhenTossLoss++;
+    }
+    if (tossIsWW) {
+      teams.WW.tossWins++;
+      if (winnerIsWW)  teams.WW.wonWhenTossWin++;
+      if (winnerIsRCB) teams.RCB.wonWhenTossLoss++;
+    }
+  });
+
+  const ctx = document.getElementById('tossAnalysisChart').getContext('2d');
+  charts.tossAnalysis = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['RCB', 'WW'],
+      datasets: [
+        {
+          label: 'Toss Wins',
+          data: [teams.RCB.tossWins, teams.WW.tossWins],
+          backgroundColor: ['rgba(229,57,53,0.55)', 'rgba(25,118,210,0.55)'],
+          borderColor: ['#e53935', '#1976d2'],
+          borderWidth: 1, borderRadius: 3
+        },
+        {
+          label: 'Won (toss won)',
+          data: [teams.RCB.wonWhenTossWin, teams.WW.wonWhenTossWin],
+          backgroundColor: ['rgba(229,57,53,0.85)', 'rgba(25,118,210,0.85)'],
+          borderColor: ['#e53935', '#1976d2'],
+          borderWidth: 1, borderRadius: 3
+        },
+        {
+          label: 'Won (toss lost)',
+          data: [teams.RCB.wonWhenTossLoss, teams.WW.wonWhenTossLoss],
+          backgroundColor: ['rgba(0,162,91,0.65)', 'rgba(0,162,91,0.65)'],
+          borderColor: ['#00a25b', '#00a25b'],
+          borderWidth: 1, borderRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 400 },
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: '#7a7a7a', font: { size: 11 }, boxWidth: 10, padding: 12 } },
+        tooltip: { ...TOOLTIP_DEFAULTS }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#383838', font: { size: 12, weight: '500' } } },
+        y: { grid: { color: '#f0f3f5' }, ticks: { color: '#7a7a7a', font: { size: 11 }, stepSize: 1 } }
+      }
+    }
+  });
+}
+
+
+/* ─────────────────────────────────────────
+   E (2). Extras Team Chart
+───────────────────────────────────────── */
+
+function renderExtrasTeamChart(matchBowling) {
+  destroyChart('extrasTeam');
+  if (!matchBowling || matchBowling.length === 0) {
+    showEmptyChart('extrasTeamChart', 'Run extract.html to unlock extras chart');
+    return;
+  }
+  hideEmptyChart('extrasTeamChart');
+
+  /* Each row's bowling_team is the team doing the bowling (conceding extras) */
+  const teams = { RCB: { wides: 0, noBalls: 0 }, WW: { wides: 0, noBalls: 0 } };
+  matchBowling.forEach(r => {
+    const bt = (r.bowling_team || '').toLowerCase();
+    const key = bt.includes('rcb') || bt.includes('royal') ? 'RCB' :
+                bt.includes('ww')  || bt.includes('weekend') ? 'WW' : null;
+    if (!key) return;
+    teams[key].wides   += num(r.wides);
+    teams[key].noBalls += num(r.no_balls);
+  });
+
+  const ctx = document.getElementById('extrasTeamChart').getContext('2d');
+  charts.extrasTeam = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['RCB Bowling', 'WW Bowling'],
+      datasets: [
+        {
+          label: 'Wides',
+          data: [teams.RCB.wides, teams.WW.wides],
+          backgroundColor: ['rgba(229,57,53,0.70)', 'rgba(25,118,210,0.70)'],
+          borderColor: ['#e53935', '#1976d2'],
+          borderWidth: 1, borderRadius: 3
+        },
+        {
+          label: 'No-Balls',
+          data: [teams.RCB.noBalls, teams.WW.noBalls],
+          backgroundColor: ['rgba(229,57,53,0.40)', 'rgba(25,118,210,0.40)'],
+          borderColor: ['#e53935', '#1976d2'],
+          borderWidth: 1, borderRadius: 3, borderDash: [4, 2]
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 400 },
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: '#7a7a7a', font: { size: 11 }, boxWidth: 10, padding: 12 } },
+        tooltip: { ...TOOLTIP_DEFAULTS }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#383838', font: { size: 12, weight: '500' } } },
+        y: { grid: { color: '#f0f3f5' }, ticks: { color: '#7a7a7a', font: { size: 11 }, stepSize: 1 } }
+      }
+    }
+  });
+}
+
+
+/* ─────────────────────────────────────────
+   F. Bowler vs Batsman Matchup Table
+───────────────────────────────────────── */
+
+function renderMatchupTable(matchBatting) {
+  const banner = document.getElementById('matchupBanner');
+  const wrap   = document.getElementById('matchupTableWrap');
+  if (!wrap) return;
+
+  if (!matchBatting || matchBatting.length === 0) {
+    if (banner) banner.classList.remove('hidden');
+    wrap.innerHTML = '';
+    return;
+  }
+
+  /* Filter to actual dismissals by a bowler */
+  const dismissalTypes = new Set(['bowled', 'caught', 'lbw', 'stumped']);
+  const dismissals = matchBatting.filter(r =>
+    r.dismissal_type && dismissalTypes.has(r.dismissal_type.toLowerCase()) &&
+    r.dismissed_by && r.dismissed_by.trim() !== ''
+  );
+
+  if (!dismissals.length) {
+    if (banner) banner.classList.remove('hidden');
+    wrap.innerHTML = '';
+    return;
+  }
+
+  if (banner) banner.classList.add('hidden');
+
+  /* Collect unique bowlers (rows) and batsmen (columns) */
+  const bowlerSet  = new Set();
+  const batsmanSet = new Set();
+  dismissals.forEach(r => {
+    bowlerSet.add(r.dismissed_by.trim());
+    batsmanSet.add(r.player.trim());
+  });
+
+  const bowlers  = [...bowlerSet].sort();
+  const batsmen  = [...batsmanSet].sort();
+
+  /* Build matrix: matrix[bowler][batsman] = count */
+  const matrix = {};
+  bowlers.forEach(b => { matrix[b] = {}; batsmen.forEach(bt => { matrix[b][bt] = 0; }); });
+  dismissals.forEach(r => {
+    const b  = r.dismissed_by.trim();
+    const bt = r.player.trim();
+    if (matrix[b] && bt in matrix[b]) matrix[b][bt]++;
+  });
+
+  /* Row totals */
+  const rowTotals = {};
+  bowlers.forEach(b => { rowTotals[b] = batsmen.reduce((s, bt) => s + matrix[b][bt], 0); });
+  /* Col totals */
+  const colTotals = {};
+  batsmen.forEach(bt => { colTotals[bt] = bowlers.reduce((s, b) => s + matrix[b][bt], 0); });
+  const grandTotal = bowlers.reduce((s, b) => s + rowTotals[b], 0);
+
+  /* Build HTML table */
+  const headerCells = batsmen.map(bt => `<th class="matchup-bat-th" title="${esc(bt)}"><div class="matchup-rotated">${esc(bt)}</div></th>`).join('');
+  const headerRow = `<tr><th class="matchup-bowler-th">Bowler ↓ · Batsman →</th>${headerCells}<th class="matchup-total-col">Total</th></tr>`;
+
+  const bodyRows = bowlers.map(b => {
+    const cells = batsmen.map(bt => {
+      const v = matrix[b][bt];
+      if (v === 0) return `<td>–</td>`;
+      const hitClass = v >= 2 ? ' matchup-cell-hit matchup-cell-hit2' : ' matchup-cell-hit';
+      return `<td class="${hitClass}">${v}</td>`;
+    }).join('');
+    return `<tr><td>${esc(b)}</td>${cells}<td class="matchup-total-col">${rowTotals[b]}</td></tr>`;
+  }).join('');
+
+  const totalCells = batsmen.map(bt => `<td class="">${colTotals[bt]}</td>`).join('');
+  const totalRow = `<tr class="matchup-total-row"><td>Total</td>${totalCells}<td class="matchup-total-col">${grandTotal}</td></tr>`;
+
+  wrap.innerHTML = `
+    <table class="matchup-table">
+      <thead>${headerRow}</thead>
+      <tbody>${bodyRows}${totalRow}</tbody>
+    </table>`;
+}
+
+
+/* ============================================================
    Main render — called on every filter change
    ============================================================ */
 
-function renderTopHeroes(batting, bowling, fielding, mvp) {
+function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBowling) {
   const grid = document.getElementById('topHeroesGrid');
   if (!grid) return;
 
@@ -1075,10 +2452,17 @@ function renderTopHeroes(batting, bowling, fielding, mvp) {
   const tBat      = topTied(batting,  r => num(r.total_runs),      r => num(r.total_runs) > 0);
   const tBowl     = topTied(bowling,  r => num(r.total_wickets),   r => num(r.total_wickets) > 0);
   const tField    = topTied(fielding, r => num(r.total_dismissal), r => num(r.total_dismissal) > 0);
-  const tMvp      = topTied(mvp,      r => num(r.Total),           r => num(r.Total) > 0);
+  const tMvp      = topTied(state.mvp, r => num(r.Total),           r => num(r.Total) > 0); /* always unfiltered — Season MVP is absolute */
   const tSixes    = topTied(batting,  r => num(r['6s']),           r => num(r['6s']) > 0);
   const tBalls    = topTied(batting,  r => num(r.ball_faced),      r => num(r.ball_faced) > 0);
   const tDots     = topTied(bowling,  r => num(r.dot_balls),       r => num(r.dot_balls) > 0);
+  /* Dot balls FACED as batsman: approx = balls_faced − (non-boundary scoring balls) − boundary balls
+     = ball_faced − (total_runs − 3×4s − 5×6s), clamped ≥ 0 */
+  const batDotsArr = batting.map(r => ({
+    ...r,
+    _batDots: Math.max(0, num(r.ball_faced) - (num(r.total_runs) - 3*num(r['4s']) - 5*num(r['6s'])))
+  }));
+  const tBatDots  = topTied(batDotsArr, r => r._batDots, r => num(r.ball_faced) >= 10);
   const tMaiden   = topTied(bowling,  r => num(r.maidens),         r => num(r.maidens) > 0);
   const tBowlSR   = topTiedAsc(bowling, r => num(r.SR),           r => num(r.SR) > 0 && num(r.total_wickets) >= 2);
   const tOvers    = topTied(bowling,  r => num(r.overs),           r => num(r.overs) > 0);
@@ -1105,24 +2489,606 @@ function renderTopHeroes(batting, bowling, fielding, mvp) {
       </div>`;
   }
 
+  /* ── Match-level fun heroes (from PDF-extracted data) ── */
+  /* Build a tied-object from a sorted [name, {n, team}][] entry-list */
+  function matchTiedFromMap(sortedEntries) {
+    if (!sortedEntries.length) return { val: 0, players: [] };
+    const best = sortedEntries[0][1].n;
+    if (best <= 0) return { val: 0, players: [] };
+    const tied = sortedEntries.filter(([, d]) => d.n === best);
+    return {
+      val: best,
+      players: tied.map(([name, d]) => ({ name, team_name: d.team }))
+    };
+  }
+
+  const _emptyTied  = { val: 0, players: [] };
+  let tRunOutVictim = _emptyTied;
+  let tRunOutCaller = _emptyTied;
+  let tDuckKing     = _emptyTied;
+  let tWideMan      = _emptyTied;
+  let tNoBallKing   = _emptyTied;
+
+  if (matchBatting?.length) {
+    /* Most times run out */
+    const roMap = {};
+    matchBatting.forEach(r => {
+      if (r.dismissal_type !== 'run_out') return;
+      const p = (r.player || '').trim(); if (!p) return;
+      if (!roMap[p]) roMap[p] = { n: 0, team: r.batting_team };
+      roMap[p].n++;
+    });
+    tRunOutVictim = matchTiedFromMap(Object.entries(roMap).sort((a,b) => b[1].n - a[1].n));
+
+    /* Duck king */
+    const dkMap = {};
+    matchBatting.forEach(r => {
+      const dt = r.dismissal_type || '';
+      if (parseInt(r.runs) !== 0 || dt === 'not_out' || dt === '') return;
+      const p = (r.player || '').trim(); if (!p) return;
+      if (!dkMap[p]) dkMap[p] = { n: 0, team: r.batting_team };
+      dkMap[p].n++;
+    });
+    tDuckKing = matchTiedFromMap(Object.entries(dkMap).sort((a,b) => b[1].n - a[1].n));
+
+    /* (Run-out enforcer removed — duplicate of "Run Out Hero" from fielding CSV) */
+
+    /* Run-out caller: most times as the non-dismissed partner (inferred via innings simulation) */
+    const pEvents = inferRunOutPartnerships(matchBatting);
+    const callerMap = {};
+    pEvents.forEach(e => {
+      const p = e.partner; if (!p || p === '?') return;
+      if (!callerMap[p]) callerMap[p] = { n: 0, team: e.partnerTeam };
+      callerMap[p].n++;
+    });
+    tRunOutCaller = matchTiedFromMap(Object.entries(callerMap).sort((a,b) => b[1].n - a[1].n));
+  }
+
+  if (matchBowling?.length) {
+    /* Wide man */
+    const wdMap = {};
+    matchBowling.forEach(r => {
+      const p = (r.player || '').trim(); if (!p) return;
+      if (!wdMap[p]) wdMap[p] = { n: 0, team: r.bowling_team };
+      wdMap[p].n += parseInt(r.wides) || 0;
+    });
+    tWideMan = matchTiedFromMap(Object.entries(wdMap).sort((a,b) => b[1].n - a[1].n));
+
+    /* No-ball king */
+    const nbMap = {};
+    matchBowling.forEach(r => {
+      const p = (r.player || '').trim(); if (!p) return;
+      if (!nbMap[p]) nbMap[p] = { n: 0, team: r.bowling_team };
+      nbMap[p].n += parseInt(r.no_balls) || 0;
+    });
+    tNoBallKing = matchTiedFromMap(Object.entries(nbMap).sort((a,b) => b[1].n - a[1].n));
+  }
+
   grid.innerHTML =
     /* Row 1 — Main heroes */
-    heroCard('🏏', 'Top Batter',       tBat,     null,          'team_name',   'runs') +
-    heroCard('🎯', 'Top Bowler',       tBowl,    null,          'team_name',   'wickets') +
-    heroCard('🧤', 'Top Fielder',      tField,   null,          'team_name',   'dismissals') +
-    heroCard('🏆', 'Season MVP',       tMvp,     'Player Name', 'Team Name',   'pts') +
+    heroCard('🏏', 'Top Batter',        tBat,          null,          'team_name',   'runs') +
+    heroCard('🎯', 'Top Bowler',        tBowl,         null,          'team_name',   'wickets') +
+    heroCard('🧤', 'Top Fielder',       tField,        null,          'team_name',   'dismissals') +
+    heroCard('🏆', 'Season MVP',        tMvp,          'Player Name', 'Team Name',   'pts') +
     /* Row 2 — Batting specials */
-    heroCard('💥', 'Six Machine',      tSixes,   null,          'team_name',   'sixes') +
-    heroCard('⏱️', 'Most Balls Faced', tBalls,   null,          'team_name',   'balls') +
+    heroCard('💥', 'Six Machine',       tSixes,        null,          'team_name',   'sixes') +
+    heroCard('⏱️', 'Most Balls Faced',  tBalls,        null,          'team_name',   'balls') +
     /* Row 3 — Bowling specials */
-    heroCard('🔒', 'Dot Ball King',    tDots,    null,          'team_name',   'dots') +
-    heroCard('🎖️', 'Maiden Master',   tMaiden,  null,          'team_name',   'maidens') +
-    heroCard('⚡', 'Best Bowl SR',     tBowlSR,  null,          'team_name',   'SR') +
-    heroCard('🏃', 'Workhorse',        tOvers,   null,          'team_name',   'overs') +
+    heroCard('🔒', 'Dot Ball King',     tDots,         null,          'team_name',   'dots bowled') +
+    heroCard('🎖️', 'Maiden Master',    tMaiden,       null,          'team_name',   'maidens') +
+    heroCard('⚡', 'Best Bowl SR',      tBowlSR,       null,          'team_name',   'SR') +
+    heroCard('🏃', 'Workhorse',         tOvers,        null,          'team_name',   'overs') +
     /* Row 4 — Fielding specials */
-    heroCard('🙌', 'Catch King',       tCatches, null,          'team_name',   'catches') +
-    heroCard('🚀', 'Run Out Hero',     tRunOut,  null,          'team_name',   'run outs');
+    heroCard('🙌', 'Catch King',        tCatches,      null,          'team_name',   'catches') +
+    heroCard('🚀', 'Run Out Hero',      tRunOut,       null,          'team_name',   'run outs');
+    /* Duck King, Wide Man, No-Ball King, Run-Out Magnet, Run-Out Caller, Dot Absorber → Fun Awards section */
 }
+
+/* ══════════════════════════════════════════════════════
+   G. Fun Awards & Season Records
+   ══════════════════════════════════════════════════════ */
+
+function _awardCard(icon, title, player, team, value, detail, color) {
+  const isRCB = (team || '').toLowerCase().includes('rcb') ||
+                (team || '').toLowerCase().includes('royal');
+  const badge = team
+    ? `<span class="award-team-badge ${isRCB ? 'rcb-chip' : 'ww-chip'}">${isRCB ? 'RCB' : 'WW'}</span>`
+    : '';
+  const names = (player || '—').split(' & ').map(n => n.trim()).filter(Boolean);
+  let nameHTML;
+  if (names.length <= 1) {
+    /* Single player — normal */
+    nameHTML = `<div class="award-player">${esc(names[0] || '—')}</div>`;
+  } else if (names.length <= 4) {
+    /* 2–4 players — two per line */
+    const lines = [];
+    for (let i = 0; i < names.length; i += 2)
+      lines.push(names.slice(i, i + 2).map(n => esc(n)).join(' &amp; '));
+    nameHTML = `<div class="award-player award-player-sm">${lines.join('<br>')}</div>`;
+  } else {
+    /* 5+ tied — show count badge + scrollable pill list */
+    const pills = names.map(n => `<span class="award-tied-pill">${esc(n)}</span>`).join('');
+    nameHTML = `
+      <div class="award-player award-player-tied">
+        <span class="award-tied-badge">${names.length} Tied</span>
+      </div>
+      <div class="award-tied-list">${pills}</div>`;
+  }
+  return `<div class="award-card ${color}">
+    <div class="award-icon">${icon}</div>
+    <div class="award-title">${title}</div>
+    ${nameHTML}
+    ${badge}
+    <div class="award-value">${value}</div>
+    <div class="award-detail">${detail}</div>
+  </div>`;
+}
+
+function renderFunAwards(matchBatting, matchBowling) {
+  const grid = document.getElementById('funAwardsGrid');
+  if (!grid) return;
+  if (!matchBatting?.length || !matchBowling?.length) {
+    grid.innerHTML = '<p class="sc-placeholder">Extracting scorecard data…</p>'; return;
+  }
+
+  /* Run-outs suffered */
+  const runOutMap = {};
+  matchBatting.forEach(r => {
+    if ((r.dismissal_type || '') !== 'run_out') return;
+    const p = r.player; if (!p) return;
+    if (!runOutMap[p]) runOutMap[p] = { n: 0, team: r.batting_team };
+    runOutMap[p].n++;
+  });
+  const roSorted = Object.entries(runOutMap).sort((a,b) => b[1].n - a[1].n);
+  const roBest   = roSorted[0]?.[1]?.n || 0;
+  const roTied   = roSorted.filter(([,d]) => d.n === roBest);
+  const roName   = roTied.map(([n]) => n).join(' & ') || '—';
+  const roD      = roTied[0]?.[1] || { n: 0, team: '' };
+
+  /* Ducks */
+  const duckMap = {};
+  matchBatting.forEach(r => {
+    const dt = (r.dismissal_type || '').toLowerCase();
+    if (parseInt(r.runs) !== 0 || dt === 'not out' || dt === '') return;
+    const p = r.player; if (!p) return;
+    if (!duckMap[p]) duckMap[p] = { n: 0, team: r.batting_team };
+    duckMap[p].n++;
+  });
+  const dkSorted = Object.entries(duckMap).sort((a,b) => b[1].n - a[1].n);
+  const dkBest   = dkSorted[0]?.[1]?.n || 0;
+  const dkTied   = dkSorted.filter(([,d]) => d.n === dkBest);
+  const dkName   = dkTied.map(([n]) => n).join(' & ') || '—';
+  const dkD      = dkTied[0]?.[1] || { n: 0, team: '' };
+
+  /* Most wides season total */
+  const wideMap = {};
+  matchBowling.forEach(r => {
+    const p = r.player; if (!p) return;
+    if (!wideMap[p]) wideMap[p] = { n: 0, team: r.bowling_team };
+    wideMap[p].n += parseInt(r.wides) || 0;
+  });
+  const wdSorted = Object.entries(wideMap).sort((a,b) => b[1].n - a[1].n);
+  const wdBest   = wdSorted[0]?.[1]?.n || 0;
+  const wdTied   = wdSorted.filter(([,d]) => d.n === wdBest);
+  const wdName   = wdTied.map(([n]) => n).join(' & ') || '—';
+  const wdD      = wdTied[0]?.[1] || { n: 0, team: '' };
+
+  /* Most no-balls */
+  const nbMap = {};
+  matchBowling.forEach(r => {
+    const p = r.player; if (!p) return;
+    if (!nbMap[p]) nbMap[p] = { n: 0, team: r.bowling_team };
+    nbMap[p].n += parseInt(r.no_balls) || 0;
+  });
+  const nbSorted = Object.entries(nbMap).sort((a,b) => b[1].n - a[1].n);
+  const nbBest   = nbSorted[0]?.[1]?.n || 0;
+  const nbTied   = nbSorted.filter(([,d]) => d.n === nbBest);
+  const nbName   = nbTied.map(([n]) => n).join(' & ') || '—';
+  const nbD      = nbTied[0]?.[1] || { n: 0, team: '' };
+
+  /* Dot Absorber: most dot balls faced as batsman (balls - non-boundary scoring approx) */
+  const dotAbsMap = {};
+  matchBatting.forEach(r => {
+    const p = r.player; if (!p) return;
+    const dots = Math.max(0,
+      (parseInt(r.balls)||0) - ((parseInt(r.runs)||0) - 3*(parseInt(r.fours)||0) - 5*(parseInt(r.sixes)||0))
+    );
+    if (!dotAbsMap[p]) dotAbsMap[p] = { n: 0, team: r.batting_team };
+    dotAbsMap[p].n += dots;
+  });
+  const daSorted = Object.entries(dotAbsMap).sort((a,b) => b[1].n - a[1].n);
+  const daBest   = daSorted[0]?.[1]?.n || 0;
+  const daTied   = daSorted.filter(([,d]) => d.n === daBest);
+  const daName   = daTied.map(([n]) => n).join(' & ') || '—';
+  const daD      = daTied[0]?.[1] || { n: 0, team: '' };
+
+  /* Run-out caller (partner during run-outs) */
+  const callerSorted = matchBatting ? (() => {
+    const pEvents = inferRunOutPartnerships(matchBatting);
+    const cMap = {};
+    pEvents.forEach(e => {
+      const p = e.partner; if (!p || p === '?') return;
+      if (!cMap[p]) cMap[p] = { n: 0, team: e.partnerTeam };
+      cMap[p].n++;
+    });
+    return Object.entries(cMap).sort((a,b) => b[1].n - a[1].n);
+  })() : [];
+  const callerBest  = callerSorted[0]?.[1]?.n || 0;
+  const callerTied  = callerSorted.filter(([,d]) => d.n === callerBest);
+  const callerName  = callerTied.map(([n]) => n).join(' & ') || '—';
+  const callerD     = callerTied[0]?.[1] || { n: 0, team: '' };
+
+  grid.innerHTML =
+    _awardCard('🏃', 'Run-Out Magnet',      roName,     roD.team,     roD.n,     'times run out this season',    'c-danger') +
+    _awardCard('📞', 'Run-Out Caller',       callerName, callerD.team, callerBest,'times at crease when partner was run out', 'c-danger') +
+    _awardCard('🦆', 'Duck King',            dkName,     dkD.team,     dkD.n,     'dismissed for zero',            'c-warning') +
+    _awardCard('💨', 'Wide Man',             wdName,     wdD.team,     wdD.n,     'wides bowled this season',      'c-warning') +
+    _awardCard('⚾', 'No-Ball King',         nbName,     nbD.team,     nbD.n,     'no-balls this season',          'c-info') +
+    _awardCard('🧱', 'Dot Absorber',         daName,     daD.team,     daBest,    'dot balls faced as batsman',    'c-info');
+}
+
+function renderMatchRecords(matchBatting, matchBowling, matchMeta) {
+  const grid = document.getElementById('matchRecordsGrid');
+  if (!grid) return;
+  if (!matchBatting?.length || !matchBowling?.length) {
+    grid.innerHTML = '<p class="sc-placeholder">Extracting scorecard data…</p>'; return;
+  }
+
+  /* ── tie-aware helper: returns { val, names, team } ── */
+  function topTR(arr, valFn, teamKey) {
+    if (!arr.length) return { val: 0, names: '—', team: '' };
+    const sorted = [...arr].sort((a, b) => valFn(b) - valFn(a));
+    const best   = valFn(sorted[0]);
+    if (best <= 0) return { val: 0, names: '—', team: '' };
+    const tied   = sorted.filter(r => valFn(r) === best);
+    const names  = [...new Set(tied.map(r => r.player || ''))].filter(Boolean).join(' & ');
+    const team   = tied[0][teamKey] || '';
+    return { val: best, names, team, first: sorted[0] };
+  }
+
+  /* 1. Highest individual score in a single innings */
+  const topBat        = topTR(matchBatting,  r => parseInt(r.runs)||0,           'batting_team');
+
+  /* 2. Most sixes in a single innings */
+  const topSixer      = topTR(matchBatting,  r => parseInt(r.sixes)||0,          'batting_team');
+
+  /* 3. Most fours in a single innings */
+  const topFours      = topTR(matchBatting,  r => parseInt(r.fours)||0,          'batting_team');
+
+  /* 4. Best bowling spell: most wickets (tie-break: fewest runs) */
+  const topBowlArr  = [...matchBowling].sort((a, b) => {
+    const wDiff = (parseInt(b.wickets)||0) - (parseInt(a.wickets)||0);
+    return wDiff !== 0 ? wDiff : (parseInt(a.runs)||0) - (parseInt(b.runs)||0);
+  });
+  const topBowlBest = topBowlArr[0] || {};
+  const topBowlTied = topBowlArr.filter(r =>
+    (parseInt(r.wickets)||0) === (parseInt(topBowlBest.wickets)||0) &&
+    (parseInt(r.runs)||0)    === (parseInt(topBowlBest.runs)||0)
+  );
+  const topBowlNames = [...new Set(topBowlTied.map(r => r.player||''))].filter(Boolean).join(' & ');
+
+  /* 5. Costliest spell */
+  const costliest     = topTR(matchBowling,  r => parseInt(r.runs)||0,           'bowling_team');
+
+  /* 6. Most wides in a single match spell */
+  const topWideMatch  = topTR(matchBowling,  r => parseInt(r.wides)||0,          'bowling_team');
+
+  /* 7. Most sixes conceded in a single match spell */
+  const topSixesCon   = topTR(matchBowling,  r => parseInt(r.sixes_conceded)||0, 'bowling_team');
+
+  /* 8. Most no-balls in a single match spell */
+  const topNBMatch    = topTR(matchBowling,  r => parseInt(r.no_balls)||0,       'bowling_team');
+
+  grid.innerHTML =
+    _awardCard('🏏', 'Highest Score (Match)', topBat.names, topBat.team,
+      topBat.val, `${topBat.first?.balls||0} balls · ${topBat.first?.fours||0}×4 ${topBat.first?.sixes||0}×6`, 'c-success') +
+
+    _awardCard('💥', 'Most Sixes (Innings)', topSixer.names, topSixer.team,
+      topSixer.val, `${topSixer.first?.runs||0} runs that day`, 'c-success') +
+
+    _awardCard('🔵', 'Most Fours (Innings)', topFours.names, topFours.team,
+      topFours.val, `${topFours.first?.runs||0} runs that day`, 'c-info') +
+
+    _awardCard('🎳', 'Best Bowling Spell', topBowlNames, topBowlBest.bowling_team||'',
+      `${topBowlBest.wickets||0}/${topBowlBest.runs||0}`, `${topBowlBest.overs||0} overs`, 'c-info') +
+
+    _awardCard('💸', 'Costliest Spell', costliest.names, costliest.team,
+      `${costliest.val} runs`, `${costliest.first?.overs||0} ov · ${costliest.first?.wickets||0} wkts`, 'c-danger') +
+
+    _awardCard('🌊', 'Most Wides in a Spell', topWideMatch.names, topWideMatch.team,
+      topWideMatch.val, `wides in one match`, 'c-warning') +
+
+    _awardCard('🚀', 'Most Sixes Conceded', topSixesCon.names, topSixesCon.team,
+      topSixesCon.val, `sixes hit off them in one match`, 'c-warning') +
+
+    _awardCard('⚾', 'Most No-Balls (Spell)', topNBMatch.names, topNBMatch.team,
+      topNBMatch.val, `no-balls in one match`, 'c-purple');
+}
+
+function renderExtrasLeaderboard(matchBowling) {
+  const canvas = document.getElementById('extrasLeaderboardChart');
+  if (!canvas) return;
+  if (!matchBowling?.length) { canvas.style.display = 'none'; return; }
+  canvas.style.display = '';
+
+  /* Sum wides + no-balls per bowler */
+  const bowlerMap = {};
+  matchBowling.forEach(r => {
+    const p = r.player; if (!p) return;
+    if (!bowlerMap[p]) bowlerMap[p] = { wides: 0, noBalls: 0, team: r.bowling_team };
+    bowlerMap[p].wides   += parseInt(r.wides)    || 0;
+    bowlerMap[p].noBalls += parseInt(r.no_balls) || 0;
+  });
+
+  const sorted = Object.entries(bowlerMap)
+    .map(([name, d]) => ({ name, ...d, total: d.wides + d.noBalls }))
+    .filter(b => b.total > 0)
+    .sort((a,b) => b.total - a.total);
+
+  const isRCB = t => (t || '').toLowerCase().includes('royal') || (t || '').toLowerCase().includes('rcb');
+  const barColors = sorted.map(b => isRCB(b.team) ? 'rgba(229,57,53,0.75)' : 'rgba(59,130,246,0.75)');
+
+  /* Dynamic height — every bowler gets a row */
+  canvas.style.height = Math.max(180, sorted.length * 28 + 60) + 'px';
+  const ctx = canvas.getContext('2d');
+  if (canvas._chartInstance) canvas._chartInstance.destroy();
+  canvas._chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(b => b.name),
+      datasets: [
+        {
+          label: 'Wides',
+          data: sorted.map(b => b.wides),
+          backgroundColor: sorted.map(b => isRCB(b.team) ? 'rgba(229,57,53,0.8)' : 'rgba(59,130,246,0.8)'),
+          borderRadius: 4
+        },
+        {
+          label: 'No-Balls',
+          data: sorted.map(b => b.noBalls),
+          backgroundColor: sorted.map(b => isRCB(b.team) ? 'rgba(229,57,53,0.4)' : 'rgba(59,130,246,0.4)'),
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#94a3b8', boxWidth: 14, font: { size: 11 } } },
+        tooltip: {
+          callbacks: {
+            afterBody: items => {
+              const idx = items[0].dataIndex;
+              return `Total extras: ${sorted[idx].total}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: '#94a3b8', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { stacked: true, ticks: { color: '#cbd5e1', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+      }
+    }
+  });
+}
+
+/* ── Infer batting partnerships from position-order simulation ── */
+function inferRunOutPartnerships(matchBatting) {
+  /* Group rows by match + innings */
+  const groups = {};
+  (matchBatting || []).forEach(r => {
+    const key = r.match_id + '||' + r.innings;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(r);
+  });
+
+  const events = []; /* { victim, victimTeam, partner, partnerTeam, fielder, match_id, match_date } */
+
+  Object.values(groups).forEach(rows => {
+    /* Sort by batting position — this IS the order players came to bat */
+    const byPos = [...rows].sort((a, b) => parseInt(a.position) - parseInt(b.position));
+    if (byPos.length < 2) return;
+
+    /* Simulate the innings forward */
+    let crease = [byPos[0], byPos[1]]; /* openers */
+    let nextIn  = 2;                    /* index of next batter waiting */
+
+    byPos.forEach(batter => {
+      /* Find this batter in the crease */
+      const idx = crease.findIndex(c => c.player === batter.player);
+      if (idx === -1) return; /* not at crease — skip (shouldn't happen in clean data) */
+
+      const partner = crease[idx === 0 ? 1 : 0]; /* the OTHER batter */
+
+      if (batter.dismissal_type === 'run_out') {
+        events.push({
+          victim:      (batter.player  || '').trim(),
+          victimTeam:  batter.batting_team || '',
+          partner:     (partner?.player || '?').trim(),
+          partnerTeam: partner?.batting_team || batter.batting_team || '',
+          fielder:     (batter.caught_by || '?').trim(),
+          match_id:    batter.match_id,
+          match_date:  batter.match_date || ''
+        });
+      }
+
+      /* Replace dismissed batter with next in queue */
+      const isOut = batter.dismissal_type &&
+                    batter.dismissal_type !== 'not_out' &&
+                    batter.dismissal_type !== 'retired_hurt';
+      if (isOut) {
+        if (nextIn < byPos.length) {
+          crease[idx] = byPos[nextIn++];
+        } else {
+          crease.splice(idx, 1);
+        }
+      }
+    });
+  });
+
+  return events;
+}
+
+/* ── Run-Out Deep Dive ── */
+function renderRunOutAnalysis(matchBatting) {
+  const victimCanvas    = document.getElementById('runOutVictimsChart');
+  const enforcerCanvas  = document.getElementById('runOutEnforcersChart');
+  const partnerCanvas   = document.getElementById('runOutPartnerChart');
+  const pairTableWrap   = document.getElementById('runOutPairTableWrap');
+  const tableWrap       = document.getElementById('runOutTableWrap');
+  if (!victimCanvas || !enforcerCanvas || !tableWrap) return;
+
+  const runOuts = (matchBatting || []).filter(r => r.dismissal_type === 'run_out');
+
+  if (!runOuts.length) {
+    tableWrap.innerHTML = '<p class="sc-placeholder">No run-out data available.</p>';
+    return;
+  }
+
+  const isRCB = t => (t || '').toLowerCase().includes('royal') || (t || '').toLowerCase().includes('rcb');
+
+  /* ── 1. Victim counts ── */
+  const victimMap = {};
+  runOuts.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!victimMap[p]) victimMap[p] = { n: 0, team: r.batting_team };
+    victimMap[p].n++;
+  });
+  const victims = Object.entries(victimMap).sort((a,b) => b[1].n - a[1].n); /* ALL victims */
+
+  /* ── 2. Fielder (thrower) counts ── */
+  const enfMap = {};
+  runOuts.forEach(r => {
+    const f = (r.caught_by || '').trim(); if (!f) return;
+    const enfTeam = isRCB(r.batting_team) ? 'Weekend Warriors (WW)' : 'Royal Cricket Blasters (RCB)';
+    if (!enfMap[f]) enfMap[f] = { n: 0, team: enfTeam };
+    enfMap[f].n++;
+  });
+  const enforcers = Object.entries(enfMap).sort((a,b) => b[1].n - a[1].n); /* ALL fielders */
+
+  /* ── 3. Partnership inference ── */
+  const partnershipEvents = inferRunOutPartnerships(matchBatting);
+
+  /* How many times each player was the non-dismissed partner */
+  const partnerMap = {};
+  partnershipEvents.forEach(e => {
+    const p = e.partner; if (!p || p === '?') return;
+    if (!partnerMap[p]) partnerMap[p] = { n: 0, team: e.partnerTeam };
+    partnerMap[p].n++;
+  });
+  const topPartners = Object.entries(partnerMap).sort((a,b) => b[1].n - a[1].n); /* ALL partners */
+
+  /* Pair frequency: "A was running when B got out" */
+  const pairMap = {};
+  partnershipEvents.forEach(e => {
+    if (!e.victim || !e.partner || e.partner === '?') return;
+    const key = `${e.partner} → ${e.victim}`; /* Partner (caller) → Victim */
+    pairMap[key] = (pairMap[key] || 0) + 1;
+  });
+  const topPairs = Object.entries(pairMap).sort((a,b) => b[1] - a[1]).slice(0, 15);
+
+  /* ── Chart builder — dynamic height so ALL bars are visible ── */
+  const buildHBar = (canvas, labels, data, teams, title) => {
+    if (!canvas) return;
+    if (canvas._chartInstance) canvas._chartInstance.destroy();
+    /* 28px per bar + 60px padding — ensures every entry gets room */
+    canvas.style.height = Math.max(180, labels.length * 28 + 60) + 'px';
+    canvas._chartInstance = new Chart(canvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: title,
+          data,
+          backgroundColor: teams.map(t => isRCB(t) ? 'rgba(229,57,53,0.8)' : 'rgba(59,130,246,0.8)'),
+          borderRadius: 5
+        }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x} time${ctx.parsed.x !== 1 ? 's' : ''}` } }
+        },
+        scales: {
+          x: { ticks: { color: '#94a3b8', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+          y: { ticks: { color: '#cbd5e1', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+        }
+      }
+    });
+  };
+
+  buildHBar(victimCanvas,   victims.map(([n])   => n), victims.map(([,d])   => d.n), victims.map(([,d])   => d.team), 'Times Run Out');
+  buildHBar(enforcerCanvas, enforcers.map(([n]) => n), enforcers.map(([,d]) => d.n), enforcers.map(([,d]) => d.team), 'Run-Outs Fielded');
+  buildHBar(partnerCanvas,  topPartners.map(([n]) => n), topPartners.map(([,d]) => d.n), topPartners.map(([,d]) => d.team), 'Times as Partner');
+
+  /* ── Pair frequency table ── */
+  if (pairTableWrap) {
+    if (!topPairs.length) {
+      pairTableWrap.innerHTML = '<p class="sc-placeholder">No pair data.</p>';
+    } else {
+      const pairRows = topPairs.map(([pair, count]) => {
+        const [partnerName, victimName] = pair.split(' → ');
+        const pTeam = partnerMap[partnerName]?.team || '';
+        const vTeam = victimMap[victimName]?.team || '';
+        const pBadge = `<span class="ro-fielder ${isRCB(pTeam) ? 'ro-rcb' : 'ro-ww'}">${partnerName}</span>`;
+        const vBadge = `<span class="ro-fielder ${isRCB(vTeam) ? 'ro-rcb' : 'ro-ww'}">${victimName}</span>`;
+        return `<tr>
+          <td>${pBadge} called → ${vBadge} out</td>
+          <td class="ro-count">${count}</td>
+        </tr>`;
+      }).join('');
+      pairTableWrap.innerHTML = `
+        <table class="ro-table">
+          <thead><tr><th>Partner (caller) → Victim (run out)</th><th class="ro-count">×</th></tr></thead>
+          <tbody>${pairRows}</tbody>
+        </table>`;
+    }
+  }
+
+  /* ── Full detail table — victim + partner + fielder ── */
+  const byVictim = {};
+  partnershipEvents.forEach(e => {
+    if (!e.victim) return;
+    if (!byVictim[e.victim]) byVictim[e.victim] = { team: e.victimTeam, events: [] };
+    byVictim[e.victim].events.push(e);
+  });
+
+  const sortedV = Object.entries(byVictim).sort((a,b) => b[1].events.length - a[1].events.length);
+
+  const detailRows = sortedV.map(([name, d]) => {
+    const isR = isRCB(d.team);
+    const badge = `<span class="form-chip ${isR ? 'rcb-chip' : 'ww-chip'}" style="font-size:0.6rem;padding:2px 5px;">${isR ? 'RCB' : 'WW'}</span>`;
+    const evList = d.events.map(e => {
+      const pIsRCB = isRCB(e.partnerTeam);
+      return `<span class="ro-event-pill">
+        🤝 <b>${e.partner}</b> <span class="ro-fielder-sm">(partner)</span>
+        · ⚡ <b>${e.fielder}</b> <span class="ro-fielder-sm">(fielder)</span>
+      </span>`;
+    }).join('');
+    return `<tr>
+      <td class="ro-victim">${name} ${badge}</td>
+      <td class="ro-count">${d.events.length}</td>
+      <td class="ro-fielders">${evList}</td>
+    </tr>`;
+  }).join('');
+
+  tableWrap.innerHTML = `
+    <table class="ro-table">
+      <thead>
+        <tr>
+          <th>Run-Out Victim</th>
+          <th class="ro-count">×</th>
+          <th>Partner at Other End &amp; Fielder Who Ran Them Out</th>
+        </tr>
+      </thead>
+      <tbody>${detailRows}</tbody>
+    </table>`;
+}
+
+/* ════════════════════════════════════════════════════════ */
 
 function renderDashboard() {
   const batting  = filterBatting();
@@ -1131,7 +3097,7 @@ function renderDashboard() {
   const mvp      = filterMvp();
 
   renderKPIs(batting, bowling, fielding, mvp);
-  renderTopHeroes(batting, bowling, fielding, mvp);
+  renderTopHeroes(batting, bowling, fielding, mvp, state.matchBatting, state.matchBowling);
   renderPlayerDetail(state.player);
   renderTopBatters(batting);
   renderStrikeRate(batting);
@@ -1156,6 +3122,20 @@ function renderDashboard() {
   renderTeamRunsChart();
   renderTeamWicketsChart();
   renderTeamMvpChart();
+
+  /* New match-data powered sections */
+  renderFormTracker(state.matchBatting, state.matchBowling);
+  renderBowlingFormTracker(state.matchBowling, state.matchBatting);
+  renderScorecardViewer(state.matchMeta, state.matchBatting, state.matchBowling);
+  renderBowlingDiscipline(state.matchBowling);
+  renderDismissalAnalysis(state.matchBatting);
+  renderTossAnalysis(state.matchMeta);
+  renderExtrasTeamChart(state.matchBowling);
+  renderFunAwards(state.matchBatting, state.matchBowling);
+  renderMatchRecords(state.matchBatting, state.matchBowling, state.matchMeta);
+  renderExtrasLeaderboard(state.matchBowling);
+  renderRunOutAnalysis(state.matchBatting);
+  renderMatchupTable(state.matchBatting);
 
   renderFullStatsTable(batting, bowling, fielding, mvp);
 }
@@ -1389,6 +3369,357 @@ function parsePointsTable(rows) {
   })).sort((a, b) => a.rank - b.rank);
 }
 
+/* ============================================================
+   Scorecard PDF Auto-Extraction Engine
+   Reads all 12 match PDFs at startup, parses batting + bowling
+   tables, and populates state.matchBatting / matchBowling / matchMeta.
+
+   Actual CricHeroes PDF format (confirmed from live PDFs):
+   - Date:   "2026-02-22, 01:34 AM UTC"
+   - Toss:   "Royal Cricket Blasters (RCB) opt to bat"
+   - Result: "Weekend Warriors (WW) won by 4 wickets"
+   - Page 3/4 batting rows start with position number:
+       "1 PlayerName [dismissal info] R B M 4s 6s SR"
+   - Bowling rows:  "1 BowlerName [(c)] O M R W 0s 4s 6s WD NB Eco"
+   - Section markers: "No Batsman Status R B M 4s 6s SR"
+                      "No Bowler O M R W 0s 4s 6s WD NB Eco"
+   ============================================================ */
+
+const SCORECARD_PDFS = [
+  { path: './MatchScoreCards/Scorecard_22632660.pdf', matchId: '22632660' },
+  { path: './MatchScoreCards/Scorecard_22632661.pdf', matchId: '22632661' },
+  { path: './MatchScoreCards/Scorecard_22632662.pdf', matchId: '22632662' },
+  { path: './MatchScoreCards/Scorecard_22786417.pdf', matchId: '22786417' },
+  { path: './MatchScoreCards/Scorecard_22786418.pdf', matchId: '22786418' },
+  { path: './MatchScoreCards/Scorecard_22786419.pdf', matchId: '22786419' },
+  { path: './MatchScoreCards/Scorecard_22943979.pdf', matchId: '22943979' },
+  { path: './MatchScoreCards/Scorecard_22943980.pdf', matchId: '22943980' },
+  { path: './MatchScoreCards/Scorecard_22943981.pdf', matchId: '22943981' },
+  { path: './MatchScoreCards/Scorecard_23064193.pdf', matchId: '23064193' },
+  { path: './MatchScoreCards/Scorecard_23064208.pdf', matchId: '23064208' },
+  { path: './MatchScoreCards/Scorecard_23110064.pdf', matchId: '23110064' },
+];
+
+/** Group PDF text items into rows by Y coordinate (top→bottom). */
+function groupIntoRows(items, tolerance = 4) {
+  const rows = [];
+  for (const item of items) {
+    const text = item.str && item.str.trim();
+    if (!text) continue;
+    const y = item.transform[5];
+    const x = item.transform[4];
+    let row = rows.find(r => Math.abs(r.y - y) <= tolerance);
+    if (!row) { row = { y, cells: [] }; rows.push(row); }
+    row.cells.push({ x, text });
+  }
+  for (const row of rows) {
+    row.cells.sort((a, b) => a.x - b.x);
+    row.tokens = row.cells.map(c => c.text);
+    row.text   = row.tokens.join(' ');
+  }
+  return rows.sort((a, b) => b.y - a.y); // descending Y = top first
+}
+
+/** Remove position number prefix and role tags like (c), (wk), (RHB), †  */
+function cleanPlayerName(raw) {
+  return (raw || '')
+    .replace(/^\d+\s+/, '')            // leading "N " position number
+    .replace(/\(c\s*&\s*wk\)/gi, '')   // (c & wk)
+    .replace(/\(c\)/gi, '')
+    .replace(/\(wk\)/gi, '')
+    .replace(/\([LR]HB\)/gi, '')
+    .replace(/†/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+/** Parse match metadata (date, toss, result) from page 1 items.
+ *  Actual PDF format:
+ *    Date:   "2026-02-22, 01:34 AM UTC"
+ *    Toss:   "Royal Cricket Blasters (RCB) opt to bat"
+ *    Result: "Weekend Warriors (WW) won by 4 wickets"
+ */
+function parseScorecardMeta(page1Items, matchId) {
+  const rows     = groupIntoRows(page1Items);
+  const fullText = rows.map(r => r.text).join(' ');
+
+  // Date — ISO format "YYYY-MM-DD"
+  let match_date = '';
+  const dateM = fullText.match(/(\d{4}-\d{2}-\d{2})/);
+  if (dateM) {
+    const [y, mo, d] = dateM[1].split('-');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    match_date = `${parseInt(d, 10)} ${months[parseInt(mo, 10) - 1]} ${y}`;
+  }
+
+  // Toss: "Team ... opt to bat/field"
+  let toss_winner = '', toss_decision = '';
+  const tossM = fullText.match(/(Royal Cricket Blasters|Weekend Warriors)[^.]*?\bopt to\s+(bat|field)/i);
+  if (tossM) {
+    toss_winner   = tossM[1].includes('Royal') ? 'Royal Cricket Blasters (RCB)' : 'Weekend Warriors (WW)';
+    toss_decision = tossM[2].toLowerCase();
+  }
+
+  // Result: "Team ... won by N wickets/runs"
+  let result = '', winner = '', margin = '';
+  const resM = fullText.match(/(Royal Cricket Blasters|Weekend Warriors)[^.]*?\bwon by\s+(\d+)\s+(wickets?|runs?)/i);
+  if (resM) {
+    winner = resM[1].includes('Royal') ? 'Royal Cricket Blasters (RCB)' : 'Weekend Warriors (WW)';
+    margin = `${resM[2]} ${resM[3]}`;
+    result = `${winner} won by ${margin}`;
+  } else if (/\btied\b/i.test(fullText)) {
+    result = 'Tied'; winner = '';
+  }
+
+  return { match_id: matchId, match_date, toss_winner, toss_decision,
+           result, winner, margin, innings1_team: '', innings2_team: '' };
+}
+
+/** Detect batting team from innings header row like:
+ *  "Royal Cricket Blasters (RCB) 74/4 (12.0 Ov) (1st Innings) ..."
+ */
+function detectBattingTeam(rows) {
+  for (const row of rows.slice(0, 8)) {
+    if (/Royal Cricket Blasters/i.test(row.text)) return 'Royal Cricket Blasters (RCB)';
+    if (/Weekend Warriors/i.test(row.text))       return 'Weekend Warriors (WW)';
+  }
+  return '';
+}
+
+/** Parse dismissal info from left-side tokens of a batting row.
+ *  Row always starts with position number, then player name, then status.
+ *  Examples after stripping numeric columns:
+ *    ["1","Arun","run out","Venkat A"]
+ *    ["2","Satyam Goyal","b","Lokesh kumar YC"]
+ *    ["3","Murali Cn Cricket","c","†Balaji Balaraju","b","Sudheer Nidiginti"]
+ *    ["6","Pavan","(RHB)","not out"]
+ */
+function parseDismissal(leftTokens) {
+  // Skip position number (first token is always a digit string)
+  const tokens = (leftTokens[0] && /^\d+$/.test(leftTokens[0]))
+    ? leftTokens.slice(1) : leftTokens;
+
+  if (!tokens.length) return { playerName: null, dismissalType: 'not_out', dismissedBy: '', caughtBy: '' };
+
+  const text = tokens.join(' ');
+
+  // Find first dismissal keyword in text
+  const kwRe = /\b(not out|retired hurt|run out|lbw b |b (?=[A-Z†])|c (?=[A-Z†]))/i;
+  const kw   = kwRe.exec(text);
+
+  if (!kw) {
+    // No keyword → whole text is player name (not out / did not bat)
+    return { playerName: cleanPlayerName(text), dismissalType: 'not_out', dismissedBy: '', caughtBy: '' };
+  }
+
+  const rawName    = text.slice(0, kw.index).trim();
+  const playerName = cleanPlayerName(rawName) || cleanPlayerName(text.split(/\s/)[0]);
+  const statusText = text.slice(kw.index).trim();
+  let dismissalType = 'unknown', dismissedBy = '', caughtBy = '';
+
+  if (/^not out/i.test(statusText)) {
+    dismissalType = 'not_out';
+  } else if (/^retired hurt/i.test(statusText)) {
+    dismissalType = 'retired_hurt';
+  } else if (/^run out/i.test(statusText)) {
+    dismissalType = 'run_out';
+    const after = statusText.replace(/^run out\s*/i, '').replace(/[()]/g, '').replace(/†/g, '').trim();
+    caughtBy = after.split(/\s/)[0] || '';
+  } else if (/^lbw b /i.test(statusText)) {
+    dismissalType = 'lbw';
+    dismissedBy = statusText.replace(/^lbw b\s*/i, '').trim().split(/\s/)[0];
+  } else if (/^c /i.test(statusText)) {
+    dismissalType = 'caught';
+    // "c †FielderName b BowlerName" — fielder may have † prefix
+    const m = statusText.match(/^c\s+(.+?)\s+b\s+(.+)/i);
+    if (m) {
+      caughtBy    = m[1].replace(/†/g, '').trim();
+      dismissedBy = m[2].trim().split(/\s/)[0];
+    }
+  } else if (/^b /i.test(statusText)) {
+    dismissalType = 'bowled';
+    dismissedBy = statusText.replace(/^b\s*/i, '').trim().split(/\s/)[0];
+  }
+
+  return { playerName: playerName || null, dismissalType, dismissedBy, caughtBy };
+}
+
+/** Parse a batting row.
+ *  Actual format: "N PlayerName [tags] [dismissal] R B M 4s 6s SR"
+ *  Right-anchor last 6 numeric columns: R B M 4s 6s SR
+ */
+function tryParseBattingRow(row, matchId, matchDate, innings, battingTeam) {
+  const tokens = row.tokens;
+  if (tokens.length < 8) return null;
+
+  // First token must be position number 1–11
+  if (!/^\d+$/.test(tokens[0])) return null;
+  const position = parseInt(tokens[0], 10);
+  if (position < 1 || position > 11) return null;
+
+  if (/^(Extras|Total|Fall|To Bat|No Batsman)/i.test(row.text.trim())) return null;
+
+  const n   = tokens.length;
+  const sr  = parseFloat(tokens[n - 1]);
+  const six = parseInt(tokens[n - 2], 10);
+  const fou = parseInt(tokens[n - 3], 10);
+  // tokens[n-4] = M (minutes, integer)
+  const bal = parseInt(tokens[n - 5], 10);
+  const run = parseInt(tokens[n - 6], 10);
+
+  if (isNaN(sr) || isNaN(six) || isNaN(fou) || isNaN(bal) || isNaN(run)) return null;
+  if (sr < 0 || six < 0 || fou < 0 || bal < 0 || run < 0) return null;
+
+  const { playerName, dismissalType, dismissedBy, caughtBy } = parseDismissal(tokens.slice(0, n - 6));
+  if (!playerName) return null;
+
+  return { match_id: matchId, match_date: matchDate, innings, batting_team: battingTeam,
+           position, player: playerName, runs: run, balls: bal, fours: fou, sixes: six,
+           strike_rate: sr, dismissal_type: dismissalType,
+           dismissed_by: dismissedBy, caught_by: caughtBy };
+}
+
+/** Parse a bowling row.
+ *  Actual format: "N BowlerName [(c)] O M R W 0s 4s 6s WD NB Eco"
+ *  Right-anchor last 10 numeric columns.
+ */
+function tryParseBowlingRow(row, matchId, matchDate, innings, bowlingTeam) {
+  const tokens = row.tokens;
+  if (tokens.length < 12) return null;
+
+  // First token must be position number 1–12
+  if (!/^\d+$/.test(tokens[0])) return null;
+  const pos = parseInt(tokens[0], 10);
+  if (pos < 1 || pos > 12) return null;
+
+  if (/^(Fall|Extras|Total|No Bowler)/i.test(row.text.trim())) return null;
+
+  const n   = tokens.length;
+  const eco  = parseFloat(tokens[n - 1]);
+  const nb   = parseInt(tokens[n - 2], 10);
+  const wd   = parseInt(tokens[n - 3], 10);
+  const six  = parseInt(tokens[n - 4], 10);
+  const fou  = parseInt(tokens[n - 5], 10);
+  const dots = parseInt(tokens[n - 6], 10);
+  const wkts = parseInt(tokens[n - 7], 10);
+  const runs = parseInt(tokens[n - 8], 10);
+  const mdn  = parseInt(tokens[n - 9], 10);
+  const ovs  = parseFloat(tokens[n - 10]);
+
+  if ([eco, nb, wd, six, fou, dots, wkts, runs, mdn, ovs].some(isNaN)) return null;
+  if (ovs <= 0 || eco < 0) return null;
+
+  // Player name = tokens between position number (idx 0) and the 10 numeric columns
+  const rawPlayer = tokens.slice(1, n - 10).join(' ');
+  const player    = cleanPlayerName(rawPlayer);
+  if (!player) return null;
+
+  return { match_id: matchId, match_date: matchDate, innings, bowling_team: bowlingTeam,
+           player, overs: ovs, maidens: mdn, runs, wickets: wkts, dot_balls: dots,
+           fours_conceded: fou, sixes_conceded: six, wides: wd, no_balls: nb, economy: eco };
+}
+
+/** Parse one innings page.
+ *  Section markers (actual PDF):
+ *    "No Batsman Status R B M 4s 6s SR"  → start batting
+ *    "No Bowler O M R W 0s 4s 6s WD NB Eco" → start bowling
+ *    "Extras:" / "Total:" / "Fall of Wickets" / "To Bat:" → end section
+ */
+function parseInningsPage(pageItems, inningsNum, matchId, matchDate, battingTeam) {
+  const rows        = groupIntoRows(pageItems);
+  const bowlingTeam = battingTeam.includes('RCB')
+    ? 'Weekend Warriors (WW)' : 'Royal Cricket Blasters (RCB)';
+
+  const batting = [], bowling = [];
+  let mode = null;
+
+  for (const row of rows) {
+    const t = row.text.trim();
+    if (!t) continue;
+
+    // Section header detection
+    if (/No Batsman\s+Status/i.test(t))          { mode = 'batting'; continue; }
+    if (/No Bowler\s+O\s+M\s+R\s+W/i.test(t))   { mode = 'bowling'; continue; }
+    if (/^Fall\s+of\s+Wicket/i.test(t) ||
+        /^To Bat:/i.test(t) ||
+        /^Extras:/i.test(t) ||
+        /^Total:/i.test(t))                       { mode = null;      continue; }
+
+    if (mode === 'batting') {
+      const parsed = tryParseBattingRow(row, matchId, matchDate, inningsNum, battingTeam);
+      if (parsed) batting.push(parsed);
+    } else if (mode === 'bowling') {
+      const parsed = tryParseBowlingRow(row, matchId, matchDate, inningsNum, bowlingTeam);
+      if (parsed) bowling.push(parsed);
+    }
+  }
+  return { batting, bowling };
+}
+
+/** Extract one scorecard PDF → { meta, batting[], bowling[] }. */
+async function extractScorecardPDF({ path, matchId }) {
+  if (!window.pdfjsLib) return null;
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER_SRC;
+
+  let pdfDoc;
+  try {
+    const resp = await fetch(path);
+    if (!resp.ok) return null;
+    const buf = await resp.arrayBuffer();
+    pdfDoc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  } catch (e) {
+    console.warn(`Scorecard load failed: ${path}`, e);
+    return null;
+  }
+
+  const pageItems = {};
+  for (const p of [1, 3, 4]) {
+    if (p > pdfDoc.numPages) continue;
+    const pg      = await pdfDoc.getPage(p);
+    const content = await pg.getTextContent();
+    pageItems[p]  = content.items;
+  }
+
+  const meta = parseScorecardMeta(pageItems[1] || [], matchId);
+  const allBatting = [], allBowling = [];
+
+  for (const [pageNum, inningsNum] of [[3, 1], [4, 2]]) {
+    if (!pageItems[pageNum]) continue;
+    const rows       = groupIntoRows(pageItems[pageNum]);
+    const battingTeam = detectBattingTeam(rows);
+    if (!battingTeam) continue;
+
+    if (inningsNum === 1) meta.innings1_team = battingTeam;
+    else                  meta.innings2_team = battingTeam;
+
+    const { batting, bowling } = parseInningsPage(pageItems[pageNum], inningsNum, matchId, meta.match_date, battingTeam);
+    allBatting.push(...batting);
+    allBowling.push(...bowling);
+  }
+
+  return { meta, batting: allBatting, bowling: allBowling };
+}
+
+/** Extract all 12 scorecards, returning combined arrays. */
+async function extractAllScorecards(onProgress) {
+  const allMeta = [], allBatting = [], allBowling = [];
+  for (let i = 0; i < SCORECARD_PDFS.length; i++) {
+    const entry = SCORECARD_PDFS[i];
+    if (onProgress) onProgress(i + 1, SCORECARD_PDFS.length, entry.matchId);
+    try {
+      const result = await extractScorecardPDF(entry);
+      if (result) {
+        allMeta.push(result.meta);
+        allBatting.push(...result.batting);
+        allBowling.push(...result.bowling);
+      }
+    } catch (e) {
+      console.warn(`Extraction failed for match ${entry.matchId}:`, e);
+    }
+  }
+  return { matchMeta: allMeta, matchBatting: allBatting, matchBowling: allBowling };
+}
+
 async function init() {
   showSpinner();
   try {
@@ -1413,6 +3744,77 @@ async function init() {
       const ptRows = await loadCSV(CSV_FILES.pointsTable).catch(() => []);
       POINTS_TABLE = parsePointsTable(ptRows);
     }
+
+    /* Try pre-extracted CSVs first (instant if available) */
+    const [mbResult, mbowlResult, mmetaResult] = await Promise.allSettled([
+      loadCSV(CSV_FILES.matchBatting),
+      loadCSV(CSV_FILES.matchBowling),
+      loadCSV(CSV_FILES.matchMeta)
+    ]);
+
+    const csvBat  = mbResult.status    === 'fulfilled' && mbResult.value?.length    > 0 && mbResult.value[0].match_id    !== undefined ? mbResult.value    : null;
+    const csvBowl = mbowlResult.status === 'fulfilled' && mbowlResult.value?.length > 0 && mbowlResult.value[0].match_id !== undefined ? mbowlResult.value : null;
+    const csvMeta = mmetaResult.status === 'fulfilled' && mmetaResult.value?.length > 0 && mmetaResult.value[0].match_id !== undefined ? mmetaResult.value : null;
+
+    /* ── Cache key: changes if PDF list changes, forcing a fresh extraction ── */
+    const CACHE_KEY = 'cricDash_v1_' + SCORECARD_PDFS.map(e => e.matchId).join('_');
+
+    if (csvBat && csvBowl && csvMeta) {
+      /* Pre-extracted CSVs exist — use them and also warm the cache */
+      state.matchBatting = csvBat;
+      state.matchBowling = csvBowl;
+      state.matchMeta    = csvMeta;
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          meta: csvMeta, batting: csvBat, bowling: csvBowl
+        }));
+      } catch(_) {}
+    } else {
+      /* Try localStorage cache first */
+      let cached = null;
+      try { cached = JSON.parse(localStorage.getItem(CACHE_KEY)); } catch(_) {}
+
+      if (cached && cached.meta?.length && cached.batting?.length && cached.bowling?.length) {
+        /* Instant load from cache — no PDF parsing needed */
+        state.matchMeta    = cached.meta;
+        state.matchBatting = cached.batting;
+        state.matchBowling = cached.bowling;
+      } else {
+        /* First load — extract from PDFs and cache the result */
+        const spinnerText = document.querySelector('.spinner-text');
+        const { matchMeta, matchBatting, matchBowling } = await extractAllScorecards((done, total) => {
+          if (spinnerText) spinnerText.textContent = `Extracting scorecards… ${done}/${total} (first load only)`;
+        });
+        state.matchMeta    = matchMeta;
+        state.matchBatting = matchBatting;
+        state.matchBowling = matchBowling;
+        if (spinnerText) spinnerText.textContent = 'Saving to cache…';
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            meta: matchMeta, batting: matchBatting, bowling: matchBowling
+          }));
+        } catch(_) {
+          console.warn('localStorage cache failed (quota exceeded?) — will re-extract next load');
+        }
+        if (spinnerText) spinnerText.textContent = 'Loading cricket data…';
+      }
+    }
+
+    /* ── Sanitise extracted player names ──
+       PDF parsing sometimes includes dismissal text in the player name field
+       e.g. "Arun st Ashok adapala" should just be "Arun".
+       Strip any trailing dismissal fragments here so every downstream
+       feature (form tracker, run-out analysis, matchup table, etc.) gets
+       clean names without needing individual fixes everywhere.            */
+    const _trimDismissal = name => (name || '')
+      .replace(/\s+st\b.*/i,      '')   // "X st Keeper"    → "X"
+      .replace(/\s+c&?\s*.*/i,    '')   // "X c& Bowler"    → "X"
+      .replace(/\s+run\s*out.*/i, '')   // "X run out …"    → "X"
+      .replace(/\s+b\s+\w+$/i,    '')   // "X b Bowler"     → "X"  (trailing only)
+      .trim();
+    state.matchBatting.forEach(r => { r.player = _trimDismissal(r.player); });
+    /* matchBowling names are generally clean, but apply same pass for safety */
+    state.matchBowling.forEach(r => { r.player = _trimDismissal(r.player); });
 
     /* Static renders — only need to run once */
     renderPointsTable();

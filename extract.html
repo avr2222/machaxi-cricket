@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏏 Cricket PDF Extractor — Match Scorecards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --header-bg: #172035;
+      --accent:    #387ed1;
+      --accent-lt: rgba(56,126,209,0.10);
+      --bg-page:   #f0f3f5;
+      --bg-card:   #ffffff;
+      --border:    #e7e7e7;
+      --text-primary:   #383838;
+      --text-secondary: #7a7a7a;
+      --text-muted:     #b0b0b0;
+      --green:  #00a25b;
+      --green-lt: rgba(0,162,91,0.09);
+      --red:    #e64040;
+      --red-lt:   rgba(230,64,64,0.09);
+      --gold:   #f0a500;
+      --radius-sm: 3px;
+      --radius-md: 5px;
+      --radius-lg: 8px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13px; line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    .header {
+      background: var(--header-bg);
+      border-bottom: 1px solid #0f1829;
+      padding: 0 24px; height: 48px;
+      display: flex; align-items: center;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-content {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
+    }
+    .header-title { display: flex; align-items: center; gap: 10px; }
+    .header-logo  { font-size: 18px; }
+    .header-title h1 { font-size: 15px; font-weight: 500; color: #fff; letter-spacing: 0.1px; }
+    .header-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.15); }
+    .header-subtitle { font-size: 11px; color: rgba(255,255,255,0.42); }
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 24px 24px; display: flex; flex-direction: column; gap: 20px; }
+
+    .section-header { margin-bottom: 12px; }
+    .section-header h2 {
+      font-size: 13px; font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      padding-left: 9px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .info-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 18px 22px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .info-card p { color: var(--text-secondary); margin-bottom: 8px; font-size: 13px; line-height: 1.7; }
+    .info-card p:last-child { margin-bottom: 0; }
+    .info-card strong { color: var(--text-primary); }
+    .info-card code {
+      background: rgba(0,0,0,0.05); padding: 1px 6px;
+      border-radius: 2px; font-family: 'Consolas', monospace; font-size: 11px;
+    }
+    .instruction-banner {
+      background: #e8f5e9; border: 1px solid #a5d6a7;
+      border-radius: var(--radius-md); padding: 14px 18px;
+      color: #2e7d32; font-size: 13px; font-weight: 500;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .instruction-banner-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    /* PDF list */
+    .pdf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 8px;
+    }
+    .pdf-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 12px 14px;
+      display: flex; align-items: center; gap: 12px;
+      transition: border-color 0.18s;
+    }
+    .pdf-item.processing { border-color: var(--accent); }
+    .pdf-item.done       { border-color: var(--green); }
+    .pdf-item.error      { border-color: var(--red); }
+    .pdf-icon { font-size: 20px; flex-shrink: 0; }
+    .pdf-info { flex: 1; min-width: 0; }
+    .pdf-name { font-size: 12px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pdf-status { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+    .pdf-item.processing .pdf-status { color: var(--accent); }
+    .pdf-item.done       .pdf-status { color: var(--green); }
+    .pdf-item.error      .pdf-status { color: var(--red); }
+    .pdf-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 20px; flex-shrink: 0;
+    }
+    .pdf-badge-pending     { background: #f5f5f5;   color: var(--text-muted); }
+    .pdf-badge-processing  { background: var(--accent-lt); color: var(--accent); }
+    .pdf-badge-done        { background: var(--green-lt);  color: var(--green); }
+    .pdf-badge-error       { background: var(--red-lt);    color: var(--red); }
+
+    /* Progress bar */
+    .progress-wrap {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 18px 22px;
+    }
+    .progress-label {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .progress-label-text { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; }
+    .progress-label-pct  { font-size: 14px; font-weight: 700; color: var(--accent); }
+    .progress-bar-track {
+      height: 8px; background: #f0f3f5; border-radius: 4px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; background: linear-gradient(90deg, var(--accent), #22c55e);
+      border-radius: 4px; transition: width 0.3s ease;
+      width: 0%;
+    }
+    .progress-sub {
+      margin-top: 8px; font-size: 11px; color: var(--text-muted); text-align: center;
+    }
+
+    /* Action buttons */
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      padding: 0 18px; height: 34px; border-radius: var(--radius-sm);
+      font-size: 12px; font-family: inherit; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.18s; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #2d6dbf; }
+    .btn-primary:disabled { background: #b0bec5; cursor: not-allowed; }
+    .btn-secondary { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-green:hover { background: #008a4e; }
+    .btn-green:disabled { background: #b0bec5; cursor: not-allowed; }
+
+    /* Summary stats */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
+    }
+    .summary-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 14px 16px;
+    }
+    .summary-label {
+      font-size: 10px; font-weight: 600; color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .summary-val { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-top: 2px; }
+    .summary-card.accent .summary-val { color: var(--accent); }
+
+    /* Log */
+    .log-wrap {
+      background: #101826; border-radius: var(--radius-md);
+      padding: 14px 16px; max-height: 220px; overflow-y: auto;
+      font-family: 'Consolas', 'Monaco', monospace; font-size: 11px;
+    }
+    .log-line { color: #b0bec5; margin-bottom: 3px; }
+    .log-line.ok    { color: #69f0ae; }
+    .log-line.warn  { color: #ffcc02; }
+    .log-line.error { color: #ff5252; }
+
+    .hidden { display: none !important; }
+
+    footer {
+      text-align: center; padding: 16px;
+      color: var(--text-muted); font-size: 11px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-card);
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header" role="banner">
+  <div class="header-content">
+    <div class="header-title">
+      <span class="header-logo">🏏</span>
+      <h1>Match Scorecard Extractor</h1>
+      <div class="header-divider"></div>
+      <p class="header-subtitle">PDF → CSV Pipeline · Machaxi Box Cricket Season 2</p>
+    </div>
+  </div>
+</header>
+
+<div class="main-content">
+
+  <!-- Instructions -->
+  <div>
+    <div class="section-header"><h2>How It Works</h2></div>
+    <div class="info-card">
+      <p>This tool reads all <strong>12 match scorecard PDFs</strong> from the <code>MatchScoreCards/</code> folder, extracts batting and bowling data from each innings, and produces three downloadable CSVs.</p>
+      <p>It uses <strong>PDF.js 3.11.174</strong> to parse text with positional (x,y) data directly in your browser — no server required (open via <code>http://</code>, not <code>file://</code>).</p>
+      <p>Pages extracted: <strong>Page 1</strong> (match summary), <strong>Page 3</strong> (1st innings), <strong>Page 4</strong> (2nd innings).</p>
+    </div>
+  </div>
+
+  <!-- PDF List -->
+  <div>
+    <div class="section-header"><h2>Match PDFs (12 files)</h2></div>
+    <div class="pdf-grid" id="pdfGrid"></div>
+  </div>
+
+  <!-- Progress -->
+  <div>
+    <div class="section-header"><h2>Extraction Progress</h2></div>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span class="progress-label-text">Overall Progress</span>
+        <span class="progress-label-pct" id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-sub" id="progressSub">Press "Start Extraction" to begin.</div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="btn-row">
+    <button class="btn btn-primary" id="btnStart">▶ Start Extraction</button>
+    <button class="btn btn-green hidden" id="btnDownloadMeta" disabled>⬇ Download match_meta.csv</button>
+    <button class="btn btn-green hidden" id="btnDownloadBatting" disabled>⬇ Download match_batting.csv</button>
+    <button class="btn btn-green hidden" id="btnDownloadBowling" disabled>⬇ Download match_bowling.csv</button>
+  </div>
+
+  <!-- Summary -->
+  <div id="summarySection" class="hidden">
+    <div class="section-header"><h2>Extraction Summary</h2></div>
+    <div class="summary-grid">
+      <div class="summary-card accent"><div class="summary-label">PDFs Processed</div><div class="summary-val" id="sumPdfs">0</div></div>
+      <div class="summary-card">       <div class="summary-label">Match Records</div><div class="summary-val" id="sumMatches">0</div></div>
+      <div class="summary-card">       <div class="summary-label">Batting Rows</div><div class="summary-val" id="sumBatting">0</div></div>
+      <div class="summary-card">       <div class="summary-label">Bowling Rows</div><div class="summary-val" id="sumBowling">0</div></div>
+      <div class="summary-card">       <div class="summary-label">Errors</div><div class="summary-val" id="sumErrors">0</div></div>
+    </div>
+  </div>
+
+  <!-- After-download instruction -->
+  <div id="afterSection" class="hidden">
+    <div class="instruction-banner">
+      <div class="instruction-banner-icon">✅</div>
+      <div>
+        <strong>After downloading:</strong> Place the 3 CSV files (<code>match_meta.csv</code>, <code>match_batting.csv</code>, <code>match_bowling.csv</code>) in the <code>data/</code> folder, then refresh the dashboard (<code>index.html</code>) to unlock all new analytics sections.
+      </div>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div>
+    <div class="section-header"><h2>Extraction Log</h2></div>
+    <div class="log-wrap" id="logWrap">
+      <div class="log-line">Ready. Press Start Extraction to begin.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Machaxi Box Cricket Season 2 &nbsp;·&nbsp; PDF Extractor &nbsp;·&nbsp; Powered by PDF.js 3.11.174
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+'use strict';
+
+/* ─────────────────────────────────────────────
+   PDF.js worker setup
+───────────────────────────────────────────── */
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+/* ─────────────────────────────────────────────
+   All 12 match IDs and PDF paths
+───────────────────────────────────────────── */
+const MATCH_IDS = [
+  22632660, 22632661, 22632662,
+  22786417, 22786418, 22786419,
+  22943979, 22943980, 22943981,
+  23064193, 23064208, 23110064
+];
+
+const PDF_PATHS = MATCH_IDS.map(id => ({
+  id: String(id),
+  path: `./MatchScoreCards/${id}.pdf`
+}));
+
+/* ─────────────────────────────────────────────
+   Output data stores
+───────────────────────────────────────────── */
+let allMeta    = [];
+let allBatting = [];
+let allBowling = [];
+let errorCount = 0;
+
+/* ─────────────────────────────────────────────
+   Logging helpers
+───────────────────────────────────────────── */
+function log(msg, type) {
+  const wrap = document.getElementById('logWrap');
+  const line = document.createElement('div');
+  line.className = `log-line${type ? ' ' + type : ''}`;
+  line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  wrap.appendChild(line);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+/* ─────────────────────────────────────────────
+   Progress helpers
+───────────────────────────────────────────── */
+function setProgress(done, total, subMsg) {
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent  = pct + '%';
+  if (subMsg) document.getElementById('progressSub').textContent = subMsg;
+}
+
+/* ─────────────────────────────────────────────
+   PDF item card helpers
+───────────────────────────────────────────── */
+function updateCard(id, state, statusMsg) {
+  const el = document.getElementById(`pdf-card-${id}`);
+  if (!el) return;
+  el.className = `pdf-item ${state}`;
+  el.querySelector('.pdf-status').textContent = statusMsg;
+  const badge = el.querySelector('.pdf-badge');
+  badge.className = `pdf-badge pdf-badge-${state}`;
+  badge.textContent = state.toUpperCase();
+}
+
+/* ─────────────────────────────────────────────
+   PDF text extraction — with x,y positions
+───────────────────────────────────────────── */
+async function extractPageItems(pdf, pageNum) {
+  if (pageNum > pdf.numPages) return [];
+  const page    = await pdf.getPage(pageNum);
+  const content = await page.getTextContent({ normalizeWhitespace: false });
+  return content.items.map(item => ({
+    str: item.str,
+    x:   Math.round(item.transform[4]),
+    y:   Math.round(item.transform[5])
+  })).filter(i => i.str.trim() !== '');
+}
+
+/* ─────────────────────────────────────────────
+   Group items into rows by Y coordinate
+   Then sort each row left-to-right by X
+───────────────────────────────────────────── */
+function groupIntoRows(items, tolerance) {
+  if (!tolerance) tolerance = 4;
+  const sorted = [...items].sort((a, b) => b.y - a.y);
+  const rows = [];
+  for (const item of sorted) {
+    let placed = false;
+    for (const row of rows) {
+      if (Math.abs(row.y - item.y) <= tolerance) {
+        row.items.push(item);
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) rows.push({ y: item.y, items: [item] });
+  }
+  rows.forEach(row => row.items.sort((a, b) => a.x - b.x));
+  return rows;
+}
+
+/* ─────────────────────────────────────────────
+   Helpers for rows → token arrays
+───────────────────────────────────────────── */
+function rowTokens(row) {
+  return row.items.map(i => i.str.trim()).filter(Boolean);
+}
+
+function rowText(row) {
+  return rowTokens(row).join(' ');
+}
+
+/* ─────────────────────────────────────────────
+   Page 1 — match summary
+───────────────────────────────────────────── */
+function parsePage1(rows) {
+  const allText = rows.map(rowText).join('\n');
+
+  /* Date — DD Mon YYYY e.g. "15 Jan 2025" */
+  let matchDate = '';
+  const dateM = allText.match(/\b(\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4})\b/i);
+  if (dateM) matchDate = dateM[1];
+
+  /* Venue — find rows containing "at" or look for venue-like text */
+  let venue = '';
+  for (const row of rows) {
+    const t = rowText(row);
+    const vm = t.match(/\bat\s+(.+)/i);
+    if (vm && vm[1].trim().length > 3) { venue = vm[1].trim().replace(/\s*,.*$/, ''); break; }
+  }
+  if (!venue) {
+    for (const row of rows) {
+      const t = rowText(row).toLowerCase();
+      if (t.includes('ground') || t.includes('stadium') || t.includes('oval') || t.includes('park') || t.includes('arena')) {
+        venue = rowText(row).trim();
+        break;
+      }
+    }
+  }
+
+  /* Toss — "X Won The Toss and Chose To Bat/Field" */
+  let tossWinner = '', tossDecision = '';
+  const tossM = allText.match(/(Royal Cricket Blasters|Weekend Warriors)[^.]*Won The Toss and Chose To (Bat|Field)/i);
+  if (tossM) {
+    tossWinner   = tossM[1];
+    tossDecision = tossM[2].toLowerCase();
+  }
+
+  /* Result — "X Won By N Wicket(s)/Run(s)" or "Match Tied" */
+  let result = '', winner = '', margin = '';
+  const tiedM = allText.match(/Match\s+Tied/i);
+  if (tiedM) {
+    result = 'Match Tied';
+  } else {
+    const wonM = allText.match(/(Royal Cricket Blasters|Weekend Warriors)\s+Won\s+By\s+([\d]+\s+(?:Wicket|Run)[s]*)/i);
+    if (wonM) {
+      winner = wonM[1];
+      margin = wonM[2];
+      result = `${winner} Won By ${margin}`;
+    }
+  }
+
+  return { matchDate, venue, tossWinner, tossDecision, result, winner, margin };
+}
+
+/* ─────────────────────────────────────────────
+   Detect team name from top rows
+───────────────────────────────────────────── */
+function detectTeam(rows, maxRows) {
+  const limit = Math.min(maxRows || 8, rows.length);
+  for (let i = 0; i < limit; i++) {
+    const t = rowText(rows[i]).toLowerCase();
+    if (t.includes('royal cricket blasters')) return 'Royal Cricket Blasters';
+    if (t.includes('weekend warriors'))      return 'Weekend Warriors';
+  }
+  return '';
+}
+
+/* ─────────────────────────────────────────────
+   Parse batting table from an innings page rows
+   Returns array of batting row objects
+───────────────────────────────────────────── */
+function parseBattingSection(rows, battingTeam, matchId, matchDate, inningsNum) {
+  const results = [];
+
+  /* Find BATTING header row */
+  let batStart = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const t = rowText(rows[i]).toUpperCase();
+    if (t.includes('BATTING')) { batStart = i; break; }
+  }
+  if (batStart < 0) return results;
+
+  /* Find end of batting section */
+  let batEnd = rows.length;
+  for (let i = batStart + 1; i < rows.length; i++) {
+    const t = rowText(rows[i]).toUpperCase();
+    if (t.startsWith('EXTRAS') || t.startsWith('TOTAL') || t.includes('BOWLING')) {
+      batEnd = i;
+      break;
+    }
+  }
+
+  let position = 1;
+  for (let i = batStart + 1; i < batEnd; i++) {
+    const tokens = rowTokens(rows[i]);
+    if (tokens.length < 6) continue;
+
+    /* Validate right-anchored numeric columns: R B M 4s 6s SR */
+    const sr  = parseFloat(tokens[tokens.length - 1]);
+    const six = parseInt(tokens[tokens.length - 2], 10);
+    const fou = parseInt(tokens[tokens.length - 3], 10);
+    const mRaw = tokens[tokens.length - 4];
+    const mVal = mRaw === '-' ? 0 : parseInt(mRaw, 10);
+    const bal = parseInt(tokens[tokens.length - 5], 10);
+    const run = parseInt(tokens[tokens.length - 6], 10);
+
+    if (isNaN(sr) || sr < 0) continue;
+    if (isNaN(six) || isNaN(fou) || isNaN(bal) || isNaN(run)) continue;
+    if (mRaw !== '-' && isNaN(mVal)) continue;
+
+    /* Name + dismissal text from everything before the 6 numeric tokens */
+    const nameTokens = tokens.slice(0, tokens.length - 6);
+    const fullText   = nameTokens.join(' ');
+
+    /* Skip header/summary rows */
+    const ft = fullText.trim().toUpperCase();
+    if (ft.startsWith('EXTRAS') || ft.startsWith('TOTAL') || ft.startsWith('FALL') || ft === 'BATTER') continue;
+    if (ft === '' && run === 0 && bal === 0) continue;
+
+    /* Parse player name + dismissal */
+    const { player, dismissalType, dismissedBy, caughtBy } = parseDismissal(fullText);
+    if (!player || player.length < 2) continue;
+
+    results.push({
+      match_id:       matchId,
+      match_date:     matchDate,
+      innings:        inningsNum,
+      batting_team:   battingTeam,
+      position:       position++,
+      player:         player,
+      runs:           run,
+      balls:          bal,
+      fours:          fou,
+      sixes:          six,
+      strike_rate:    isNaN(sr) ? 0 : sr,
+      dismissal_type: dismissalType,
+      dismissed_by:   dismissedBy,
+      caught_by:      caughtBy
+    });
+  }
+  return results;
+}
+
+/* ─────────────────────────────────────────────
+   Parse dismissal text into structured fields
+───────────────────────────────────────────── */
+function parseDismissal(fullText) {
+  const t = fullText.trim();
+
+  /* Common patterns to clean up — split on first known keyword sequences */
+  let player = '', dismissalType = 'unknown', dismissedBy = '', caughtBy = '';
+
+  /* not out */
+  const noM = t.match(/^(.+?)\s+not\s+out$/i);
+  if (noM) { player = noM[1].trim(); dismissalType = 'not_out'; return { player, dismissalType, dismissedBy, caughtBy }; }
+
+  /* retired hurt */
+  const rhM = t.match(/^(.+?)\s+retired\s+hurt$/i);
+  if (rhM) { player = rhM[1].trim(); dismissalType = 'retired_hurt'; return { player, dismissalType, dismissedBy, caughtBy }; }
+
+  /* run out (fielder) */
+  const roM = t.match(/^(.+?)\s+run\s+out\s*(?:\((.+?)\))?$/i);
+  if (roM) {
+    player = roM[1].trim(); dismissalType = 'run_out';
+    dismissedBy = roM[2] ? roM[2].trim() : '';
+    return { player, dismissalType, dismissedBy, caughtBy };
+  }
+
+  /* lbw b Bowler */
+  const lbwM = t.match(/^(.+?)\s+lbw\s+b\s+(.+)$/i);
+  if (lbwM) {
+    player = lbwM[1].trim(); dismissalType = 'lbw';
+    dismissedBy = lbwM[2].trim();
+    return { player, dismissalType, dismissedBy, caughtBy };
+  }
+
+  /* c Fielder b Bowler */
+  const caughtM = t.match(/^(.+?)\s+c\s+(.+?)\s+b\s+(.+)$/i);
+  if (caughtM) {
+    player = caughtM[1].trim(); dismissalType = 'caught';
+    caughtBy   = caughtM[2].trim();
+    dismissedBy = caughtM[3].trim();
+    return { player, dismissalType, dismissedBy, caughtBy };
+  }
+
+  /* b Bowler — clean bowled */
+  const bowlM = t.match(/^(.+?)\s+b\s+(.+)$/i);
+  if (bowlM) {
+    player = bowlM[1].trim(); dismissalType = 'bowled';
+    dismissedBy = bowlM[2].trim();
+    return { player, dismissalType, dismissedBy, caughtBy };
+  }
+
+  /* st Fielder b Bowler */
+  const stM = t.match(/^(.+?)\s+st\s+(.+?)\s+b\s+(.+)$/i);
+  if (stM) {
+    player = stM[1].trim(); dismissalType = 'stumped';
+    caughtBy   = stM[2].trim();
+    dismissedBy = stM[3].trim();
+    return { player, dismissalType, dismissedBy, caughtBy };
+  }
+
+  /* Fallback — entire text is player name */
+  player = t;
+  dismissalType = 'unknown';
+  return { player, dismissalType, dismissedBy, caughtBy };
+}
+
+/* ─────────────────────────────────────────────
+   Parse bowling table from an innings page rows
+───────────────────────────────────────────── */
+function parseBowlingSection(rows, bowlingTeam, matchId, matchDate, inningsNum) {
+  const results = [];
+
+  /* Find BOWLING header */
+  let bowlStart = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const t = rowText(rows[i]).toUpperCase();
+    if (t.includes('BOWLING')) { bowlStart = i; break; }
+  }
+  if (bowlStart < 0) return results;
+
+  /* End of bowling section */
+  let bowlEnd = rows.length;
+  for (let i = bowlStart + 1; i < rows.length; i++) {
+    const t = rowText(rows[i]).toUpperCase();
+    if (t.startsWith('FALL OF') || t.includes('FALL OF WICKET')) {
+      bowlEnd = i; break;
+    }
+  }
+
+  for (let i = bowlStart + 1; i < bowlEnd; i++) {
+    const tokens = rowTokens(rows[i]);
+    if (tokens.length < 10) continue;
+
+    /* Right-anchored: Eco NB WD 6s 4s 0s W R M(maidens) O */
+    const eco = parseFloat(tokens[tokens.length - 1]);
+    const nb  = parseInt(tokens[tokens.length - 2], 10);
+    const wd  = parseInt(tokens[tokens.length - 3], 10);
+    const six = parseInt(tokens[tokens.length - 4], 10);
+    const fou = parseInt(tokens[tokens.length - 5], 10);
+    const dot = parseInt(tokens[tokens.length - 6], 10);
+    const wkts= parseInt(tokens[tokens.length - 7], 10);
+    const run = parseInt(tokens[tokens.length - 8], 10);
+    const mai = parseInt(tokens[tokens.length - 9], 10);
+    const ov  = parseFloat(tokens[tokens.length - 10]);
+
+    if (isNaN(eco) || isNaN(nb) || isNaN(wd) || isNaN(six) || isNaN(fou) ||
+        isNaN(dot) || isNaN(wkts) || isNaN(run) || isNaN(mai) || isNaN(ov)) continue;
+    if (ov <= 0) continue;
+
+    const nameTokens = tokens.slice(0, tokens.length - 10);
+    const bowlerName = nameTokens.join(' ').trim();
+    if (!bowlerName || bowlerName.length < 2) continue;
+
+    const ft = bowlerName.toUpperCase();
+    if (ft === 'BOWLER' || ft === 'BOWLING') continue;
+
+    results.push({
+      match_id:        matchId,
+      match_date:      matchDate,
+      innings:         inningsNum,
+      bowling_team:    bowlingTeam,
+      player:          bowlerName,
+      overs:           ov,
+      maidens:         mai,
+      runs:            run,
+      wickets:         wkts,
+      dot_balls:       dot,
+      fours_conceded:  fou,
+      sixes_conceded:  six,
+      wides:           wd,
+      no_balls:        nb,
+      economy:         eco
+    });
+  }
+  return results;
+}
+
+/* ─────────────────────────────────────────────
+   Process a single PDF
+───────────────────────────────────────────── */
+async function processPDF(matchId, pdfPath) {
+  updateCard(matchId, 'processing', 'Loading PDF…');
+  log(`Loading ${pdfPath}…`);
+
+  const resp = await fetch(pdfPath);
+  if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${pdfPath}`);
+  const buf = await resp.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+
+  log(`  PDF loaded — ${pdf.numPages} pages`, 'ok');
+
+  /* Page 1 — match summary */
+  updateCard(matchId, 'processing', 'Reading page 1…');
+  const p1Items = await extractPageItems(pdf, 1);
+  const p1Rows  = groupIntoRows(p1Items);
+  const meta    = parsePage1(p1Rows);
+
+  log(`  Match date: ${meta.matchDate || '?'}  Toss: ${meta.tossWinner || '?'} — ${meta.tossDecision || '?'}`);
+  log(`  Result: ${meta.result || '?'}`);
+
+  /* Page 3 — innings 1 */
+  updateCard(matchId, 'processing', 'Reading page 3 (Inn 1)…');
+  const p3Items = await extractPageItems(pdf, 3);
+  const p3Rows  = groupIntoRows(p3Items);
+
+  const team1 = detectTeam(p3Rows, 8);
+  const team2 = team1 === 'Royal Cricket Blasters' ? 'Weekend Warriors' :
+                team1 === 'Weekend Warriors'       ? 'Royal Cricket Blasters' : '';
+
+  const batting1 = parseBattingSection(p3Rows, team1, matchId, meta.matchDate, 1);
+  const bowling1 = parseBowlingSection(p3Rows, team2, matchId, meta.matchDate, 1);
+
+  log(`  Inn 1: ${team1 || '?'} batting — ${batting1.length} batters, ${bowling1.length} bowlers`);
+
+  /* Page 4 — innings 2 */
+  updateCard(matchId, 'processing', 'Reading page 4 (Inn 2)…');
+  const p4Items = await extractPageItems(pdf, 4);
+  const p4Rows  = groupIntoRows(p4Items);
+
+  const batting2 = parseBattingSection(p4Rows, team2, matchId, meta.matchDate, 2);
+  const bowling2 = parseBowlingSection(p4Rows, team1, matchId, meta.matchDate, 2);
+
+  log(`  Inn 2: ${team2 || '?'} batting — ${batting2.length} batters, ${bowling2.length} bowlers`);
+
+  updateCard(matchId, 'done', `Done — ${batting1.length + batting2.length} bats, ${bowling1.length + bowling2.length} bowls`);
+
+  return {
+    meta: {
+      match_id:      matchId,
+      match_date:    meta.matchDate,
+      innings1_team: team1,
+      innings2_team: team2,
+      toss_winner:   meta.tossWinner,
+      toss_decision: meta.tossDecision,
+      result:        meta.result,
+      winner:        meta.winner,
+      margin:        meta.margin
+    },
+    batting:  [...batting1, ...batting2],
+    bowling:  [...bowling1, ...bowling2]
+  };
+}
+
+/* ─────────────────────────────────────────────
+   CSV generation helpers
+───────────────────────────────────────────── */
+function csvEscape(val) {
+  const s = String(val ?? '');
+  if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
+function toCSV(headers, rows) {
+  const head = headers.join(',');
+  const body = rows.map(r => headers.map(h => csvEscape(r[h])).join(',')).join('\n');
+  return head + '\n' + body;
+}
+
+function downloadCSV(filename, csvString) {
+  const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+/* ─────────────────────────────────────────────
+   Main extraction driver
+───────────────────────────────────────────── */
+async function runExtraction() {
+  allMeta    = [];
+  allBatting = [];
+  allBowling = [];
+  errorCount = 0;
+
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('summarySection').classList.add('hidden');
+  document.getElementById('afterSection').classList.add('hidden');
+  ['btnDownloadMeta','btnDownloadBatting','btnDownloadBowling'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.add('hidden');
+    el.disabled = true;
+  });
+
+  const total = PDF_PATHS.length;
+  log(`Starting extraction of ${total} PDFs…`);
+
+  for (let i = 0; i < PDF_PATHS.length; i++) {
+    const { id, path } = PDF_PATHS[i];
+    setProgress(i, total, `Processing ${i + 1} / ${total}: Match ${id}…`);
+
+    try {
+      const result = await processPDF(id, path);
+      allMeta.push(result.meta);
+      allBatting.push(...result.batting);
+      allBowling.push(...result.bowling);
+      log(`  Match ${id} — OK`, 'ok');
+    } catch (err) {
+      errorCount++;
+      updateCard(id, 'error', `Error: ${err.message}`);
+      log(`  Match ${id} — ERROR: ${err.message}`, 'error');
+    }
+  }
+
+  setProgress(total, total, `Done! Processed ${total} PDFs.`);
+  log(`Extraction complete. ${allMeta.length} matches, ${allBatting.length} batting rows, ${allBowling.length} bowling rows, ${errorCount} errors.`, 'ok');
+
+  /* Update summary */
+  document.getElementById('sumPdfs').textContent    = total;
+  document.getElementById('sumMatches').textContent  = allMeta.length;
+  document.getElementById('sumBatting').textContent  = allBatting.length;
+  document.getElementById('sumBowling').textContent  = allBowling.length;
+  document.getElementById('sumErrors').textContent   = errorCount;
+  document.getElementById('summarySection').classList.remove('hidden');
+  document.getElementById('afterSection').classList.remove('hidden');
+
+  /* Enable download buttons */
+  ['btnDownloadMeta','btnDownloadBatting','btnDownloadBowling'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('hidden');
+    el.disabled = false;
+  });
+
+  document.getElementById('btnStart').disabled = false;
+}
+
+/* ─────────────────────────────────────────────
+   Download button handlers
+───────────────────────────────────────────── */
+document.getElementById('btnDownloadMeta').addEventListener('click', () => {
+  const headers = ['match_id','match_date','innings1_team','innings2_team',
+                   'toss_winner','toss_decision','result','winner','margin'];
+  downloadCSV('match_meta.csv', toCSV(headers, allMeta));
+  log('Downloaded match_meta.csv', 'ok');
+});
+
+document.getElementById('btnDownloadBatting').addEventListener('click', () => {
+  const headers = ['match_id','match_date','innings','batting_team','position',
+                   'player','runs','balls','fours','sixes','strike_rate',
+                   'dismissal_type','dismissed_by','caught_by'];
+  downloadCSV('match_batting.csv', toCSV(headers, allBatting));
+  log('Downloaded match_batting.csv', 'ok');
+});
+
+document.getElementById('btnDownloadBowling').addEventListener('click', () => {
+  const headers = ['match_id','match_date','innings','bowling_team','player',
+                   'overs','maidens','runs','wickets','dot_balls',
+                   'fours_conceded','sixes_conceded','wides','no_balls','economy'];
+  downloadCSV('match_bowling.csv', toCSV(headers, allBowling));
+  log('Downloaded match_bowling.csv', 'ok');
+});
+
+document.getElementById('btnStart').addEventListener('click', runExtraction);
+
+/* ─────────────────────────────────────────────
+   Render PDF card list on load
+───────────────────────────────────────────── */
+function renderPDFGrid() {
+  const grid = document.getElementById('pdfGrid');
+  grid.innerHTML = PDF_PATHS.map(({ id, path }) => `
+    <div class="pdf-item" id="pdf-card-${id}">
+      <div class="pdf-icon">📄</div>
+      <div class="pdf-info">
+        <div class="pdf-name">Match ${id}</div>
+        <div class="pdf-status">Pending — ${path}</div>
+      </div>
+      <span class="pdf-badge pdf-badge-pending">PENDING</span>
+    </div>
+  `).join('');
+}
+
+renderPDFGrid();
+</script>
+</body>
+</html>

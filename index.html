@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=15">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
@@ -144,12 +144,98 @@
       <div id="topHeroesGrid" class="heroes-grid"></div>
     </section>
 
+    <!-- G. Fun Awards & Match Records — directly below heroes -->
+    <section class="section" aria-labelledby="fun-heading">
+      <div class="section-header"><h2 id="fun-heading">🎭 Fun Awards &amp; Season Records</h2></div>
+
+      <!-- Season Awards row -->
+      <div class="fun-sub-label">🏆 Season Awards</div>
+      <div id="funAwardsGrid" class="fun-awards-grid"></div>
+
+      <!-- Single-Match Records row -->
+      <div class="fun-sub-label" style="margin-top:28px;">⚡ Best Single-Match Performances</div>
+      <div id="matchRecordsGrid" class="fun-awards-grid"></div>
+
+      <!-- Wides & No-Balls leaderboard chart -->
+      <div class="fun-sub-label" style="margin-top:28px;">📊 Wides &amp; No-Balls — Who Causes Most Extras?</div>
+      <div class="chart-wrap">
+        <canvas id="extrasLeaderboardChart"></canvas>
+      </div>
+
+
+    </section>
+
     <!-- Player Profile (shown only when a player is selected) -->
     <section id="playerDetailSection" class="section hidden" aria-labelledby="profile-heading" aria-live="polite">
       <div class="section-header">
         <h2 id="profile-heading">Player Profile</h2>
       </div>
       <div id="playerDetailCard"></div>
+    </section>
+
+    <!-- A. Player Form Tracker — NEW -->
+    <section class="section" aria-labelledby="form-heading">
+      <div class="section-header"><h2 id="form-heading">📈 Player Form Tracker</h2></div>
+
+      <!-- Tab switcher -->
+      <div class="hm-tab-bar">
+        <button class="hm-tab hm-tab-active" data-hm-tab="batting">🏏 Batting</button>
+        <button class="hm-tab" data-hm-tab="bowling">🎳 Bowling</button>
+        <span class="hm-tab-hint">Click a row for detail chart</span>
+      </div>
+
+      <!-- Batting pane -->
+      <div id="hmPane-batting" class="hm-pane">
+        <div class="hm-legend-row">
+          <span class="hm-legend-label">Runs:</span>
+          <span class="hm-swatch hm-dnb hm-abs">A</span><span class="hm-legend-text">Absent</span>
+          <span class="hm-swatch hm-duck">0🦆</span><span class="hm-legend-text">Duck</span>
+          <span class="hm-swatch hm-low">1–15</span>
+          <span class="hm-swatch hm-mid">16–30</span>
+          <span class="hm-swatch hm-good">31–50</span>
+          <span class="hm-swatch hm-great">51+</span>
+          <span class="hm-legend-text" style="margin-left:8px">* = not out</span>
+        </div>
+        <div class="table-scroll-wrap"><div id="formHeatMap"></div></div>
+      </div>
+
+      <!-- Bowling pane -->
+      <div id="hmPane-bowling" class="hm-pane" style="display:none">
+        <div class="hm-legend-row">
+          <span class="hm-legend-label">Wickets:</span>
+          <span class="hm-swatch hm-dnb hm-abs">A</span><span class="hm-legend-text">Absent</span>
+          <span class="hm-swatch hm-b0">0W</span>
+          <span class="hm-swatch hm-b1">1W</span>
+          <span class="hm-swatch hm-b2">2W</span>
+          <span class="hm-swatch hm-b3">3W</span>
+          <span class="hm-swatch hm-b4">4W+</span>
+          <span class="hm-legend-text" style="margin-left:8px">cell = W/R</span>
+        </div>
+        <div class="table-scroll-wrap"><div id="bowlHeatMap"></div></div>
+      </div>
+
+      <!-- Detail chart — shown when a row is clicked -->
+      <div id="formDetailWrap" class="hm-detail-wrap" style="display:none">
+        <div class="hm-detail-header">
+          <span id="formDetailTitle" class="hm-detail-title"></span>
+          <button id="formDetailClose" class="hm-detail-close" title="Close">✕</button>
+        </div>
+        <div class="chart-wrap" style="height:280px">
+          <canvas id="formChart" role="img" aria-label="Player form tracker chart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- B. Match Scorecard Viewer — NEW -->
+    <section class="section" aria-labelledby="scorecard-heading">
+      <div class="section-header"><h2 id="scorecard-heading">📋 Match Scorecard Viewer</h2></div>
+      <div class="scorecard-viewer-wrap">
+        <div class="scorecard-match-select">
+          <label for="matchSelect">Select Match</label>
+          <select id="matchSelect"><option value="">— Select a match —</option></select>
+        </div>
+        <div id="scorecardContent" class="scorecard-content"></div>
+      </div>
     </section>
 
     <!-- Batting Charts -->
@@ -248,6 +334,27 @@
           </div>
         </div>
       </div>
+      <!-- C. Bowling Discipline — NEW -->
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Wides &amp; No-Balls per Bowler 🚫</div>
+          <div class="chart-wrap"><canvas id="extrasPerBowlerChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Dot Ball % <span class="chart-note">(dots / total balls bowled)</span></div>
+          <div class="chart-wrap"><canvas id="dotPctChart"></canvas></div>
+        </div>
+      </div>
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Boundary % Conceded <span class="chart-note">(4s+6s conceded / balls bowled)</span></div>
+          <div class="chart-wrap"><canvas id="boundaryPctChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">How Wickets Were Taken 🎯</div>
+          <div class="chart-wrap chart-wrap-sm"><canvas id="wicketTypePieChart"></canvas></div>
+        </div>
+      </div>
     </section>
 
     <!-- Fielding & MVP -->
@@ -281,6 +388,17 @@
           <div class="chart-wrap chart-wrap-sm">
             <canvas id="fieldingShareChart" role="img" aria-label="Fielding share chart"></canvas>
           </div>
+        </div>
+      </div>
+      <!-- D. Dismissal Analysis — NEW -->
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">How Batters Got Out <span class="chart-note">(all matches)</span></div>
+          <div class="chart-wrap chart-wrap-sm"><canvas id="dismissalTypePieChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Not Out % per Player <span class="chart-note">(min 3 innings)</span></div>
+          <div class="chart-wrap"><canvas id="notOutPctChart"></canvas></div>
         </div>
       </div>
     </section>
@@ -324,6 +442,24 @@
           </div>
         </div>
       </div>
+      <!-- E. Toss & Match Context — NEW -->
+      <div class="charts-grid-2 mt-16">
+        <div class="chart-card">
+          <div class="chart-title">Toss Decision &amp; Win Rate 🪙</div>
+          <div class="chart-wrap chart-wrap-sm"><canvas id="tossAnalysisChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Extras Conceded per Team 💸</div>
+          <div class="chart-wrap chart-wrap-sm"><canvas id="extrasTeamChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- F. Bowler vs Batsman Matchup — NEW -->
+    <section class="section" aria-labelledby="matchup-heading">
+      <div class="section-header"><h2 id="matchup-heading">⚔️ Bowler vs Batsman Matchups</h2></div>
+      <div id="matchupBanner" class="matchup-banner hidden">Run extract.html and add match CSVs to data/ to unlock matchup data.</div>
+      <div class="table-scroll-wrap"><div id="matchupTableWrap"></div></div>
     </section>
 
     <!-- Full Player Stats Table -->
@@ -343,6 +479,6 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="script.js"></script>
+  <script src="script.js?v=22"></script>
 </body>
 </html>
