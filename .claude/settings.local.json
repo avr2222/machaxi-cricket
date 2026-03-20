@@ -32,7 +32,11 @@
       "Bash(python -m http.server 8090 --directory \"C:/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8090/CricHeroesStats/Scorecard_22632660.pdf\")",
       "Bash(curl -s \"http://localhost:8090/CricHeroesStats/\")",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8090/index.html\")"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8090/index.html\")",
+      "Bash(python -c \"import pdfplumber; print\\(''ok''\\)\")",
+      "Bash(pip install:*)",
+      "Bash(python extract_scorecards.py)",
+      "Bash(python -c \":*)"
     ]
   }
 }

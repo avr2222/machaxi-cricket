@@ -3813,19 +3813,36 @@ function renderScorecardSections() {
  * instantly, and only extracts new PDFs (e.g. 3 added this week).
  */
 async function loadScorecards() {
+  /* ── Fast path: pre-built CSVs from extract_scorecards.py (milliseconds) ── */
+  try {
+    const [metaRes, batRes, bowlRes] = await Promise.all([
+      loadCSV(CSV_FILES.matchMeta),
+      loadCSV(CSV_FILES.matchBatting),
+      loadCSV(CSV_FILES.matchBowling),
+    ]);
+    const valid = r => r?.length > 0 && r[0].match_id !== undefined;
+    if (valid(metaRes) && valid(batRes) && valid(bowlRes)) {
+      state.matchMeta    = metaRes;
+      state.matchBatting = batRes;
+      state.matchBowling = bowlRes;
+      state.matchBatting.forEach(r => { r.player = _trimDismissal(r.player); });
+      state.matchBowling.forEach(r => { r.player = _trimDismissal(r.player); });
+      renderScorecardSections();
+      return;   /* done — no PDF parsing needed */
+    }
+  } catch (_) { /* CSVs not available, fall through to PDF extraction */ }
+
+  /* ── Slow path: extract from PDFs in the browser (first-time fallback) ── */
   showExtractionToast('Discovering PDF files…');
   try {
     const { matchMeta, matchBatting, matchBowling } = await extractAllScorecards(
       (done, total, matchId) => updateExtractionToast(done, total, matchId)
     );
-
     state.matchMeta    = matchMeta;
     state.matchBatting = matchBatting;
     state.matchBowling = matchBowling;
-
     state.matchBatting.forEach(r => { r.player = _trimDismissal(r.player); });
     state.matchBowling.forEach(r => { r.player = _trimDismissal(r.player); });
-
     renderScorecardSections();
     hideExtractionToast();
   } catch (e) {
