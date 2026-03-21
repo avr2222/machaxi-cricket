@@ -546,18 +546,29 @@ body.loading .chart-wrap::after {
 .week-heroes-wrap {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 4px 24px 20px;
+  padding: 4px 24px 16px;
 }
 .week-heroes-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr) 1px repeat(3, 1fr);
-  gap: 10px;
+  display: flex;
+  gap: 16px;
   align-items: stretch;
 }
-.week-divider {
+.week-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.week-col-divider {
+  width: 1px;
   background: var(--border);
-  margin: 0 8px;
-  align-self: stretch;
+  flex-shrink: 0;
+}
+.week-section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--text-secondary);
+  padding: 2px 0 2px 2px;
 }
 .week-hero-card {
   display: flex;
@@ -566,38 +577,31 @@ body.loading .chart-wrap::after {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   min-width: 0;
 }
 .week-hero-rank {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text-muted);
-  min-width: 22px;
+  min-width: 20px;
   text-align: center;
 }
 .week-hero-rank.gold   { color: #f59e0b; }
 .week-hero-rank.silver { color: #94a3b8; }
 .week-hero-rank.bronze { color: #b45309; }
 .week-hero-avatar {
-  width: 36px; height: 36px;
+  width: 34px; height: 34px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; color: #fff;
+  font-size: 11px; font-weight: 700; color: #fff;
   flex-shrink: 0;
 }
 .week-hero-info { min-width: 0; flex: 1; }
 .week-hero-name  { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .week-hero-team  { font-size: 11px; color: var(--text-secondary); }
-.week-hero-stat  { font-size: 18px; font-weight: 700; color: var(--accent); text-align: right; white-space: nowrap; }
+.week-hero-stat  { font-size: 17px; font-weight: 700; color: var(--accent); text-align: right; white-space: nowrap; }
 .week-hero-stat span { font-size: 10px; font-weight: 400; color: var(--text-muted); display: block; }
-.week-section-label {
-  grid-column: 1 / 4;
-  font-size: 11px; font-weight: 700; letter-spacing: .06em;
-  text-transform: uppercase; color: var(--text-secondary);
-  padding: 2px 0 2px 2px;
-}
-.week-section-label.bowl { grid-column: 5 / 8; }
 
 /* ── Top Heroes ── */
 .heroes-grid {
@@ -693,11 +697,15 @@ body.loading .chart-wrap::after {
   .kpi-grid { grid-template-columns: repeat(4, minmax(120px, 1fr)); }
 }
 @media (max-width: 960px) {
-  .charts-grid-2,
-  .charts-grid-3 { grid-template-columns: 1fr; }
+  /* charts stay 2-col down to 960px — only 3-col drops to 2 */
+  .charts-grid-3 { grid-template-columns: 1fr 1fr; }
   .kpi-grid { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 700px) {
+  /* charts: 2-col until 700px, then single on phones */
+  .charts-grid-2,
+  .charts-grid-3 { grid-template-columns: 1fr; }
+
   .heroes-grid { grid-template-columns: repeat(2, 1fr); }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .header-title h1 { font-size: 13px; }
@@ -708,9 +716,18 @@ body.loading .chart-wrap::after {
   .main-content { padding: 14px 16px; }
   .player-detail-card { grid-template-columns: 1fr; }
 
+  /* Week heroes: stack bat / bowl vertically */
+  .week-heroes-wrap { padding: 4px 16px 16px; }
+  .week-heroes-grid { flex-direction: column; gap: 10px; }
+  .week-col-divider { width: 100%; height: 1px; }
+
+  /* Fun awards: 2 columns fit on 375px+ phones */
+  .fun-awards-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .award-card { padding: 14px 10px 12px; }
 }
 @media (max-width: 400px) {
   .kpi-value { font-size: 17px; }
+  .fun-awards-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
 }
 
 /* ── Form Tracker ── */

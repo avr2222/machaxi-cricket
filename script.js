@@ -4012,12 +4012,15 @@ function renderWeekHeroes(matchBatting, matchBowling) {
   }).join('');
 
   grid.innerHTML = `
-    <div class="week-section-label">🏏 Top Batters</div>
-    <div></div>
-    <div class="week-section-label bowl">🎳 Top Bowlers</div>
-    ${batCards}
-    <div class="week-divider"></div>
-    ${bowlCards}
+    <div class="week-col">
+      <div class="week-section-label">🏏 Top Batters</div>
+      ${batCards}
+    </div>
+    <div class="week-col-divider"></div>
+    <div class="week-col">
+      <div class="week-section-label">🎳 Top Bowlers</div>
+      ${bowlCards}
+    </div>
   `;
   wrap.style.display = '';
 }
