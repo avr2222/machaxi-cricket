@@ -3401,8 +3401,8 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
     if (sortState.key !== key) return '';
     return sortState.dir === -1 ? ' sort-desc' : ' sort-asc';
   };
-  const sh = (key, label, cls = '') =>
-    `<th class="fst-sortable${cls ? ' ' + cls : ''}${si(key)}" data-sort="${key}">${label}</th>`;
+  const sh = (key, label, cls = '', rowspan = 1) =>
+    `<th${rowspan > 1 ? ` rowspan="${rowspan}"` : ''} class="fst-sortable${cls ? ' ' + cls : ''}${si(key)}" data-sort="${key}">${label}</th>`;
 
   const rows = players.map(p => {
     const b = p.bat || {}, bw = p.bowl || {}, f = p.field || {}, m = p.mvp || {};
@@ -3438,13 +3438,13 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
     <table class="fst-table">
       <thead>
         <tr>
-          ${sh('name',    'Player',  'fst-name-h')}
-          ${sh('team',    'Team')}
-          ${sh('matches', 'M')}
+          ${sh('name',    'Player',  'fst-name-h', 2)}
+          ${sh('team',    'Team',    '',           2)}
+          ${sh('matches', 'M',       '',           2)}
           <th colspan="8" class="fst-group-bat">Batting</th>
           <th colspan="6" class="fst-group-bowl">Bowling</th>
           <th colspan="5" class="fst-group-field">Fielding</th>
-          ${sh('mvp', 'MVP', 'fst-group-mvp')}
+          ${sh('mvp', 'MVP', 'fst-group-mvp', 2)}
         </tr>
         <tr>
           ${sh('runs','Runs')}${sh('hs','HS')}${sh('avg','Avg')}${sh('sr','SR')}${sh('balls','Balls')}${sh('4s','4s')}${sh('6s','6s')}${sh('50s','50s')}
