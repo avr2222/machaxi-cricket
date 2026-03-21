@@ -722,13 +722,35 @@ body.loading .chart-wrap::after {
   .week-col-divider { width: 100%; height: 1px; }
 
   .award-card { padding: 14px 10px 12px; }
+
+  /* Form heatmap — compact cells + fix sticky column on mobile */
+  .hm-table { min-width: unset; font-size: 0.7rem; }
+  .hm-name-th { min-width: 90px; padding: 6px 8px; font-size: 0.6rem; }
+  .hm-match-th { min-width: 30px; padding: 6px 3px; font-size: 0.6rem; }
+  .hm-total-th { padding: 6px 6px; font-size: 0.6rem; }
+  .hm-name { padding: 5px 8px; font-size: 0.72rem; }
+  .hm-cell { min-width: 30px; padding: 4px 2px; font-size: 0.68rem; }
+  .hm-total { padding: 5px 6px; font-size: 0.74rem; }
+  .hm-tab-hint { display: none; }
+  .hm-scroll-hint { display: flex; }
 }
 @media (max-width: 400px) {
   .kpi-value { font-size: 17px; }
+  .hm-name-th { min-width: 72px; }
+  .hm-cell, .hm-match-th { min-width: 26px; }
 }
 
 /* ── Form Tracker ── */
 /* ── Form Heat Map ── */
+.hm-scroll-hint {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.hm-scroll-hint svg { flex-shrink: 0; opacity: 0.6; }
 
 /* Tab bar */
 .hm-tab-bar {
@@ -767,12 +789,13 @@ body.loading .chart-wrap::after {
 }
 .hm-table {
   width: 100%; border-collapse: collapse;
-  font-size: 0.78rem; min-width: 600px;
+  font-size: 0.78rem; min-width: 480px;
 }
 .hm-name-th {
   text-align: left; padding: 8px 12px; font-size: 0.68rem; font-weight: 700;
   color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;
-  background: rgba(255,255,255,0.03); min-width: 130px; position: sticky; left: 0; z-index: 2;
+  background: var(--surface); min-width: 130px; position: sticky; left: 0; z-index: 2;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.15);
 }
 .hm-match-th {
   text-align: center; padding: 8px 6px; font-size: 0.7rem; font-weight: 700;
@@ -794,7 +817,8 @@ body.loading .chart-wrap::after {
 .hm-name {
   padding: 6px 12px; font-weight: 600; white-space: nowrap;
   position: sticky; left: 0; z-index: 1;
-  background: var(--surface); border-right: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 2px 0 4px rgba(0,0,0,0.15);
 }
 .hm-name.hm-rcb { border-left: 3px solid var(--rcb); }
 .hm-name.hm-ww  { border-left: 3px solid var(--ww);  }
