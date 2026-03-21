@@ -3350,17 +3350,59 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
     if (match) playerMap[match].mvp = r;
   });
 
-  const players = Object.values(playerMap).sort((a, b) => {
-    const aRuns = num(a.bat?.total_runs) || 0;
-    const bRuns = num(b.bat?.total_runs) || 0;
-    return bRuns - aRuns;
-  });
+  const allPlayers = Object.values(playerMap);
+  if (!allPlayers.length) { wrap.innerHTML = '<p class="table-empty">No data for this selection.</p>'; return; }
 
-  if (!players.length) { wrap.innerHTML = '<p class="table-empty">No data for this selection.</p>'; return; }
+  /* ── Sort state (persists across re-renders) ── */
+  if (!renderFullStatsTable._sort) renderFullStatsTable._sort = { key: 'runs', dir: -1 };
+  const sortState = renderFullStatsTable._sort;
+
+  /* Value extractor per sort key */
+  function sortVal(p, key) {
+    const b = p.bat || {}, bw = p.bowl || {}, f = p.field || {}, m = p.mvp || {};
+    switch (key) {
+      case 'name':    return (p.name || '').toLowerCase();
+      case 'team':    return (p.team || '').toLowerCase();
+      case 'matches': return num(b.total_match || bw.total_match || f.total_match);
+      case 'runs':    return num(b.total_runs);
+      case 'hs':      return num(b.highest_run);
+      case 'avg':     return num(b.average);
+      case 'sr':      return num(b.strike_rate);
+      case 'balls':   return num(b.ball_faced);
+      case '4s':      return num(b['4s']);
+      case '6s':      return num(b['6s']);
+      case '50s':     return num(b['50s']);
+      case 'wkts':    return num(bw.total_wickets);
+      case 'overs':   return num(bw.overs);
+      case 'econ':    return num(bw.economy);
+      case 'bsr':     return num(bw.SR);
+      case 'mdn':     return num(bw.maidens);
+      case 'dots':    return num(bw.dot_balls);
+      case 'ct':      return num(f.catches);
+      case 'ro':      return num(f.run_outs);
+      case 'st':      return num(f.stumpings);
+      case 'cb':      return num(f.caught_and_bowl);
+      case 'dis':     return num(f.total_dismissal);
+      case 'mvp':     return num(m.Total);
+      default:        return 0;
+    }
+  }
+
+  const players = allPlayers.sort((a, b) => {
+    const av = sortVal(a, sortState.key), bv = sortVal(b, sortState.key);
+    if (typeof av === 'string') return sortState.dir * av.localeCompare(bv);
+    return sortState.dir * ((bv || 0) - (av || 0));
+  });
 
   const teamDot = t => `<span class="pt-team-dot" style="background:${t.includes('WW') ? 'var(--ww)' : 'var(--rcb)'}"></span>`;
   const d = v => (v !== undefined && v !== null && v !== '' && v !== '-') ? v : '—';
   const n = (v, dec) => { const x = num(v); return x ? (dec !== undefined ? x.toFixed(dec) : x) : '—'; };
+  const si = key => {
+    if (sortState.key !== key) return '';
+    return sortState.dir === -1 ? ' sort-desc' : ' sort-asc';
+  };
+  const sh = (key, label, cls = '') =>
+    `<th class="fst-sortable${cls ? ' ' + cls : ''}${si(key)}" data-sort="${key}">${label}</th>`;
 
   const rows = players.map(p => {
     const b = p.bat || {}, bw = p.bowl || {}, f = p.field || {}, m = p.mvp || {};
@@ -3396,22 +3438,32 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
     <table class="fst-table">
       <thead>
         <tr>
-          <th rowspan="2" class="fst-name-h">Player</th>
-          <th rowspan="2">Team</th>
-          <th rowspan="2">M</th>
+          ${sh('name',    'Player',  'fst-name-h')}
+          ${sh('team',    'Team')}
+          ${sh('matches', 'M')}
           <th colspan="8" class="fst-group-bat">Batting</th>
           <th colspan="6" class="fst-group-bowl">Bowling</th>
           <th colspan="5" class="fst-group-field">Fielding</th>
-          <th rowspan="2" class="fst-group-mvp">MVP</th>
+          ${sh('mvp', 'MVP', 'fst-group-mvp')}
         </tr>
         <tr>
-          <th>Runs</th><th>HS</th><th>Avg</th><th>SR</th><th>Balls</th><th>4s</th><th>6s</th><th>50s</th>
-          <th>Wkts</th><th>Ov</th><th>Econ</th><th>BSR</th><th>Mdn</th><th>Dots</th>
-          <th>Ct</th><th>RO</th><th>St</th><th>C&B</th><th>Dis</th>
+          ${sh('runs','Runs')}${sh('hs','HS')}${sh('avg','Avg')}${sh('sr','SR')}${sh('balls','Balls')}${sh('4s','4s')}${sh('6s','6s')}${sh('50s','50s')}
+          ${sh('wkts','Wkts')}${sh('overs','Ov')}${sh('econ','Econ')}${sh('bsr','BSR')}${sh('mdn','Mdn')}${sh('dots','Dots')}
+          ${sh('ct','Ct')}${sh('ro','RO')}${sh('st','St')}${sh('cb','C&B')}${sh('dis','Dis')}
         </tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>`;
+
+  /* Attach sort click listeners */
+  wrap.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (sortState.key === key) sortState.dir *= -1;
+      else { sortState.key = key; sortState.dir = -1; }
+      renderFullStatsTable(batting, bowling, fielding, mvp);
+    });
+  });
 }
 
 

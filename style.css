@@ -692,6 +692,16 @@ body.loading .chart-wrap::after {
 .fst-mvp { font-weight: 700; color: #8e24aa; }
 .table-empty { color: var(--text-muted); text-align: center; padding: 24px; }
 
+/* ── Sortable column headers ── */
+.fst-sortable {
+  cursor: pointer; user-select: none; white-space: nowrap;
+  transition: background 0.15s;
+}
+.fst-sortable:hover { background: rgba(255,255,255,0.15) !important; }
+.fst-sortable::after { content: ' ⇅'; opacity: 0.35; font-size: 10px; }
+.fst-sortable.sort-desc::after { content: ' ▼'; opacity: 1; color: #fbbf24; }
+.fst-sortable.sort-asc::after  { content: ' ▲'; opacity: 1; color: #fbbf24; }
+
 /* ── Responsive ── */
 @media (max-width: 1200px) {
   .kpi-grid { grid-template-columns: repeat(4, minmax(120px, 1fr)); }
