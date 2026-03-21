@@ -544,6 +544,35 @@ function buildPlayerHighlights(playerName) {
   return parts.length ? `<div class="player-highlights">${parts.join('')}</div>` : '';
 }
 
+/** Normalize a player name for fuzzy matching: lowercase, strip punctuation, collapse spaces */
+function normName(s) {
+  return (s || '').toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Find an MVP row by player name using fallback strategies:
+ * 1. Exact match after normalization  ("Arun 102raaga" = "Arun 102.raaga")
+ * 2. One is a prefix of the other     ("Manjunath" vs "Manjunath H", "Leela Anna" vs "Leel")
+ * 3. First word matches               ("Girish Cricket" vs "GIRISH G")
+ */
+function findMvpByName(mvpList, name) {
+  const n = normName(name);
+  // 1. Normalized exact
+  let r = mvpList.find(r => normName(r['Player Name']) === n);
+  if (r) return r;
+  // 2. Prefix — only when the shorter side is >3 chars to avoid false first-name matches
+  r = mvpList.find(r => {
+    const m = normName(r['Player Name']);
+    const shorter = m.length < n.length ? m : n;
+    const longer  = m.length < n.length ? n : m;
+    return shorter.length > 3 && longer.startsWith(shorter);
+  });
+  if (r) return r;
+  // 3. First word only (last resort)
+  const firstName = n.split(' ')[0];
+  return mvpList.find(r => normName(r['Player Name']).split(' ')[0] === firstName) || null;
+}
+
 function renderPlayerDetail(playerName) {
   const section = document.getElementById('playerDetailSection');
   const card    = document.getElementById('playerDetailCard');
@@ -554,7 +583,7 @@ function renderPlayerDetail(playerName) {
   const bat   = state.batting.find(r  => r.name          && r.name.trim()          === playerName) || {};
   const bowl  = state.bowling.find(r  => r.name          && r.name.trim()          === playerName) || {};
   const field = state.fielding.find(r => r.name          && r.name.trim()          === playerName) || {};
-  const mvpR  = state.mvp.find(r      => r['Player Name'] && r['Player Name'].trim().toLowerCase() === playerName.toLowerCase()) || {};
+  const mvpR  = findMvpByName(state.mvp, playerName) || {};
 
   const initials  = playerName.split(' ').map(w => w[0] || '').join('').slice(0, 2).toUpperCase();
   const teamName  = bat.team_name || bowl.team_name || '';
@@ -3305,8 +3334,19 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
     playerMap[key].field = r;
   });
   mvp.forEach(r => {
-    const key = r['Player Name']?.trim().toLowerCase(); if (!key) return;
-    const match = Object.keys(playerMap).find(k => k.toLowerCase() === key);
+    const mvpNorm = normName(r['Player Name']); if (!mvpNorm) return;
+    const keys = Object.keys(playerMap);
+    // 1. Normalized exact
+    let match = keys.find(k => normName(k) === mvpNorm);
+    // 2. Prefix (shorter side > 3 chars)
+    if (!match) match = keys.find(k => {
+      const kn = normName(k);
+      const shorter = kn.length < mvpNorm.length ? kn : mvpNorm;
+      const longer  = kn.length < mvpNorm.length ? mvpNorm : kn;
+      return shorter.length > 3 && longer.startsWith(shorter);
+    });
+    // 3. First word only
+    if (!match) match = keys.find(k => normName(k).split(' ')[0] === mvpNorm.split(' ')[0]);
     if (match) playerMap[match].mvp = r;
   });
 
