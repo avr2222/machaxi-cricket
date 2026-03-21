@@ -3,10 +3,11 @@
 extract_scorecards.py
 ─────────────────────
 Scans CricHeroesStats/ for Scorecard_*.pdf files, parses batting/bowling data,
-and writes three CSV files to data/:
+and writes four CSV files:
   data/match_meta.csv
   data/match_batting.csv
   data/match_bowling.csv
+  points_table.csv        ← auto-computed from scorecard results
 
 Usage:
     pip install pdfplumber
@@ -350,10 +351,126 @@ def process_pdf(pdf_path, match_id):
     return meta, batting1 + batting2, bowling1 + bowling2
 
 
+
+# ── Points Table — computed from scorecard data ────────────────────────────────
+
+TEAMS = {
+    "Royal Cricket Blasters": {"short": "RCB", "full": "Royal Cricket Blasters (RCB)"},
+    "Weekend Warriors":       {"short": "WW",  "full": "Weekend Warriors (WW)"},
+}
+
+def overs_to_balls(overs_float):
+    """Convert 3.4 overs notation to total balls (3 overs + 4 balls = 22 balls)."""
+    whole = int(overs_float)
+    part  = round((overs_float - whole) * 10)
+    return whole * 6 + part
+
+def compute_points_table(all_meta, all_batting, all_bowling):
+    """
+    Derive a full points table from parsed scorecard data.
+    NRR = (runs_scored / overs_faced) - (runs_conceded / overs_conceded)
+    """
+    stats = {name: dict(M=0, W=0, L=0, T=0, NR=0, Pts=0,
+                        runs_for=0, balls_for=0, runs_against=0, balls_against=0,
+                        results=[])
+             for name in TEAMS}
+
+    # Index batting totals per match per team
+    bat_totals = {}
+    for r in all_batting:
+        mid  = r["match_id"]
+        team = r["batting_team"]
+        bat_totals.setdefault(mid, {}).setdefault(team, 0)
+        bat_totals[mid][team] += int(r["runs"])
+
+    # Index bowling: balls bowled per match per bowling team
+    bowl_totals = {}
+    for r in all_bowling:
+        mid  = r["match_id"]
+        team = r["bowling_team"]
+        bowl_totals.setdefault(mid, {}).setdefault(team, 0)
+        bowl_totals[mid][team] += overs_to_balls(float(r["overs"]))
+
+    for meta in sorted(all_meta, key=lambda m: m.get("match_date", "")):
+        mid    = meta["match_id"]
+        winner = meta.get("winner", "")
+        result = meta.get("result", "")
+        t1     = meta.get("innings1_team", "")
+        t2     = meta.get("innings2_team", "")
+
+        if not t1 or not t2 or t1 not in stats or t2 not in stats:
+            continue
+
+        stats[t1]["M"] += 1
+        stats[t2]["M"] += 1
+
+        if "tied" in result.lower():
+            for t in (t1, t2):
+                stats[t]["T"] += 1; stats[t]["Pts"] += 1; stats[t]["results"].append("T")
+        elif winner in (t1, t2):
+            loser = t2 if winner == t1 else t1
+            stats[winner]["W"]   += 1; stats[winner]["Pts"] += 2; stats[winner]["results"].append("W")
+            stats[loser]["L"]    += 1; stats[loser]["results"].append("L")
+        else:
+            for t in (t1, t2):
+                stats[t]["NR"] += 1; stats[t]["Pts"] += 1; stats[t]["results"].append("NR")
+
+        # NRR: t1 batted inn1 (t2 bowled), t2 batted inn2 (t1 bowled)
+        runs_t1        = bat_totals.get(mid, {}).get(t1, 0)
+        runs_t2        = bat_totals.get(mid, {}).get(t2, 0)
+        balls_t2_bowled = bowl_totals.get(mid, {}).get(t2, 0)  # balls t1 faced
+        balls_t1_bowled = bowl_totals.get(mid, {}).get(t1, 0)  # balls t2 faced
+
+        if balls_t2_bowled > 0:
+            stats[t1]["runs_for"]      += runs_t1
+            stats[t1]["balls_for"]     += balls_t2_bowled
+            stats[t2]["runs_against"]  += runs_t1
+            stats[t2]["balls_against"] += balls_t2_bowled
+
+        if balls_t1_bowled > 0:
+            stats[t2]["runs_for"]      += runs_t2
+            stats[t2]["balls_for"]     += balls_t1_bowled
+            stats[t1]["runs_against"]  += runs_t2
+            stats[t1]["balls_against"] += balls_t1_bowled
+
+    rows = []
+    for name, s in stats.items():
+        rpo_for     = (s["runs_for"]     / s["balls_for"]     * 6) if s["balls_for"]     > 0 else 0
+        rpo_against = (s["runs_against"] / s["balls_against"] * 6) if s["balls_against"] > 0 else 0
+        nrr = round(rpo_for - rpo_against, 3)
+
+        w, p = divmod(s["balls_for"], 6)
+        for_str     = f"{s['runs_for']}/{w}.{p}"
+        w, p = divmod(s["balls_against"], 6)
+        against_str = f"{s['runs_against']}/{w}.{p}"
+
+        rows.append({
+            "team":    TEAMS[name]["full"],
+            "short":   TEAMS[name]["short"],
+            "M": s["M"], "W": s["W"], "L": s["L"],
+            "D": 0,      "T": s["T"], "NR": s["NR"],
+            "Pts":     s["Pts"],
+            "NRR":     nrr,
+            "For":     for_str,
+            "Against": against_str,
+            "last5":   "|".join(s["results"][-5:]),
+            "_sort":   (s["Pts"], nrr),
+        })
+
+    rows.sort(key=lambda r: r["_sort"], reverse=True)
+    for i, r in enumerate(rows):
+        r["rank"] = i + 1
+        del r["_sort"]
+
+    return rows
+
+
 # ── CSV output ─────────────────────────────────────────────────────────────────
 
 def write_csv(path, headers, rows):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+    dirpath = os.path.dirname(path)
+    if dirpath:
+        os.makedirs(dirpath, exist_ok=True)
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=headers, extrasaction="ignore")
         writer.writeheader()
@@ -414,6 +531,13 @@ def main():
     write_csv(os.path.join(OUTPUT_DIR, "match_meta.csv"),    META_HEADERS,    all_meta)
     write_csv(os.path.join(OUTPUT_DIR, "match_batting.csv"), BATTING_HEADERS, all_batting)
     write_csv(os.path.join(OUTPUT_DIR, "match_bowling.csv"), BOWLING_HEADERS, all_bowling)
+
+    # Auto-generate points_table.csv from scorecard results
+    pt_rows = compute_points_table(all_meta, all_batting, all_bowling)
+    PT_HEADERS = ["rank","team","short","M","W","L","D","T","NR","NRR","For","Against","Pts","last5"]
+    write_csv("points_table.csv", PT_HEADERS, pt_rows)
+    for r in pt_rows:
+        print(f"  #{r['rank']} {r['short']:3s}  {r['W']}W {r['L']}L  {r['Pts']}pts  NRR {r['NRR']:+.3f}")
 
     print("\nDone! Refresh the dashboard -- all scorecard data loads instantly now.")
 
