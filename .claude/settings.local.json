@@ -40,7 +40,9 @@
       "Bash(python extract_scorecards.py --debug)",
       "WebSearch",
       "WebFetch(domain:blog.cricheroes.com)",
-      "WebFetch(domain:medium.com)"
+      "WebFetch(domain:medium.com)",
+      "Bash(wc -l /c/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/data/*.csv)",
+      "Bash(grep -n \"const.*=.*{$\\\\|function.*{$\" /c/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/script.js)"
     ]
   }
 }

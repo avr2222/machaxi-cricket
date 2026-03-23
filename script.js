@@ -2898,13 +2898,93 @@ function renderFunAwards(matchBatting, matchBowling) {
   const callerName  = callerTied.map(([n]) => n).join(' & ') || '—';
   const callerD     = callerTied[0]?.[1] || { n: 0, team: '' };
 
+  /* Fielder's Friend: batsman dismissed caught the most */
+  const ffMap = {};
+  matchBatting.forEach(r => {
+    if ((r.dismissal_type || '') !== 'caught') return;
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!ffMap[p]) ffMap[p] = { n: 0, team: r.batting_team };
+    ffMap[p].n++;
+  });
+  const ffSorted = Object.entries(ffMap).sort((a,b) => b[1].n - a[1].n);
+  const ffBest   = ffSorted[0]?.[1]?.n || 0;
+  const ffTied   = ffSorted.filter(([,d]) => d.n === ffBest);
+  const ffName   = ffTied.map(([n]) => n).join(' & ') || '—';
+  const ffD      = ffTied[0]?.[1] || { n: 0, team: '' };
+
+  /* Boundary Painter: bowler who conceded most fours in the season */
+  const bpMap = {};
+  matchBowling.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!bpMap[p]) bpMap[p] = { n: 0, team: r.bowling_team };
+    bpMap[p].n += parseInt(r.fours_conceded) || 0;
+  });
+  const bpSorted = Object.entries(bpMap).sort((a,b) => b[1].n - a[1].n);
+  const bpBest   = bpSorted[0]?.[1]?.n || 0;
+  const bpTied   = bpSorted.filter(([,d]) => d.n === bpBest);
+  const bpName   = bpTied.map(([n]) => n).join(' & ') || '—';
+  const bpD      = bpTied[0]?.[1] || { n: 0, team: '' };
+
+  /* Bogey Bowler: batsman dismissed most times by the same bowler / fielder */
+  const nemesisMap = {};
+  matchBatting.forEach(r => {
+    const dt = (r.dismissal_type || '');
+    const db = (r.dismissed_by || '').trim();
+    if (!db || dt === 'not_out' || dt === 'retired_hurt' || dt === '' || dt === 'unknown') return;
+    const p = (r.player || '').trim(); if (!p) return;
+    const key = p + '||' + db;
+    if (!nemesisMap[key]) nemesisMap[key] = { n: 0, batter: p, dismisser: db, team: r.batting_team };
+    nemesisMap[key].n++;
+  });
+  const nemSorted  = Object.entries(nemesisMap).sort((a,b) => b[1].n - a[1].n);
+  const nemBest    = nemSorted[0]?.[1]?.n || 0;
+  const nemTied    = nemSorted.filter(([,d]) => d.n === nemBest);
+  const nemName    = nemTied.map(([,d]) => d.batter).join(' & ') || '—';
+  const nemD       = nemTied[0]?.[1] || { n: 0, team: '', dismisser: '—' };
+  const nemDetail  = `times dismissed by ${nemD.dismisser}`;
+
+  /* Six-O-Matic: bowler who conceded the most sixes this season */
+  const sixConcMap = {};
+  matchBowling.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!sixConcMap[p]) sixConcMap[p] = { n: 0, team: r.bowling_team };
+    sixConcMap[p].n += parseInt(r.sixes_conceded) || 0;
+  });
+  const scSorted = Object.entries(sixConcMap).sort((a,b) => b[1].n - a[1].n);
+  const scBest   = scSorted[0]?.[1]?.n || 0;
+  const scTied   = scSorted.filter(([,d]) => d.n === scBest);
+  const scName   = scTied.map(([n]) => n).join(' & ') || '—';
+  const scD      = scTied[0]?.[1] || { n: 0, team: '' };
+
+  /* Slowcoach: lowest batting strike rate (season total, min 20 balls) */
+  const srTotMap = {};
+  matchBatting.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    if (!srTotMap[p]) srTotMap[p] = { runs: 0, balls: 0, team: r.batting_team };
+    srTotMap[p].runs  += parseInt(r.runs)  || 0;
+    srTotMap[p].balls += parseInt(r.balls) || 0;
+  });
+  const slowList = Object.entries(srTotMap)
+    .filter(([, d]) => d.balls >= 20)
+    .map(([name, d]) => [name, { n: Math.round((d.runs / d.balls) * 1000) / 10, team: d.team }])
+    .sort((a, b) => a[1].n - b[1].n);   // ascending — lowest SR first
+  const slowBest = slowList[0]?.[1]?.n ?? null;
+  const slowTied = slowBest !== null ? slowList.filter(([, d]) => d.n === slowBest) : [];
+  const slowName = slowTied.map(([n]) => n).join(' & ') || '—';
+  const slowD    = slowTied[0]?.[1] || { n: 0, team: '' };
+
   grid.innerHTML =
     _awardCard('🏃', 'Run-Out Magnet',      roName,     roD.team,     roD.n,     'times run out this season',    'c-danger') +
     _awardCard('📞', 'Run-Out Caller',       callerName, callerD.team, callerBest,'times at crease when partner was run out', 'c-danger') +
     _awardCard('🦆', 'Duck King',            dkName,     dkD.team,     dkD.n,     'dismissed for zero',            'c-warning') +
     _awardCard('💨', 'Wide Man',             wdName,     wdD.team,     wdD.n,     'wides bowled this season',      'c-warning') +
     _awardCard('⚾', 'No-Ball King',         nbName,     nbD.team,     nbD.n,     'no-balls this season',          'c-info') +
-    _awardCard('🧱', 'Dot Absorber',         daName,     daD.team,     daBest,    'dot balls faced as batsman',    'c-info');
+    _awardCard('🧱', 'Dot Absorber',         daName,     daD.team,     daBest,    'dot balls faced as batsman',    'c-info') +
+    _awardCard('😈', 'Bogey Bowler',         nemName,    nemD.team,    nemBest,   nemDetail,                       'c-danger') +
+    _awardCard('🍭', 'Six-O-Matic',         scName,     scD.team,     scBest,    'sixes conceded this season',    'c-warning') +
+    _awardCard('🐢', 'Slowcoach',           slowName,   slowD.team,   slowBest ?? '—', 'strike rate (min 20 balls)', 'c-info') +
+    _awardCard('🕸️', "Fielder's Friend",    ffName,     ffD.team,     ffBest,    'times dismissed caught',        'c-warning') +
+    _awardCard('🎨', 'Boundary Painter',    bpName,     bpD.team,     bpBest,    'fours conceded this season',    'c-info');
 }
 
 function renderMatchRecords(matchBatting, matchBowling, matchMeta) {
@@ -2959,6 +3039,70 @@ function renderMatchRecords(matchBatting, matchBowling, matchMeta) {
   /* 8. Most no-balls in a single match spell */
   const topNBMatch    = topTR(matchBowling,  r => parseInt(r.no_balls)||0,       'bowling_team');
 
+  /* 9. Dot Ball Machine: most dot balls in a single spell */
+  const topDotSpell   = topTR(matchBowling, r => parseInt(r.dot_balls)||0, 'bowling_team');
+
+  /* 10. Team innings totals — used for highest & lowest */
+  const inningsTotals = {};
+  matchBatting.forEach(r => {
+    const key = `${r.match_id}_${r.innings}_${r.batting_team}`;
+    if (!inningsTotals[key]) inningsTotals[key] = { runs: 0, team: r.batting_team, date: r.match_date };
+    inningsTotals[key].runs += parseInt(r.runs) || 0;
+  });
+  const totalsList = Object.values(inningsTotals);
+
+  /* 11. Highest team total */
+  const highSorted = [...totalsList].sort((a,b) => b.runs - a.runs);
+  const highBest   = highSorted[0]?.runs || 0;
+  const highTied   = highSorted.filter(t => t.runs === highBest);
+  const highName   = [...new Set(highTied.map(t => t.team))].join(' & ') || '—';
+  const highFirst  = highSorted[0] || {};
+
+  /* 12. Lowest team total */
+  const lowSorted  = [...totalsList].filter(t => t.runs > 0).sort((a,b) => a.runs - b.runs);
+  const lowBest    = lowSorted[0]?.runs || 0;
+  const lowTied    = lowSorted.filter(t => t.runs === lowBest);
+  const lowName    = [...new Set(lowTied.map(t => t.team))].join(' & ') || '—';
+  const lowFirst   = lowSorted[0] || {};
+
+  /* 13. Super All-Rounder: best combined batting + bowling in a single match */
+  const arMap = {};
+  matchBatting.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    const key = `${r.match_id}_${p}`;
+    if (!arMap[key]) arMap[key] = { runs: 0, wickets: 0, player: p, team: r.batting_team, date: r.match_date };
+    arMap[key].runs += parseInt(r.runs) || 0;
+  });
+  matchBowling.forEach(r => {
+    const p = (r.player || '').trim(); if (!p) return;
+    const key = `${r.match_id}_${p}`;
+    if (!arMap[key]) arMap[key] = { runs: 0, wickets: 0, player: p, team: r.bowling_team, date: r.match_date };
+    arMap[key].wickets += parseInt(r.wickets) || 0;
+  });
+  const arScore   = d => d.runs + d.wickets * 15;
+  const arSorted  = Object.values(arMap).filter(d => d.runs > 0 && d.wickets > 0).sort((a,b) => arScore(b) - arScore(a));
+  const arBestScore = arSorted.length ? arScore(arSorted[0]) : 0;
+  const arTied    = arSorted.filter(d => arScore(d) === arBestScore);
+  const arName    = arTied.map(d => d.player).join(' & ') || '—';
+  const arFirst   = arTied[0] || {};
+  const arTeam    = arFirst.team || '';
+  const arVal     = arFirst.player ? `${arFirst.runs}R+${arFirst.wickets}W` : '—';
+
+  /* 14. Highest batting SR in a single innings (min 6 balls) */
+  const topSRInnings  = topTR(
+    matchBatting.filter(r => (parseInt(r.balls)||0) >= 6),
+    r => parseFloat(r.strike_rate)||0,
+    'batting_team'
+  );
+
+  /* 10. Best economy in a single spell (min 1 over) — lowest is best, sort ascending */
+  const ecoFiltered = matchBowling.filter(r => (parseFloat(r.overs)||0) >= 1.0);
+  const ecoSorted   = [...ecoFiltered].sort((a, b) => (parseFloat(a.economy)||999) - (parseFloat(b.economy)||999));
+  const ecoBestVal  = parseFloat(ecoSorted[0]?.economy) ?? null;
+  const ecoTied     = ecoBestVal !== null ? ecoSorted.filter(r => parseFloat(r.economy) === ecoBestVal) : [];
+  const ecoNames    = [...new Set(ecoTied.map(r => r.player||''))].filter(Boolean).join(' & ') || '—';
+  const ecoFirst    = ecoSorted[0] || {};
+
   grid.innerHTML =
     _awardCard('🏏', 'Highest Score (Match)', topBat.names, topBat.team,
       topBat.val, `${topBat.first?.balls||0} balls · ${topBat.first?.fours||0}×4 ${topBat.first?.sixes||0}×6`, 'c-success') +
@@ -2982,7 +3126,25 @@ function renderMatchRecords(matchBatting, matchBowling, matchMeta) {
       topSixesCon.val, `sixes hit off them in one match`, 'c-warning') +
 
     _awardCard('⚾', 'Most No-Balls (Spell)', topNBMatch.names, topNBMatch.team,
-      topNBMatch.val, `no-balls in one match`, 'c-purple');
+      topNBMatch.val, `no-balls in one match`, 'c-purple') +
+
+    _awardCard('⚡', 'Best SR (Innings)', topSRInnings.names, topSRInnings.team,
+      topSRInnings.val, `${topSRInnings.first?.runs||0} runs off ${topSRInnings.first?.balls||0} balls`, 'c-success') +
+
+    _awardCard('🔒', 'Best Economy (Spell)', ecoNames, ecoFirst.bowling_team||'',
+      ecoBestVal ?? '—', `${ecoFirst.overs||0} overs · ${ecoFirst.wickets||0} wkts`, 'c-info') +
+
+    _awardCard('⚫', 'Dot Ball Machine',     topDotSpell.names, topDotSpell.team,
+      topDotSpell.val, `dots in one spell · ${topDotSpell.first?.overs||0} overs`, 'c-info') +
+
+    _awardCard('🔥', 'Highest Team Total',   highName, highFirst.team||'',
+      highBest, `runs · ${highFirst.date||''}`, 'c-success') +
+
+    _awardCard('💀', 'Lowest Team Total',    lowName, lowFirst.team||'',
+      lowBest, `runs · ${lowFirst.date||''}`, 'c-danger') +
+
+    _awardCard('🌟', 'Super All-Rounder',    arName, arTeam,
+      arVal, `in one match · ${arFirst.date||''}`, 'c-success');
 }
 
 function renderExtrasLeaderboard(matchBowling) {
