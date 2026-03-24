@@ -28,22 +28,118 @@ let POINTS_TABLE = [];
 
 /* ── CSV file paths (relative to index.html) ── */
 const CSV_FILES = {
-  batting:      './1874258_batting_leaderboard.csv',
-  bowling:      './1874258_bowling_leaderboard.csv',
-  fielding:     './1874258_fielding_leaderboard.csv',
-  mvp:          './1874258_mvp_leaderboard.csv',
+  batting:      './batting_leaderboard.csv',
+  bowling:      './bowling_leaderboard.csv',
+  fielding:     './fielding_leaderboard.csv',
+  mvp:          './mvp_leaderboard.csv',
   pointsTable:  './points_table.csv',
   matchBatting: './data/match_batting.csv',
   matchBowling: './data/match_bowling.csv',
-  matchMeta:    './data/match_meta.csv'
+  matchMeta:    './data/match_meta.csv',
+  matchBalls:   './cricheroes_data/tournament_all_balls.csv'
 };
 
-/* ── Team colour palette — Kite-toned ── */
-const TEAM_COLORS = {
-  rcb: { bg: 'rgba(229,57,53,0.70)',   border: '#e53935' },
-  ww:  { bg: 'rgba(25,118,210,0.70)',  border: '#1976d2' },
-  def: { bg: 'rgba(56,126,209,0.70)',  border: '#387ed1' }
-};
+/* ── Color palette (assigned by team index from points table) ── */
+const COLOR_PALETTE = [
+  { bg: 'rgba(229,57,53,0.70)',  border: '#e53935', light: 'rgba(229,57,53,0.09)',  cssVar: 'team-0' },
+  { bg: 'rgba(25,118,210,0.70)', border: '#1976d2', light: 'rgba(25,118,210,0.09)', cssVar: 'team-1' },
+  { bg: 'rgba(56,183,74,0.70)',  border: '#388e3c', light: 'rgba(56,183,74,0.09)',  cssVar: 'team-2' },
+  { bg: 'rgba(251,140,0,0.70)',  border: '#f57c00', light: 'rgba(251,140,0,0.09)',  cssVar: 'team-3' },
+  { bg: 'rgba(103,58,183,0.70)', border: '#7b1fa2', light: 'rgba(103,58,183,0.09)', cssVar: 'team-4' },
+];
+
+/* Built at runtime from points_table.csv — keys are lowercase team full names */
+let TEAMS = {};
+
+function buildTeamRegistry(ptRows) {
+  TEAMS = {};
+  ptRows.forEach((row, idx) => {
+    const full  = (row.team  || '').trim();
+    const short = (row.short || full.substring(0, 3).toUpperCase()).trim();
+    if (!full) return;
+    const colors = COLOR_PALETTE[idx % COLOR_PALETTE.length];
+    const entry = { full, short, idx, colors,
+      chipClass: `team-chip-${idx}`, heatClass: `hm-team-${idx}`, roClass: `ro-team-${idx}` };
+    TEAMS[full.toLowerCase()] = entry;
+    // Also index by short code for quick lookup
+    TEAMS[short.toLowerCase()] = entry;
+  });
+  injectTeamCSSVars();
+}
+
+function injectTeamCSSVars() {
+  const root = document.documentElement;
+  Object.values(TEAMS).forEach(t => {
+    root.style.setProperty(`--${t.colors.cssVar}`,     t.colors.border);
+    root.style.setProperty(`--${t.colors.cssVar}-lt`,  t.colors.light);
+  });
+}
+
+function getTeam(name) {
+  if (!name) return null;
+  const lc = name.toLowerCase();
+  // Exact key match
+  if (TEAMS[lc]) return TEAMS[lc];
+  // Partial match
+  for (const [key, entry] of Object.entries(TEAMS)) {
+    if (lc.includes(key) || key.includes(lc)) return entry;
+  }
+  return null;
+}
+function teamShort(name)      { const t = getTeam(name); return t ? t.short  : (name || '?'); }
+function teamBg(name)         { const t = getTeam(name); return t ? t.colors.bg     : 'rgba(56,126,209,0.70)'; }
+function teamBorder(name)     { const t = getTeam(name); return t ? t.colors.border : '#387ed1'; }
+function teamLight(name)      { const t = getTeam(name); return t ? t.colors.light  : 'rgba(56,126,209,0.09)'; }
+function teamChipClass(name)  { const t = getTeam(name); return t ? t.chipClass : 'team-chip-0'; }
+function teamHeatClass(name)  { const t = getTeam(name); return t ? t.heatClass : 'hm-team-0'; }
+function teamRoClass(name)    { const t = getTeam(name); return t ? t.roClass   : 'ro-team-0'; }
+function teamCssVar(name)     { const t = getTeam(name); return t ? `var(--${t.colors.cssVar})` : 'var(--team-0)'; }
+function teamList()           { return [...new Set(Object.values(TEAMS).filter(t => typeof t.idx === 'number').sort((a,b) => a.idx - b.idx))]; }
+
+function populateDynamicHTML() {
+  const tList = teamList();
+
+  // Header badges
+  const badgesEl = document.getElementById('team-badges-container');
+  if (badgesEl) {
+    badgesEl.innerHTML = tList.map((t, i) =>
+      (i > 0 ? '<span class="vs-text" aria-hidden="true">vs</span>' : '') +
+      `<span class="team-badge team-${t.idx}">${t.short}</span>`
+    ).join('');
+  }
+
+  // Header subtitle
+  const subtitleEl = document.getElementById('header-subtitle');
+  if (subtitleEl) {
+    subtitleEl.textContent = `Analytics Dashboard · ${tList.map(t => t.short).join(' vs ')}`;
+  }
+
+  // Team filter dropdown
+  const sel = document.getElementById('teamFilter');
+  if (sel) {
+    // Remove all options except 'All Teams'
+    while (sel.options.length > 1) sel.remove(1);
+    tList.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.full;
+      opt.textContent = t.full;
+      sel.appendChild(opt);
+    });
+  }
+
+  // Team comparison heading
+  const headingEl = document.getElementById('team-heading');
+  if (headingEl) {
+    headingEl.textContent = `${tList.map(t => t.short).join(' vs ')} — Team Comparison`;
+  }
+
+  // Win margin legend
+  const legendEl = document.getElementById('win-margin-legend');
+  if (legendEl) {
+    const dots = {'0':'🔴','1':'🔵','2':'🟢','3':'🟠'};
+    legendEl.textContent = '(' + tList.map((t,i) => `${dots[i]||'⚫'} ${t.short}`).join(' · ') + ')';
+  }
+}
 
 /* ── Chart.js defaults — Kite light theme ── */
 Chart.defaults.color        = '#7a7a7a';
@@ -62,6 +158,7 @@ const state = {
   matchBatting:  [],
   matchBowling:  [],
   matchMeta:     [],
+  matchBalls:    [],
   selectedMatchId: ''
 };
 
@@ -270,18 +367,12 @@ function playerRow(name) {
 
 function barBg(name) {
   const r = playerRow(name);
-  if (!r) return TEAM_COLORS.def.bg;
-  if (r.team_name && r.team_name.includes('RCB')) return TEAM_COLORS.rcb.bg;
-  if (r.team_name && r.team_name.includes('WW'))  return TEAM_COLORS.ww.bg;
-  return TEAM_COLORS.def.bg;
+  return r?.team_name ? teamBg(r.team_name) : 'rgba(56,126,209,0.70)';
 }
 
 function barBorder(name) {
   const r = playerRow(name);
-  if (!r) return TEAM_COLORS.def.border;
-  if (r.team_name && r.team_name.includes('RCB')) return TEAM_COLORS.rcb.border;
-  if (r.team_name && r.team_name.includes('WW'))  return TEAM_COLORS.ww.border;
-  return TEAM_COLORS.def.border;
+  return r?.team_name ? teamBorder(r.team_name) : '#387ed1';
 }
 
 
@@ -587,14 +678,10 @@ function renderPlayerDetail(playerName) {
 
   const initials  = playerName.split(' ').map(w => w[0] || '').join('').slice(0, 2).toUpperCase();
   const teamName  = bat.team_name || bowl.team_name || '';
-  const isRCB     = teamName.includes('RCB');
-  const isWW      = teamName.includes('WW');
-
-  const badgeStyle = isRCB
-    ? 'background:var(--rcb-lt);color:var(--rcb);border:1px solid rgba(229,57,53,0.3);'
-    : isWW
-      ? 'background:var(--ww-lt);color:var(--ww);border:1px solid rgba(25,118,210,0.3);'
-      : '';
+  const _t = getTeam(teamName);
+  const badgeStyle = _t
+    ? `background:${_t.colors.light};color:${_t.colors.border};border:1px solid ${_t.colors.bg};`
+    : '';
 
   /* Build stat tiles */
   const batStats = bat.total_runs !== undefined ? `
@@ -939,7 +1026,7 @@ function renderPointsTable() {
   const wrap = document.getElementById('pointsTableWrap');
   if (!wrap) return;
 
-  const teamColor = t => t.includes('WW') ? 'var(--ww)' : 'var(--rcb)';
+  const teamColor = t => teamCssVar(t);
 
   const rows = POINTS_TABLE.map((r, i) => {
     const nrrClass  = r.NRR >= 0 ? 'pt-nrr-pos' : 'pt-nrr-neg';
@@ -1097,15 +1184,16 @@ function renderNRRChart() {
 }
 
 /* ── Team comparison doughnut helper ── */
-function doughnutConfig(rcbVal, wwVal, tooltipSuffix) {
+function doughnutConfig(vals, tooltipSuffix) {
+  const tList = teamList();
   return {
     type: 'doughnut',
     data: {
-      labels: ['RCB', 'WW'],
+      labels: tList.map(t => t.short),
       datasets: [{
-        data: [rcbVal, wwVal],
-        backgroundColor: ['rgba(229,57,53,0.75)', 'rgba(25,118,210,0.75)'],
-        borderColor:      ['#e53935', '#1976d2'],
+        data: vals,
+        backgroundColor: tList.map(t => t.colors.bg.replace('0.70', '0.75')),
+        borderColor:      tList.map(t => t.colors.border),
         borderWidth: 2, hoverOffset: 6
       }]
     },
@@ -1127,17 +1215,17 @@ function doughnutConfig(rcbVal, wwVal, tooltipSuffix) {
 /* Team runs doughnut */
 function renderTeamRunsChart() {
   destroyChart('teamRuns');
-  const rcb = state.batting.filter(r => r.team_name && r.team_name.includes('RCB')).reduce((s, r) => s + num(r.total_runs), 0);
-  const ww  = state.batting.filter(r => r.team_name && r.team_name.includes('WW')).reduce((s, r) => s + num(r.total_runs), 0);
-  charts.teamRuns = new Chart(document.getElementById('teamRunsChart').getContext('2d'), doughnutConfig(rcb, ww, ' runs'));
+  const teams = teamList();
+  const runsPerTeam = teams.map(t => state.batting.filter(r => getTeam(r.team_name) === t).reduce((s, r) => s + num(r.total_runs), 0));
+  charts.teamRuns = new Chart(document.getElementById('teamRunsChart').getContext('2d'), doughnutConfig(runsPerTeam, ' runs'));
 }
 
 /* Team wickets doughnut */
 function renderTeamWicketsChart() {
   destroyChart('teamWickets');
-  const rcb = state.bowling.filter(r => r.team_name && r.team_name.includes('RCB')).reduce((s, r) => s + num(r.total_wickets), 0);
-  const ww  = state.bowling.filter(r => r.team_name && r.team_name.includes('WW')).reduce((s, r) => s + num(r.total_wickets), 0);
-  charts.teamWickets = new Chart(document.getElementById('teamWicketsChart').getContext('2d'), doughnutConfig(rcb, ww, ' wickets'));
+  const teams = teamList();
+  const wktsPerTeam = teams.map(t => state.bowling.filter(r => getTeam(r.team_name) === t).reduce((s, r) => s + num(r.total_wickets), 0));
+  charts.teamWickets = new Chart(document.getElementById('teamWicketsChart').getContext('2d'), doughnutConfig(wktsPerTeam, ' wickets'));
 }
 
 /* ── New batting charts ── */
@@ -1279,9 +1367,9 @@ function renderFieldingShare(fielding) {
 /* Team MVP doughnut */
 function renderTeamMvpChart() {
   destroyChart('teamMvp');
-  const rcb = parseFloat(state.mvp.filter(r => r['Team Name'] && r['Team Name'].includes('RCB')).reduce((s, r) => s + num(r.Total), 0).toFixed(2));
-  const ww  = parseFloat(state.mvp.filter(r => r['Team Name'] && r['Team Name'].includes('WW')).reduce((s, r) => s + num(r.Total), 0).toFixed(2));
-  charts.teamMvp = new Chart(document.getElementById('teamMvpChart').getContext('2d'), doughnutConfig(rcb, ww, ' pts'));
+  const teams = teamList();
+  const mvpPerTeam = teams.map(t => parseFloat(state.mvp.filter(r => getTeam(r['Team Name']) === t).reduce((s, r) => s + num(r.Total), 0).toFixed(2)));
+  charts.teamMvp = new Chart(document.getElementById('teamMvpChart').getContext('2d'), doughnutConfig(mvpPerTeam, ' pts'));
 }
 
 
@@ -1309,9 +1397,9 @@ function matchPlayerTeam(playerName, matchBatting, matchBowling) {
   const batRow  = matchBatting.find(r => r.player && r.player.trim() === playerName);
   const bowlRow = matchBowling.find(r => r.player && r.player.trim() === playerName);
   const team = (batRow && batRow.batting_team) || (bowlRow && bowlRow.bowling_team) || '';
-  if (team.includes('RCB')) return { bg: TEAM_COLORS.rcb.bg, border: TEAM_COLORS.rcb.border, chipClass: 'rcb-chip' };
-  if (team.includes('WW'))  return { bg: TEAM_COLORS.ww.bg,  border: TEAM_COLORS.ww.border,  chipClass: 'ww-chip' };
-  return { bg: TEAM_COLORS.def.bg, border: TEAM_COLORS.def.border, chipClass: '' };
+  const t = getTeam(team);
+  if (t) return { bg: t.colors.bg, border: t.colors.border, chipClass: t.chipClass };
+  return { bg: 'rgba(56,126,209,0.70)', border: '#387ed1', chipClass: 'team-chip-0' };
 }
 
 /* ─────────────────────────────────────────
@@ -1349,7 +1437,7 @@ function renderFormTracker(matchBatting, matchBowling) {
     .sort((a, b) => parseInt(a) - parseInt(b));          // oldest → newest
   const matchIds = [..._chronoIds].reverse();             // newest → oldest (display order)
   const _n = _chronoIds.length;
-  const matchLabel = (id, i) => {
+  const matchLabel = (_id, i) => {
     const num = _n - i;                                   // M12, M11 … M1
     return i === 0 ? `M${num} ★` : `M${num}`;
   };
@@ -1389,8 +1477,6 @@ function renderFormTracker(matchBatting, matchBowling) {
   /* Sort players: by total runs desc */
   const players = Object.entries(playerMap).sort((a, b) => b[1].totalRuns - a[1].totalRuns);
 
-  const isRCB = t => (t || '').toLowerCase().includes('royal') || (t || '').toLowerCase().includes('rcb');
-
   /* ── Cell background colour based on runs ── */
   function cellBg(d) {
     if (!d) return 'hm-dnb';
@@ -1410,7 +1496,7 @@ function renderFormTracker(matchBatting, matchBowling) {
 
   /* ── Build rows ── */
   const bodyRows = players.map(([name, d]) => {
-    const teamCls = isRCB(d.team) ? 'hm-rcb' : 'hm-ww';
+    const teamCls = teamHeatClass(d.team);
     const cells = matchIds.map(id => {
       const m = d.matches[id];
       if (!m) {
@@ -1421,7 +1507,7 @@ function renderFormTracker(matchBatting, matchBowling) {
           : `<td class="hm-cell hm-dnb hm-abs" title="Absent / Did not play">A</td>`;
       }
       const notOut = m.dismissal === 'not_out' ? '*' : '';
-      const isDuck = m.runs === 0 && m.dismissal !== 'not_out';
+      // isDuck = m.runs === 0 && m.dismissal !== 'not_out'; (reserved for future use)
       const tip = `${m.runs}${notOut} (${m.balls}b) · ${(m.dismissal || '').replace('_', ' ')}`;
       return `<td class="hm-cell ${cellBg(m)}" title="${tip}">${m.runs}${notOut}</td>`;
     }).join('');
@@ -1504,7 +1590,7 @@ function renderBowlingFormTracker(matchBowling, matchBatting) {
     .sort((a, b) => parseInt(a) - parseInt(b));          // oldest → newest
   const matchIds = [..._chronoIds].reverse();             // newest → oldest (display order)
   const _n = _chronoIds.length;
-  const matchLabel = (id, i) => {
+  const matchLabel = (_id, i) => {
     const num = _n - i;
     return i === 0 ? `M${num} ★` : `M${num}`;
   };
@@ -1542,7 +1628,6 @@ function renderBowlingFormTracker(matchBowling, matchBatting) {
 
   /* Sort players by total wickets desc */
   const players = Object.entries(playerMap).sort((a, b) => b[1].totalWkts - a[1].totalWkts);
-  const isRCB = t => (t||'').toLowerCase().includes('royal') || (t||'').toLowerCase().includes('rcb');
 
   /* Cell class by wickets + economy (for 0W) */
   function bowlBg(m) {
@@ -1563,7 +1648,7 @@ function renderBowlingFormTracker(matchBowling, matchBatting) {
   ).join('');
 
   const bodyRows = players.map(([name, d]) => {
-    const teamCls = isRCB(d.team) ? 'hm-rcb' : 'hm-ww';
+    const teamCls = teamHeatClass(d.team);
     const cells = matchIds.map(id => {
       const m = d.matches[id];
       if (!m) {
@@ -1758,8 +1843,8 @@ function renderScorecardViewer(matchMeta, matchBatting, matchBowling) {
   sorted.forEach((m, i) => {
     const opt = document.createElement('option');
     opt.value = m.match_id;
-    const t1  = m.innings1_team ? (m.innings1_team.includes('RCB') ? 'RCB' : 'WW') : '?';
-    const t2  = m.innings2_team ? (m.innings2_team.includes('RCB') ? 'RCB' : 'WW') : '?';
+    const t1  = m.innings1_team ? teamShort(m.innings1_team) : '?';
+    const t2  = m.innings2_team ? teamShort(m.innings2_team) : '?';
     const label = i === 0 ? `Match ${i + 1} ★ Latest` : `Match ${i + 1}`;
     opt.textContent = `${label} — ${t1} vs ${t2} (${m.match_date || 'Unknown date'})`;
     sel.appendChild(opt);
@@ -1802,9 +1887,12 @@ function renderScorecardForMatch(matchId, matchMeta, matchBatting, matchBowling)
   const innings1Bowl = matchBowling.filter(r => String(r.match_id) === String(matchId) && String(r.innings) === '1');
   const innings2Bowl = matchBowling.filter(r => String(r.match_id) === String(matchId) && String(r.innings) === '2');
 
-  function calcScore(batRows) {
-    const runs  = batRows.reduce((s, r) => s + num(r.runs), 0);
-    const wkts  = batRows.filter(r => r.dismissal_type && r.dismissal_type !== 'not_out' && r.dismissal_type !== 'unknown' && r.dismissal_type !== 'retired_hurt').length;
+  function calcScore(batRows, bowlRows) {
+    /* Use bowling-side total so extras (wides, no-balls, leg-byes) are included */
+    const runs = bowlRows?.length
+      ? bowlRows.reduce((s, r) => s + num(r.runs), 0)
+      : batRows.reduce((s, r) => s + num(r.runs), 0);
+    const wkts = batRows.filter(r => r.dismissal_type && r.dismissal_type !== 'not_out' && r.dismissal_type !== 'unknown' && r.dismissal_type !== 'retired_hurt').length;
     return runs ? `${runs}/${wkts}` : '';
   }
 
@@ -1821,7 +1909,7 @@ function renderScorecardForMatch(matchId, matchMeta, matchBatting, matchBowling)
     }
   }
 
-  function buildBattingTable(batRows) {
+  function buildBattingTable(batRows, bowlTotal) {
     if (!batRows.length) return '<p style="padding:12px;color:#b0b0b0;font-size:12px;">No batting data.</p>';
     const sorted = [...batRows].sort((a, b) => num(a.position) - num(b.position));
     const rows = sorted.map(r => `
@@ -1834,8 +1922,9 @@ function renderScorecardForMatch(matchId, matchMeta, matchBatting, matchBowling)
         <td>${num(r.sixes)}</td>
         <td>${num(r.strike_rate) ? num(r.strike_rate).toFixed(1) : '—'}</td>
       </tr>`).join('');
-    const totalRuns = sorted.reduce((s, r) => s + num(r.runs), 0);
-    const totalWkts = sorted.filter(r => r.dismissal_type && r.dismissal_type !== 'not_out' && r.dismissal_type !== 'unknown' && r.dismissal_type !== 'retired_hurt').length;
+    /* Use bowling-side total (bowlTotal) so extras appear in the Total row */
+    const displayRuns = bowlTotal > 0 ? bowlTotal : sorted.reduce((s, r) => s + num(r.runs), 0);
+    const totalWkts   = sorted.filter(r => r.dismissal_type && r.dismissal_type !== 'not_out' && r.dismissal_type !== 'unknown' && r.dismissal_type !== 'retired_hurt').length;
     return `
       <table class="sc-table">
         <thead><tr>
@@ -1845,7 +1934,7 @@ function renderScorecardForMatch(matchId, matchMeta, matchBatting, matchBowling)
         <tbody>${rows}</tbody>
         <tfoot><tr class="sc-total-row">
           <td></td><td style="text-align:left;font-weight:700;">Total</td>
-          <td><strong>${totalRuns}/${totalWkts}</strong></td>
+          <td><strong>${displayRuns}/${totalWkts}</strong></td>
           <td colspan="4"></td>
         </tr></tfoot>
       </table>`;
@@ -1879,27 +1968,62 @@ function renderScorecardForMatch(matchId, matchMeta, matchBatting, matchBowling)
   }
 
   function buildInningsBlock(inningsNum, battingTeam, batRows, bowlRows) {
-    const teamShort = battingTeam ? (battingTeam.includes('RCB') ? 'RCB' : battingTeam.includes('WW') ? 'WW' : battingTeam) : `Inn ${inningsNum}`;
-    const score     = calcScore(batRows);
+    const teamAbbr = battingTeam ? teamShort(battingTeam) : `Inn ${inningsNum}`;
+    const bowlTotal = bowlRows.reduce((s, r) => s + num(r.runs), 0);
+    const score     = calcScore(batRows, bowlRows);
     return `
       <div class="scorecard-innings-block">
         <div class="sc-innings-header">
-          <span class="sc-innings-title">${inningsNum === 1 ? '1st' : '2nd'} Innings — ${esc(teamShort)}</span>
+          <span class="sc-innings-title">${inningsNum === 1 ? '1st' : '2nd'} Innings — ${esc(teamAbbr)}</span>
           ${score ? `<span class="sc-innings-score">${score}</span>` : ''}
         </div>
         <div class="sc-section-label">Batting</div>
-        ${buildBattingTable(batRows)}
+        ${buildBattingTable(batRows, bowlTotal)}
         <div class="sc-section-label">Bowling</div>
         ${buildBowlingTable(bowlRows)}
       </div>`;
   }
 
-  const resultLine = meta.result ? `<div style="padding:8px 16px 4px;font-size:11px;color:#7a7a7a;font-style:italic;">${esc(meta.result)}${meta.toss_winner ? ` · Toss: ${esc(meta.toss_winner.includes('RCB') ? 'RCB' : 'WW')} chose to ${esc(meta.toss_decision || '')}` : ''}</div>` : '';
+  const resultLine = meta.result ? `<div style="padding:8px 16px 4px;font-size:11px;color:#7a7a7a;font-style:italic;">${esc(meta.result)}${meta.toss_winner ? ` · Toss: ${esc(teamShort(meta.toss_winner))} chose to ${esc(meta.toss_decision || '')}` : ''}</div>` : '';
+
+  const momLine = meta.man_of_match
+    ? `<div style="padding:4px 16px 8px;font-size:12px;">🏅 <strong>Man of the Match:</strong> ${esc(meta.man_of_match)}</div>`
+    : '';
+
+  /* Best batter: highest runs in this match */
+  const allBat = [...innings1Bat, ...innings2Bat];
+  const bestBatRow = allBat.length
+    ? allBat.reduce((a, b) => (num(b.runs) > num(a.runs) ? b : a))
+    : null;
+  const bestBatLine = bestBatRow && num(bestBatRow.runs) > 0
+    ? `<span>🏏 <strong>Best Bat:</strong> ${esc(bestBatRow.player)} — ${num(bestBatRow.runs)}(${num(bestBatRow.balls)})</span>`
+    : '';
+
+  /* Best bowler: most wickets (fewest runs tiebreak) */
+  const allBowl = [...innings1Bowl, ...innings2Bowl];
+  const bestBowlRow = allBowl.length
+    ? allBowl.slice().sort((a, b) => {
+        const wDiff = (num(b.wickets) - num(a.wickets));
+        return wDiff !== 0 ? wDiff : num(a.runs) - num(b.runs);
+      })[0]
+    : null;
+  const bestBowlLine = bestBowlRow && num(bestBowlRow.wickets) > 0
+    ? `<span>🎳 <strong>Best Bowl:</strong> ${esc(bestBowlRow.player)} — ${num(bestBowlRow.wickets)}/${num(bestBowlRow.runs)}</span>`
+    : '';
+
+  const perfLine = (bestBatLine || bestBowlLine)
+    ? `<div style="padding:2px 16px 8px;font-size:12px;display:flex;gap:24px;flex-wrap:wrap;">${bestBatLine}${bestBowlLine}</div>`
+    : '';
 
   content.innerHTML =
     resultLine +
+    momLine +
+    perfLine +
     buildInningsBlock(1, meta.innings1_team, innings1Bat, innings1Bowl) +
     buildInningsBlock(2, meta.innings2_team, innings2Bat, innings2Bowl);
+
+  /* Worm chart — rendered after innerHTML is set so canvas exists in DOM */
+  renderMatchWorm(state.matchBalls, matchId, state.matchMeta);
 }
 
 
@@ -2275,28 +2399,22 @@ function renderTossAnalysis(matchMeta) {
   hideEmptyChart('tossAnalysisChart');
 
   /* Per team: toss wins, matches won when won toss, matches won when lost toss */
-  const teams = {
-    RCB: { tossWins: 0, wonWhenTossWin: 0, wonWhenTossLoss: 0 },
-    WW:  { tossWins: 0, wonWhenTossWin: 0, wonWhenTossLoss: 0 }
-  };
+  const tList = teamList();
+  const tossTeamsMap = {};
+  tList.forEach(t => { tossTeamsMap[t.short] = { tossWins: 0, wonWhenTossWin: 0, wonWhenTossLoss: 0 }; });
 
   matchMeta.forEach(m => {
     const tossTeam   = m.toss_winner || '';
     const winner     = m.winner || '';
-    const tossIsRCB  = tossTeam.includes('Royal Cricket Blasters') || tossTeam.includes('RCB');
-    const tossIsWW   = tossTeam.includes('Weekend Warriors') || tossTeam.includes('WW');
-    const winnerIsRCB= winner.includes('Royal Cricket Blasters') || winner.includes('RCB');
-    const winnerIsWW = winner.includes('Weekend Warriors') || winner.includes('WW');
+    const tossEntry  = getTeam(tossTeam);
+    const winEntry   = getTeam(winner);
+    const tossShortKey = tossEntry ? tossEntry.short : null;
+    const winShortKey  = winEntry  ? winEntry.short  : null;
 
-    if (tossIsRCB) {
-      teams.RCB.tossWins++;
-      if (winnerIsRCB) teams.RCB.wonWhenTossWin++;
-      if (winnerIsWW)  teams.WW.wonWhenTossLoss++;
-    }
-    if (tossIsWW) {
-      teams.WW.tossWins++;
-      if (winnerIsWW)  teams.WW.wonWhenTossWin++;
-      if (winnerIsRCB) teams.RCB.wonWhenTossLoss++;
+    if (tossShortKey && tossTeamsMap[tossShortKey]) {
+      tossTeamsMap[tossShortKey].tossWins++;
+      if (winShortKey === tossShortKey) tossTeamsMap[tossShortKey].wonWhenTossWin++;
+      else                              tossTeamsMap[tossShortKey].wonWhenTossLoss++;
     }
   });
 
@@ -2304,27 +2422,27 @@ function renderTossAnalysis(matchMeta) {
   charts.tossAnalysis = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['RCB', 'WW'],
+      labels: tList.map(t => t.short),
       datasets: [
         {
           label: 'Toss Wins',
-          data: [teams.RCB.tossWins, teams.WW.tossWins],
-          backgroundColor: ['rgba(229,57,53,0.55)', 'rgba(25,118,210,0.55)'],
-          borderColor: ['#e53935', '#1976d2'],
+          data: tList.map(t => (tossTeamsMap[t.short] || {}).tossWins || 0),
+          backgroundColor: tList.map(t => t.colors.bg.replace('0.70', '0.55')),
+          borderColor: tList.map(t => t.colors.border),
           borderWidth: 1, borderRadius: 3
         },
         {
           label: 'Won (toss won)',
-          data: [teams.RCB.wonWhenTossWin, teams.WW.wonWhenTossWin],
-          backgroundColor: ['rgba(229,57,53,0.85)', 'rgba(25,118,210,0.85)'],
-          borderColor: ['#e53935', '#1976d2'],
+          data: tList.map(t => (tossTeamsMap[t.short] || {}).wonWhenTossWin || 0),
+          backgroundColor: tList.map(t => t.colors.bg.replace('0.70', '0.85')),
+          borderColor: tList.map(t => t.colors.border),
           borderWidth: 1, borderRadius: 3
         },
         {
           label: 'Won (toss lost)',
-          data: [teams.RCB.wonWhenTossLoss, teams.WW.wonWhenTossLoss],
-          backgroundColor: ['rgba(0,162,91,0.65)', 'rgba(0,162,91,0.65)'],
-          borderColor: ['#00a25b', '#00a25b'],
+          data: tList.map(t => (tossTeamsMap[t.short] || {}).wonWhenTossLoss || 0),
+          backgroundColor: tList.map(() => 'rgba(0,162,91,0.65)'),
+          borderColor: tList.map(() => '#00a25b'),
           borderWidth: 1, borderRadius: 3
         }
       ]
@@ -2358,34 +2476,36 @@ function renderExtrasTeamChart(matchBowling) {
   hideEmptyChart('extrasTeamChart');
 
   /* Each row's bowling_team is the team doing the bowling (conceding extras) */
-  const teams = { RCB: { wides: 0, noBalls: 0 }, WW: { wides: 0, noBalls: 0 } };
+  const tList = teamList();
+  const extTeams = {};
+  tList.forEach(t => { extTeams[t.short] = { wides: 0, noBalls: 0 }; });
   matchBowling.forEach(r => {
     const bt = (r.bowling_team || '').toLowerCase();
-    const key = bt.includes('rcb') || bt.includes('royal') ? 'RCB' :
-                bt.includes('ww')  || bt.includes('weekend') ? 'WW' : null;
+    const tEntry = getTeam(bt);
+    const key = tEntry ? tEntry.short : null;
     if (!key) return;
-    teams[key].wides   += num(r.wides);
-    teams[key].noBalls += num(r.no_balls);
+    extTeams[key].wides   += num(r.wides);
+    extTeams[key].noBalls += num(r.no_balls);
   });
 
   const ctx = document.getElementById('extrasTeamChart').getContext('2d');
   charts.extrasTeam = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['RCB Bowling', 'WW Bowling'],
+      labels: tList.map(t => `${t.short} Bowling`),
       datasets: [
         {
           label: 'Wides',
-          data: [teams.RCB.wides, teams.WW.wides],
-          backgroundColor: ['rgba(229,57,53,0.70)', 'rgba(25,118,210,0.70)'],
-          borderColor: ['#e53935', '#1976d2'],
+          data: tList.map(t => (extTeams[t.short] || {}).wides || 0),
+          backgroundColor: tList.map(t => t.colors.bg),
+          borderColor: tList.map(t => t.colors.border),
           borderWidth: 1, borderRadius: 3
         },
         {
           label: 'No-Balls',
-          data: [teams.RCB.noBalls, teams.WW.noBalls],
-          backgroundColor: ['rgba(229,57,53,0.40)', 'rgba(25,118,210,0.40)'],
-          borderColor: ['#e53935', '#1976d2'],
+          data: tList.map(t => (extTeams[t.short] || {}).noBalls || 0),
+          backgroundColor: tList.map(t => t.colors.bg.replace('0.70', '0.40')),
+          borderColor: tList.map(t => t.colors.border),
           borderWidth: 1, borderRadius: 3, borderDash: [4, 2]
         }
       ]
@@ -2493,7 +2613,7 @@ function renderMatchupTable(matchBatting) {
    Main render — called on every filter change
    ============================================================ */
 
-function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBowling) {
+function renderTopHeroes(batting, bowling, fielding, _mvp, matchBatting, matchBowling) {
   const grid = document.getElementById('topHeroesGrid');
   if (!grid) return;
 
@@ -2527,7 +2647,7 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
     ...r,
     _batDots: Math.max(0, num(r.ball_faced) - (num(r.total_runs) - 3*num(r['4s']) - 5*num(r['6s'])))
   }));
-  const tBatDots  = topTied(batDotsArr, r => r._batDots, r => num(r.ball_faced) >= 10);
+  topTied(batDotsArr, r => r._batDots, r => num(r.ball_faced) >= 10); // tBatDots reserved
   const tMaiden   = topTied(bowling,  r => num(r.maidens),         r => num(r.maidens) > 0);
   const tBowlSR   = topTiedAsc(bowling, r => num(r.SR),           r => num(r.SR) > 0 && num(r.total_wickets) >= 2);
   const tOvers    = topTied(bowling,  r => num(r.overs),           r => num(r.overs) > 0);
@@ -2538,10 +2658,8 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
     if (!tied.players.length) return `<div class="hero-card hero-empty${extraClass ? ' ' + extraClass : ''}"><div class="hero-icon">${icon}</div><div class="hero-label">${label}</div><div class="hero-empty-msg">No data</div></div>`;
     const names = tied.players.map(r => (nameKey ? r[nameKey] : r.name) || '').filter(Boolean);
     const team  = tied.players[0][teamKey] || '';
-    const isWW  = t => t.includes('WW') || t.toLowerCase().includes('weekend');
-    const isRCB = !isWW(team);
     const count = tied.players.length;
-    const color = count > 1 ? '#7b5ea7' : (isRCB ? 'var(--rcb)' : 'var(--ww)');
+    const color = count > 1 ? '#7b5ea7' : (teamBorder(team) || 'var(--team-0)');
     // Avatar: initials for solo, count badge for ties
     const initials = count > 1
       ? `×${count}`
@@ -2551,7 +2669,7 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
       : count === 2 ? names.slice(0,2).map(esc).join(' &amp; ')
       : `${esc(names[0])} <span class="hero-tied-rest">&amp; ${count - 1} others tied</span>`;
     // Team: unique teams only
-    const uniqueTeams = [...new Set(tied.players.map(r => isWW(r[teamKey]||'')?'WW':'RCB'))];
+    const uniqueTeams = [...new Set(tied.players.map(r => teamShort(r[teamKey]||'')))];
     const displayTeam = uniqueTeams.join(' &amp; ');
     const statVal = tied.val !== null ? (Number.isInteger(tied.val) ? tied.val : parseFloat(tied.val).toFixed(tied.val < 10 ? 2 : 1)) : '—';
     return `
@@ -2579,69 +2697,21 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
   }
 
   const _emptyTied  = { val: 0, players: [] };
-  let tRunOutVictim = _emptyTied;
-  let tRunOutCaller = _emptyTied;
-  let tDuckKing     = _emptyTied;
-  let tWideMan      = _emptyTied;
-  let tNoBallKing   = _emptyTied;
 
-  if (matchBatting?.length) {
-    /* Most times run out */
-    const roMap = {};
-    matchBatting.forEach(r => {
-      if (r.dismissal_type !== 'run_out') return;
-      const p = (r.player || '').trim(); if (!p) return;
-      if (!roMap[p]) roMap[p] = { n: 0, team: r.batting_team };
-      roMap[p].n++;
+  /* ── MOM from match_meta (official CricHeroes award) ── */
+  let tMOM = _emptyTied;
+  {
+    const momMap = {};
+    (state.matchMeta || []).forEach(m => {
+      const p = (m.man_of_match || '').trim(); if (!p) return;
+      if (!momMap[p]) momMap[p] = { n: 0, team: m.man_of_match_team || '' };
+      momMap[p].n++;
     });
-    tRunOutVictim = matchTiedFromMap(Object.entries(roMap).sort((a,b) => b[1].n - a[1].n));
-
-    /* Duck king */
-    const dkMap = {};
-    matchBatting.forEach(r => {
-      const dt = r.dismissal_type || '';
-      if (parseInt(r.runs) !== 0 || dt === 'not_out' || dt === '') return;
-      const p = (r.player || '').trim(); if (!p) return;
-      if (!dkMap[p]) dkMap[p] = { n: 0, team: r.batting_team };
-      dkMap[p].n++;
-    });
-    tDuckKing = matchTiedFromMap(Object.entries(dkMap).sort((a,b) => b[1].n - a[1].n));
-
-    /* (Run-out enforcer removed — duplicate of "Run Out Hero" from fielding CSV) */
-
-    /* Run-out caller: most times as the non-dismissed partner (inferred via innings simulation) */
-    const pEvents = inferRunOutPartnerships(matchBatting);
-    const callerMap = {};
-    pEvents.forEach(e => {
-      const p = e.partner; if (!p || p === '?') return;
-      if (!callerMap[p]) callerMap[p] = { n: 0, team: e.partnerTeam };
-      callerMap[p].n++;
-    });
-    tRunOutCaller = matchTiedFromMap(Object.entries(callerMap).sort((a,b) => b[1].n - a[1].n));
+    tMOM = matchTiedFromMap(Object.entries(momMap).sort((a, b) => b[1].n - a[1].n));
   }
 
-  if (matchBowling?.length) {
-    /* Wide man */
-    const wdMap = {};
-    matchBowling.forEach(r => {
-      const p = (r.player || '').trim(); if (!p) return;
-      if (!wdMap[p]) wdMap[p] = { n: 0, team: r.bowling_team };
-      wdMap[p].n += parseInt(r.wides) || 0;
-    });
-    tWideMan = matchTiedFromMap(Object.entries(wdMap).sort((a,b) => b[1].n - a[1].n));
-
-    /* No-ball king */
-    const nbMap = {};
-    matchBowling.forEach(r => {
-      const p = (r.player || '').trim(); if (!p) return;
-      if (!nbMap[p]) nbMap[p] = { n: 0, team: r.bowling_team };
-      nbMap[p].n += parseInt(r.no_balls) || 0;
-    });
-    tNoBallKing = matchTiedFromMap(Object.entries(nbMap).sort((a,b) => b[1].n - a[1].n));
-  }
-
-  /* ── MOM / Best Batter / Best Bowler counts (per match) ── */
-  let tMOM = _emptyTied, tBestBatCount = _emptyTied, tBestBowlCount = _emptyTied;
+  /* ── Best Batter / Best Bowler counts (per match) ── */
+  let tBestBatCount = _emptyTied, tBestBowlCount = _emptyTied;
 
   if (matchBatting?.length) {
     const allMatchIds = [...new Set(matchBatting.map(r => String(r.match_id)))];
@@ -2676,69 +2746,6 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
       tBestBowlCount = matchTiedFromMap(Object.entries(bestBowlMap).sort((a,b) => b[1].n - a[1].n));
     }
 
-    /* MOM: CricHeroes MVP formula applied to winning team only.
-       Batting MVP  = runs/10  + SR bonus (8% for T20, only if player SR > team SR)
-       Bowling MVP  = wickets × 1.4  + maiden bonus (1.4/maiden)
-                    + milestone bonus (+0.5 for 3wkts)
-                    + economy bonus (8% of wicket pts if eco < team eco)
-       All-rounders accumulate both batting + bowling MVP.
-       Player with highest total MVP from winning team = MOM. */
-    if (state.matchMeta?.length) {
-      const momMap = {};
-      state.matchMeta.forEach(meta => {
-        if (!meta.winner) return;
-        const mid     = String(meta.match_id);
-        const winTeam = meta.winner;
-        const winBat  = matchBatting.filter(r => String(r.match_id) === mid && r.batting_team === winTeam);
-        const winBowl = (matchBowling  || []).filter(r => String(r.match_id) === mid && r.bowling_team === winTeam);
-
-        // Team SR for the batting innings of winning team
-        const teamRuns  = winBat.reduce((s, r) => s + num(r.runs),  0);
-        const teamBalls = winBat.reduce((s, r) => s + num(r.balls), 0);
-        const teamSR    = teamBalls > 0 ? (teamRuns / teamBalls) * 100 : 100;
-
-        // Team economy for the bowling innings of winning team
-        const teamBowlRuns  = winBowl.reduce((s, r) => s + num(r.runs),  0);
-        const teamBowlOvers = winBowl.reduce((s, r) => s + num(r.overs), 0);
-        const teamEco       = teamBowlOvers > 0 ? teamBowlRuns / teamBowlOvers : 6;
-
-        // Build per-player MVP map (handles all-rounders)
-        const mvpMap = {};
-        const addMvp = (name, team, pts) => {
-          if (!name || pts <= 0) return;
-          if (!mvpMap[name]) mvpMap[name] = { mvp: 0, team };
-          mvpMap[name].mvp += pts;
-        };
-
-        winBat.forEach(r => {
-          const basic   = num(r.runs) / 10;
-          const playerSR = num(r.strike_rate);
-          const srBonus  = playerSR > teamSR ? (playerSR / teamSR) * 0.08 * basic : 0;
-          addMvp(r.player, r.batting_team, basic + srBonus);
-        });
-
-        winBowl.forEach(r => {
-          const wkts      = num(r.wickets);
-          const wicketPts = wkts * 1.4;                        // 12-over box cricket
-          const milestone = wkts >= 3 ? 0.5 : 0;
-          const maiden    = num(r.maidens) * 1.4;
-          const playerEco = num(r.economy);
-          const ecoBonus  = (wicketPts > 0 && playerEco < teamEco)
-            ? (teamEco / playerEco - 1) * 0.08 * wicketPts : 0;
-          addMvp(r.player, r.bowling_team, wicketPts + milestone + maiden + ecoBonus);
-        });
-
-        // Winner = highest MVP from winning team
-        const sorted = Object.entries(mvpMap).sort((a, b) => b[1].mvp - a[1].mvp);
-        if (sorted.length) {
-          const [momName, momData] = sorted[0];
-          const p = momName.trim(); if (!p) return;
-          if (!momMap[p]) momMap[p] = { n: 0, team: momData.team };
-          momMap[p].n++;
-        }
-      });
-      tMOM = matchTiedFromMap(Object.entries(momMap).sort((a,b) => b[1].n - a[1].n));
-    }
   }
 
   grid.innerHTML =
@@ -2769,10 +2776,8 @@ function renderTopHeroes(batting, bowling, fielding, mvp, matchBatting, matchBow
    ══════════════════════════════════════════════════════ */
 
 function _awardCard(icon, title, player, team, value, detail, color) {
-  const isRCB = (team || '').toLowerCase().includes('rcb') ||
-                (team || '').toLowerCase().includes('royal');
   const badge = team
-    ? `<span class="award-team-badge ${isRCB ? 'rcb-chip' : 'ww-chip'}">${isRCB ? 'RCB' : 'WW'}</span>`
+    ? `<span class="award-team-badge ${teamChipClass(team)}">${teamShort(team)}</span>`
     : '';
   const names = (player || '—').split(' & ').map(n => n.trim()).filter(Boolean);
   let nameHTML;
@@ -2811,6 +2816,9 @@ function renderFunAwards(matchBatting, matchBowling) {
     grid.innerHTML = '<p class="sc-placeholder">Extracting scorecard data…</p>'; return;
   }
 
+  /* Man of the Match tally */
+  // MOM award is shown in Top Heroes — not duplicated here.
+
   /* Run-outs suffered */
   const runOutMap = {};
   matchBatting.forEach(r => {
@@ -2829,7 +2837,7 @@ function renderFunAwards(matchBatting, matchBowling) {
   const duckMap = {};
   matchBatting.forEach(r => {
     const dt = (r.dismissal_type || '').toLowerCase();
-    if (parseInt(r.runs) !== 0 || dt === 'not out' || dt === '') return;
+    if (parseInt(r.runs) !== 0 || dt === 'not_out' || dt === '') return;
     const p = r.player; if (!p) return;
     if (!duckMap[p]) duckMap[p] = { n: 0, team: r.batting_team };
     duckMap[p].n++;
@@ -2987,6 +2995,445 @@ function renderFunAwards(matchBatting, matchBowling) {
     _awardCard('🎨', 'Boundary Painter',    bpName,     bpD.team,     bpBest,    'fours conceded this season',    'c-info');
 }
 
+/* ══════════════════════════════════════════════════════
+   Running Awards — derived from ball-by-ball CSV
+   ══════════════════════════════════════════════════════ */
+
+function renderRunningAwards(balls) {
+  const grid = document.getElementById('funAwardsGrid');
+  if (!grid || !balls?.length) return;
+
+  /* Aggregate per batsman */
+  const map = {};
+  balls.forEach(b => {
+    const bat   = (b.batsman || '').trim(); if (!bat) return;
+    const run   = parseInt(b.run) || 0;
+    const extra = (b.extra_type || '').trim();
+    const isWide = extra === 'WD';
+
+    if (!map[bat]) map[bat] = { singles: 0, doubles: 0, totalRuns: 0, balls: 0, runRuns: 0, team: b.batting_team };
+    const d = map[bat];
+
+    /* Only off-bat deliveries contribute to running runs */
+    if (extra === '') {
+      d.totalRuns += run;
+      if (run === 1) d.singles++;
+      if (run === 2) d.doubles++;
+      if (run === 1 || run === 2 || run === 3) d.runRuns += run;
+    }
+    /* Balls faced: every delivery except wides */
+    if (!isWide) d.balls++;
+  });
+
+  /* Singles King: most singles */
+  const singlesArr = Object.entries(map).sort((a, b) => b[1].singles - a[1].singles);
+  const singlesKing = singlesArr[0] || null;
+  const singlesVal  = singlesKing?.[1]?.singles || 0;
+  const singlesName = singlesArr.filter(([,d]) => d.singles === singlesVal).map(([n]) => n).join(' & ') || '—';
+  const singlesTeam = singlesArr.filter(([,d]) => d.singles === singlesVal)[0]?.[1]?.team || '';
+
+  /* Quick Hands: highest singles rate % (min 20 balls) */
+  const srArr = Object.entries(map)
+    .filter(([, d]) => d.balls >= 20)
+    .map(([n, d]) => [n, { pct: d.balls > 0 ? (d.singles / d.balls * 100) : 0, team: d.team }])
+    .sort((a, b) => b[1].pct - a[1].pct);
+  const qhBest = srArr[0] || null;
+  const qhVal  = qhBest ? Math.round(qhBest[1].pct) : 0;
+  const qhName = srArr.filter(([,d]) => Math.round(d.pct) === qhVal).map(([n]) => n).join(' & ') || '—';
+  const qhTeam = srArr.filter(([,d]) => Math.round(d.pct) === qhVal)[0]?.[1]?.team || '';
+
+  /* Doubles Dynamo: most doubles */
+  const doubArr = Object.entries(map).sort((a, b) => b[1].doubles - a[1].doubles);
+  const doubVal  = doubArr[0]?.[1]?.doubles || 0;
+  const doubName = doubArr.filter(([,d]) => d.doubles === doubVal).map(([n]) => n).join(' & ') || '—';
+  const doubTeam = doubArr.filter(([,d]) => d.doubles === doubVal)[0]?.[1]?.team || '';
+
+  /* Running Machine: highest % of runs from running (singles+2s) vs total runs (min 20 total runs) */
+  const rmArr = Object.entries(map)
+    .filter(([, d]) => d.totalRuns >= 20)
+    .map(([n, d]) => [n, { pct: d.totalRuns > 0 ? (d.runRuns / d.totalRuns * 100) : 0, team: d.team }])
+    .sort((a, b) => b[1].pct - a[1].pct);
+  const rmBest = rmArr[0] || null;
+  const rmVal  = rmBest ? Math.round(rmBest[1].pct) : 0;
+  const rmName = rmArr.filter(([,d]) => Math.round(d.pct) === rmVal).map(([n]) => n).join(' & ') || '—';
+  const rmTeam = rmArr.filter(([,d]) => Math.round(d.pct) === rmVal)[0]?.[1]?.team || '';
+
+  grid.innerHTML +=
+    _awardCard('1️⃣', 'Singles King',     singlesName, singlesTeam, singlesVal,  'singles taken this season',            'c-info') +
+    _awardCard('👐', 'Quick Hands',       qhName,      qhTeam,      `${qhVal}%`, 'singles per ball (min 20 balls)',       'c-success') +
+    _awardCard('2️⃣', 'Doubles Dynamo',   doubName,    doubTeam,    doubVal,     'doubles taken this season',            'c-success') +
+    _awardCard('🏃', 'Running Machine',   rmName,      rmTeam,      `${rmVal}%`, '% runs from running (min 20 runs)',     'c-success');
+}
+
+/* ══════════════════════════════════════════════════════
+   Ball Insights — over-by-over, bowler dist, worm chart
+   ══════════════════════════════════════════════════════ */
+
+function renderBallInsights(balls, matchMeta) {
+  /* Show partial-data banner if ball CSV covers fewer matches than total */
+  const ballSection = document.getElementById('ball-insights-heading')?.closest('section');
+  const existingBanner = ballSection?.querySelector('.ball-data-notice');
+  if (existingBanner) existingBanner.remove();
+
+  if (balls?.length && ballSection) {
+    const ballMatchCount  = new Set(balls.map(b => b.match_id)).size;
+    const totalMatchCount = (matchMeta || []).filter(m => m.winner).length;
+    if (ballMatchCount < totalMatchCount) {
+      const notice = document.createElement('div');
+      notice.className = 'ball-data-notice';
+      notice.style.cssText = 'margin:0 0 12px;padding:8px 12px;background:#fff8e1;border-left:3px solid #f9a825;border-radius:4px;font-size:12px;color:#5d4037;';
+      notice.innerHTML = `⚠️ Ball-by-ball data available for <strong>${ballMatchCount} of ${totalMatchCount}</strong> matches — charts below reflect those matches only.`;
+      ballSection.querySelector('.section-header').after(notice);
+    }
+  }
+
+  if (!balls?.length) return;
+  renderOverByOverChart(balls);
+  renderBowlerScoringDistChart(balls);
+  renderDeathOverCharts(balls);
+  renderWinMarginChart(matchMeta);
+}
+
+function renderOverByOverChart(balls) {
+  const ctx = document.getElementById('overByOverChart');
+  if (!ctx) return;
+
+  /* Determine max over number from data (handles T10 and T12 matches) */
+  const maxOv = balls.reduce((mx, b) => {
+    const ov = parseInt((b.over_ball || '').toString().split('.')[0]);
+    return ov > mx ? ov : mx;
+  }, 10);
+
+  /* Aggregate runs and dots per over number across all matches/innings */
+  const overRuns  = Array(maxOv).fill(0);
+  const overDots  = Array(maxOv).fill(0);
+  const overBalls = Array(maxOv).fill(0);
+
+  balls.forEach(b => {
+    const ob = (b.over_ball || '').toString();
+    const overIdx = parseInt(ob.split('.')[0]) - 1;
+    if (overIdx < 0 || overIdx >= maxOv) return;
+    const run = (parseInt(b.run) || 0) + (parseInt(b.extra_run) || 0);
+    overRuns[overIdx]  += run;
+    if ((b.extra_type || '') !== 'WD') overBalls[overIdx]++;
+    if (b.is_dot_ball === '1' || b.is_dot_ball === true || b.is_dot_ball === 1) overDots[overIdx]++;
+  });
+
+  const labels   = Array.from({ length: maxOv }, (_, i) => `Over ${i + 1}`);
+  const avgRPO   = overBalls.map((b, i) => b > 0 ? +(overRuns[i] / (b / 6)).toFixed(2) : 0);
+  const dotPct   = overBalls.map((b, i) => b > 0 ? Math.round(overDots[i] / b * 100) : 0);
+
+  if (charts.overByOver) charts.overByOver.destroy();
+  charts.overByOver = new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Avg Runs/Over',
+          data: avgRPO,
+          backgroundColor: 'rgba(25,118,210,0.60)',
+          borderColor: '#1976d2',
+          borderWidth: 1,
+          yAxisID: 'yRuns',
+          order: 2,
+        },
+        {
+          type: 'line',
+          label: 'Dot Ball %',
+          data: dotPct,
+          borderColor: '#e53935',
+          backgroundColor: 'rgba(229,57,53,0.12)',
+          tension: 0.3,
+          pointRadius: 4,
+          yAxisID: 'yDot',
+          order: 1,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        yRuns: { position: 'left',  title: { display: true, text: 'Avg RPO' }, beginAtZero: true },
+        yDot:  { position: 'right', title: { display: true, text: 'Dot %'  }, beginAtZero: true, max: 100,
+                 grid: { drawOnChartArea: false } }
+      }
+    }
+  });
+}
+
+function renderBowlerScoringDistChart(balls) {
+  const ctx = document.getElementById('scoringDistChart');
+  if (!ctx) return;
+
+  /* Per bowler: count dot, single, 2s, boundary (4/6) deliveries */
+  const bowlerMap = {};
+  balls.forEach(b => {
+    const bowler = (b.bowler || '').trim(); if (!bowler) return;
+    const run    = parseInt(b.run) || 0;
+    const extra  = (b.extra_type || '').trim();
+    if (!bowlerMap[bowler]) bowlerMap[bowler] = { dots: 0, ones: 0, twos: 0, bdry: 0, total: 0 };
+    const d = bowlerMap[bowler];
+    if (extra === 'WD') return;   /* skip wides for distribution */
+    d.total++;
+    if (b.is_dot_ball === '1' || b.is_dot_ball === 1) d.dots++;
+    else if (run === 1 && extra === '') d.ones++;
+    else if (run === 2 && extra === '') d.twos++;
+    else if (run === 4 || run === 6) d.bdry++;
+  });
+
+  /* Only bowlers with at least 12 balls */
+  const entries = Object.entries(bowlerMap).filter(([, d]) => d.total >= 12);
+  /* Sort by dot% descending */
+  entries.sort((a, b) => (b[1].dots / b[1].total) - (a[1].dots / a[1].total));
+
+  const labels   = entries.map(([n]) => n.split(' ')[0]);  /* first name only for space */
+  const dotPct   = entries.map(([, d]) => +(d.dots  / d.total * 100).toFixed(1));
+  const onesPct  = entries.map(([, d]) => +(d.ones  / d.total * 100).toFixed(1));
+  const twosPct  = entries.map(([, d]) => +(d.twos  / d.total * 100).toFixed(1));
+  const bdryPct  = entries.map(([, d]) => +(d.bdry  / d.total * 100).toFixed(1));
+
+  if (charts.scoringDist) charts.scoringDist.destroy();
+  charts.scoringDist = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Dots %',       data: dotPct,  backgroundColor: '#5c6bc0' },
+        { label: 'Singles %',    data: onesPct, backgroundColor: '#29b6f6' },
+        { label: 'Twos %',       data: twosPct, backgroundColor: '#66bb6a' },
+        { label: 'Boundaries %', data: bdryPct, backgroundColor: '#ef5350' },
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' }, tooltip: { callbacks: {
+        label: ctx => `${ctx.dataset.label}: ${ctx.raw}%`
+      }}},
+      scales: {
+        x: { stacked: true, max: 100, title: { display: true, text: '% of deliveries' } },
+        y: { stacked: true }
+      }
+    }
+  });
+}
+
+function renderDeathOverCharts(balls) {
+  const ctx = document.getElementById('deathOverBowlChart');
+  if (!ctx) return;
+
+  /* Death overs = last 5 overs (dynamically computed) */
+  const maxOvD = balls.reduce((mx, b) => {
+    const ov = parseInt((b.over_ball || '').toString().split('.')[0]);
+    return ov > mx ? ov : mx;
+  }, 10);
+  const deathBalls = balls.filter(b => {
+    const ov = parseInt((b.over_ball || '').toString().split('.')[0]);
+    return ov >= maxOvD - 4;
+  });
+
+  const bMap = {};
+  deathBalls.forEach(b => {
+    const bowler = (b.bowler || '').trim(); if (!bowler) return;
+    const run    = (parseInt(b.run) || 0) + (parseInt(b.extra_run) || 0);
+    const extra  = (b.extra_type || '').trim();
+    if (!bMap[bowler]) bMap[bowler] = { runs: 0, balls: 0, dots: 0, team: '' };
+    const d = bMap[bowler];
+    d.runs += run;
+    if (extra !== 'WD') { d.balls++; if (b.is_dot_ball === '1' || b.is_dot_ball === 1) d.dots++; }
+  });
+
+  const entries = Object.entries(bMap)
+    .filter(([, d]) => d.balls >= 6)
+    .map(([n, d]) => [n, {
+      eco:     d.balls > 0 ? +(d.runs / (d.balls / 6)).toFixed(2) : 0,
+      dotPct:  d.balls > 0 ? Math.round(d.dots / d.balls * 100) : 0,
+    }])
+    .sort((a, b) => a[1].eco - b[1].eco);  /* best economy first */
+
+  if (!entries.length) return;
+
+  const labels  = entries.map(([n]) => n.split(' ')[0]);
+  const ecoData = entries.map(([, d]) => d.eco);
+  const dotData = entries.map(([, d]) => d.dotPct);
+
+  if (charts.deathOverBowl) charts.deathOverBowl.destroy();
+  charts.deathOverBowl = new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar', label: 'Economy (death overs)',
+          data: ecoData, backgroundColor: 'rgba(25,118,210,0.65)', yAxisID: 'yEco', order: 2
+        },
+        {
+          type: 'line', label: 'Dot %',
+          data: dotData, borderColor: '#e53935', backgroundColor: 'rgba(229,57,53,0.1)',
+          tension: 0.3, pointRadius: 4, yAxisID: 'yDot', order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        yEco: { position: 'left',  title: { display: true, text: 'Economy' }, beginAtZero: true },
+        yDot: { position: 'right', title: { display: true, text: 'Dot %'  }, beginAtZero: true, max: 100,
+                grid: { drawOnChartArea: false } }
+      }
+    }
+  });
+}
+
+function renderWinMarginChart(matchMeta) {
+  const ctx = document.getElementById('winMarginChart');
+  if (!ctx || !matchMeta?.length) return;
+
+  /* Extract numeric margin from margin string like "5 runs" or "3 wickets" */
+  const parsed = matchMeta
+    .filter(m => m.margin)
+    .map(m => {
+      const numMatch = (m.margin || '').match(/(\d+)/);
+      const val      = numMatch ? parseInt(numMatch[1]) : 0;
+      const byRuns   = (m.margin || '').toLowerCase().includes('run');
+      return { date: m.match_date, winner: m.winner, val, byRuns, label: m.margin };
+    })
+    .filter(m => m.val > 0)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  if (!parsed.length) return;
+
+  /* Separate runs-wins and wickets-wins onto dual Y-axes to avoid unit mixing */
+  const runsData   = parsed.map(m => m.byRuns  ? m.val : null);
+  const wktsData   = parsed.map(m => !m.byRuns ? m.val : null);
+
+  if (charts.winMargin) charts.winMargin.destroy();
+  charts.winMargin = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: parsed.map((_m, i) => `M${i + 1}`),
+      datasets: [
+        {
+          label: 'Won by Runs',
+          data:  runsData,
+          backgroundColor: parsed.map(m => (getTeam(m.winner || '') || {colors: {bg: 'rgba(56,126,209,0.70)'}}).colors.bg.replace('0.70','0.75')),
+          borderColor:     parsed.map(m => (getTeam(m.winner || '') || {colors: {border: '#387ed1'}}).colors.border),
+          borderWidth: 1,
+          yAxisID: 'yRuns',
+        },
+        {
+          label: 'Won by Wickets',
+          data:  wktsData,
+          backgroundColor: parsed.map(m => (getTeam(m.winner || '') || {colors: {bg: 'rgba(56,126,209,0.70)'}}).colors.bg.replace('0.70','0.35')),
+          borderColor:     parsed.map(m => (getTeam(m.winner || '') || {colors: {border: '#387ed1'}}).colors.border),
+          borderWidth: 1,
+          borderDash: [4, 4],
+          yAxisID: 'yWkts',
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } },
+        tooltip: { callbacks: {
+          title: (items) => {
+            const m = parsed[items[0].dataIndex];
+            return `${m.winner || 'Winner'} — ${m.date || ''}`;
+          },
+          label: (item) => {
+            const m = parsed[item.dataIndex];
+            return `Margin: ${m.label}`;
+          }
+        }}
+      },
+      scales: {
+        yRuns: { position: 'left',  title: { display: true, text: 'Runs' },    beginAtZero: true, grid: { color: '#f0f3f5' } },
+        yWkts: { position: 'right', title: { display: true, text: 'Wickets' }, beginAtZero: true, max: 10,
+                 grid: { drawOnChartArea: false } }
+      }
+    }
+  });
+}
+
+function renderMatchWorm(balls, matchId, matchMeta) {
+  const wrap = document.getElementById('wormChartWrap');
+  const ctx  = document.getElementById('wormChart');
+  if (!wrap || !ctx) return;
+
+  if (!balls?.length || !matchId) { wrap.style.display = 'none'; return; }
+
+  const matchBalls = balls.filter(b => String(b.match_id) === String(matchId));
+  if (!matchBalls.length) { wrap.style.display = 'none'; return; }
+
+  /* Resolve team names for legend from match meta */
+  const meta  = (matchMeta || []).find(m => String(m.match_id) === String(matchId));
+  const team1 = meta?.innings1_team
+    ? teamShort(meta.innings1_team) + ' (1st inn)'
+    : '1st Innings';
+  const team2 = meta?.innings2_team
+    ? teamShort(meta.innings2_team) + ' (2nd inn)'
+    : '2nd Innings';
+
+  /* Group by innings */
+  function buildWorm(inningsNum) {
+    const inn = matchBalls
+      .filter(b => String(b.innings) === String(inningsNum))
+      .slice()  /* preserve order — CSV is newest-first, so reverse */
+      .reverse();
+
+    let cum = 0;
+    const points = [{ ball: 0, runs: 0 }];
+    inn.forEach(b => {
+      const run = (parseInt(b.run) || 0) + (parseInt(b.extra_run) || 0);
+      const extra = (b.extra_type || '').trim();
+      if (extra !== 'WD') { /* legal delivery advances ball count */
+        cum += run;
+        points.push({ ball: points.length, runs: cum });
+      }
+    });
+    return points;
+  }
+
+  const worm1 = buildWorm(1);
+  const worm2 = buildWorm(2);
+  const maxBalls = Math.max(worm1.length, worm2.length);
+
+  if (charts.worm) charts.worm.destroy();
+  charts.worm = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: Array.from({ length: maxBalls }, (_, i) => i),
+      datasets: [
+        {
+          label: team1,
+          data:  worm1.map(p => p.runs),
+          borderColor: '#1976d2', backgroundColor: 'rgba(25,118,210,0.08)',
+          tension: 0.2, pointRadius: 0, fill: false,
+        },
+        {
+          label: team2,
+          data:  worm2.map(p => p.runs),
+          borderColor: '#e53935', backgroundColor: 'rgba(229,57,53,0.08)',
+          tension: 0.2, pointRadius: 0, fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        x: { title: { display: true, text: 'Ball number' } },
+        y: { title: { display: true, text: 'Cumulative runs' }, beginAtZero: true }
+      }
+    }
+  });
+
+  wrap.style.display = '';
+}
+
 function renderMatchRecords(matchBatting, matchBowling, matchMeta) {
   const grid = document.getElementById('matchRecordsGrid');
   if (!grid) return;
@@ -3088,7 +3535,43 @@ function renderMatchRecords(matchBatting, matchBowling, matchMeta) {
   const arTeam    = arFirst.team || '';
   const arVal     = arFirst.player ? `${arFirst.runs}R+${arFirst.wickets}W` : '—';
 
-  /* 14. Highest batting SR in a single innings (min 6 balls) */
+  /* 14. Highest Runs Chased & Lowest Runs Defended — needs matchMeta */
+  const matchInnTotals = {};
+  matchBatting.forEach(r => {
+    const key = `${r.match_id}_${String(r.innings)}`;
+    if (!matchInnTotals[key]) matchInnTotals[key] = { runs: 0, team: r.batting_team, date: r.match_date };
+    matchInnTotals[key].runs += parseInt(r.runs) || 0;
+  });
+
+  /* Highest chased: margin contains "wicket" → innings-2 team won */
+  const chasedList = [];
+  (matchMeta || []).forEach(m => {
+    if (!m.margin || !m.winner) return;
+    if (!String(m.margin).toLowerCase().includes('wicket')) return;
+    const inn1 = matchInnTotals[`${m.match_id}_1`];
+    if (inn1?.runs > 0) chasedList.push({ runs: inn1.runs, team: m.winner, date: m.match_date });
+  });
+  const highChaseSorted = [...chasedList].sort((a,b) => b.runs - a.runs);
+  const highChaseVal    = highChaseSorted[0]?.runs || 0;
+  const highChaseTied   = highChaseSorted.filter(c => c.runs === highChaseVal);
+  const highChaseName   = [...new Set(highChaseTied.map(c => c.team))].join(' & ') || '—';
+  const highChaseFirst  = highChaseSorted[0] || {};
+
+  /* Lowest defended: margin contains "run" → innings-1 team won */
+  const defendedList = [];
+  (matchMeta || []).forEach(m => {
+    if (!m.margin || !m.winner) return;
+    if (!String(m.margin).toLowerCase().includes('run')) return;
+    const inn1 = matchInnTotals[`${m.match_id}_1`];
+    if (inn1?.runs > 0) defendedList.push({ runs: inn1.runs, team: inn1.team, date: m.match_date });
+  });
+  const lowDefendSorted = [...defendedList].sort((a,b) => a.runs - b.runs);
+  const lowDefendVal    = lowDefendSorted[0]?.runs || 0;
+  const lowDefendTied   = lowDefendSorted.filter(d => d.runs === lowDefendVal);
+  const lowDefendName   = [...new Set(lowDefendTied.map(d => d.team))].join(' & ') || '—';
+  const lowDefendFirst  = lowDefendSorted[0] || {};
+
+  /* 15. Highest batting SR in a single innings (min 6 balls) */
   const topSRInnings  = topTR(
     matchBatting.filter(r => (parseInt(r.balls)||0) >= 6),
     r => parseFloat(r.strike_rate)||0,
@@ -3144,7 +3627,13 @@ function renderMatchRecords(matchBatting, matchBowling, matchMeta) {
       lowBest, `runs · ${lowFirst.date||''}`, 'c-danger') +
 
     _awardCard('🌟', 'Super All-Rounder',    arName, arTeam,
-      arVal, `in one match · ${arFirst.date||''}`, 'c-success');
+      arVal, `in one match · ${arFirst.date||''}`, 'c-success') +
+
+    _awardCard('🏹', 'Highest Chase',        highChaseName, highChaseFirst.team||'',
+      highChaseVal, `runs chased · ${highChaseFirst.date||''}`, 'c-success') +
+
+    _awardCard('🛡️', 'Lowest Defended',      lowDefendName, lowDefendFirst.team||'',
+      lowDefendVal, `runs defended · ${lowDefendFirst.date||''}`, 'c-info');
 }
 
 function renderExtrasLeaderboard(matchBowling) {
@@ -3167,8 +3656,6 @@ function renderExtrasLeaderboard(matchBowling) {
     .filter(b => b.total > 0)
     .sort((a,b) => b.total - a.total);
 
-  const isRCB = t => (t || '').toLowerCase().includes('royal') || (t || '').toLowerCase().includes('rcb');
-  const barColors = sorted.map(b => isRCB(b.team) ? 'rgba(229,57,53,0.75)' : 'rgba(59,130,246,0.75)');
 
   /* Dynamic height — every bowler gets a row */
   canvas.style.height = Math.max(180, sorted.length * 28 + 60) + 'px';
@@ -3182,13 +3669,13 @@ function renderExtrasLeaderboard(matchBowling) {
         {
           label: 'Wides',
           data: sorted.map(b => b.wides),
-          backgroundColor: sorted.map(b => isRCB(b.team) ? 'rgba(229,57,53,0.8)' : 'rgba(59,130,246,0.8)'),
+          backgroundColor: sorted.map(b => (getTeam(b.team)||{colors:{bg:'rgba(56,126,209,0.80)'}}).colors.bg.replace('0.70','0.8')),
           borderRadius: 4
         },
         {
           label: 'No-Balls',
           data: sorted.map(b => b.noBalls),
-          backgroundColor: sorted.map(b => isRCB(b.team) ? 'rgba(229,57,53,0.4)' : 'rgba(59,130,246,0.4)'),
+          backgroundColor: sorted.map(b => (getTeam(b.team)||{colors:{bg:'rgba(56,126,209,0.40)'}}).colors.bg.replace('0.70','0.4')),
           borderRadius: 4
         }
       ]
@@ -3289,8 +3776,6 @@ function renderRunOutAnalysis(matchBatting) {
     return;
   }
 
-  const isRCB = t => (t || '').toLowerCase().includes('royal') || (t || '').toLowerCase().includes('rcb');
-
   /* ── 1. Victim counts ── */
   const victimMap = {};
   runOuts.forEach(r => {
@@ -3304,7 +3789,8 @@ function renderRunOutAnalysis(matchBatting) {
   const enfMap = {};
   runOuts.forEach(r => {
     const f = (r.caught_by || '').trim(); if (!f) return;
-    const enfTeam = isRCB(r.batting_team) ? 'Weekend Warriors (WW)' : 'Royal Cricket Blasters (RCB)';
+    const _batTeamEntry = getTeam(r.batting_team);
+    const enfTeam = teamList().find(t => t !== _batTeamEntry)?.full || '';
     if (!enfMap[f]) enfMap[f] = { n: 0, team: enfTeam };
     enfMap[f].n++;
   });
@@ -3344,7 +3830,7 @@ function renderRunOutAnalysis(matchBatting) {
         datasets: [{
           label: title,
           data,
-          backgroundColor: teams.map(t => isRCB(t) ? 'rgba(229,57,53,0.8)' : 'rgba(59,130,246,0.8)'),
+          backgroundColor: teams.map(t => (getTeam(t)||{colors:{bg:'rgba(56,126,209,0.8)'}}).colors.bg.replace('0.70','0.8')),
           borderRadius: 5
         }]
       },
@@ -3375,8 +3861,8 @@ function renderRunOutAnalysis(matchBatting) {
         const [partnerName, victimName] = pair.split(' → ');
         const pTeam = partnerMap[partnerName]?.team || '';
         const vTeam = victimMap[victimName]?.team || '';
-        const pBadge = `<span class="ro-fielder ${isRCB(pTeam) ? 'ro-rcb' : 'ro-ww'}">${partnerName}</span>`;
-        const vBadge = `<span class="ro-fielder ${isRCB(vTeam) ? 'ro-rcb' : 'ro-ww'}">${victimName}</span>`;
+        const pBadge = `<span class="ro-fielder ${teamRoClass(pTeam)}">${partnerName}</span>`;
+        const vBadge = `<span class="ro-fielder ${teamRoClass(vTeam)}">${victimName}</span>`;
         return `<tr>
           <td>${pBadge} called → ${vBadge} out</td>
           <td class="ro-count">${count}</td>
@@ -3401,10 +3887,8 @@ function renderRunOutAnalysis(matchBatting) {
   const sortedV = Object.entries(byVictim).sort((a,b) => b[1].events.length - a[1].events.length);
 
   const detailRows = sortedV.map(([name, d]) => {
-    const isR = isRCB(d.team);
-    const badge = `<span class="form-chip ${isR ? 'rcb-chip' : 'ww-chip'}" style="font-size:0.6rem;padding:2px 5px;">${isR ? 'RCB' : 'WW'}</span>`;
+    const badge = `<span class="form-chip ${teamChipClass(d.team)}" style="font-size:0.6rem;padding:2px 5px;">${teamShort(d.team)}</span>`;
     const evList = d.events.map(e => {
-      const pIsRCB = isRCB(e.partnerTeam);
       return `<span class="ro-event-pill">
         🤝 <b>${e.partner}</b> <span class="ro-fielder-sm">(partner)</span>
         · ⚡ <b>${e.fielder}</b> <span class="ro-fielder-sm">(fielder)</span>
@@ -3556,7 +4040,7 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
     return sortState.dir * ((bv || 0) - (av || 0));
   });
 
-  const teamDot = t => `<span class="pt-team-dot" style="background:${t.includes('WW') ? 'var(--ww)' : 'var(--rcb)'}"></span>`;
+  const teamDot = t => `<span class="pt-team-dot" style="background:${teamCssVar(t)}"></span>`;
   const d = v => (v !== undefined && v !== null && v !== '' && v !== '-') ? v : '—';
   const n = (v, dec) => { const x = num(v); return x ? (dec !== undefined ? x.toFixed(dec) : x) : '—'; };
   const si = key => {
@@ -3568,10 +4052,10 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
 
   const rows = players.map(p => {
     const b = p.bat || {}, bw = p.bowl || {}, f = p.field || {}, m = p.mvp || {};
-    const teamShort = p.team.includes('WW') ? 'WW' : p.team.includes('RCB') ? 'RCB' : p.team;
+    const tShort = teamShort(p.team);
     return `<tr>
       <td class="fst-name">${teamDot(p.team)}${esc(p.name)}</td>
-      <td class="fst-team">${esc(teamShort)}</td>
+      <td class="fst-team">${esc(tShort)}</td>
       <td class="fst-num">${n(b.total_match || bw.total_match || f.total_match)}</td>
       <td class="fst-num">${n(b.total_runs)}</td>
       <td class="fst-num">${d(b.highest_run)}</td>
@@ -3735,11 +4219,11 @@ async function loadPointsTableFromPDF() {
   }
   if (!text) return null;
 
-  const ww  = parseTeamFromText(text, 'Weekend Warriors',       'Weekend Warriors (WW)',       'WW');
-  const rcb = parseTeamFromText(text, 'Royal Cricket Blasters', 'Royal Cricket Blasters (RCB)', 'RCB');
-  if (!ww || !rcb) return null;
+  const parsedTeams = teamList().map(t => parseTeamFromText(text, t.full.replace(/\s*\([^)]+\)/, '').trim(), t.full, t.short));
+  const validTeams = parsedTeams.filter(Boolean);
+  if (validTeams.length < 2) return null;
 
-  return [ww, rcb]
+  return validTeams
     .sort((a, b) => b.Pts - a.Pts || b.NRR - a.NRR)
     .map((r, i) => ({ ...r, rank: i + 1 }));
 }
@@ -3857,7 +4341,7 @@ function parseScorecardMeta(page1Items, matchId) {
   let toss_winner = '', toss_decision = '';
   const tossM = fullText.match(/(Royal Cricket Blasters|Weekend Warriors)[^.]*?\bopt to\s+(bat|field)/i);
   if (tossM) {
-    toss_winner   = tossM[1].includes('Royal') ? 'Royal Cricket Blasters (RCB)' : 'Weekend Warriors (WW)';
+    toss_winner   = (getTeam(tossM[1]) || { full: tossM[1] }).full;
     toss_decision = tossM[2].toLowerCase();
   }
 
@@ -3865,7 +4349,7 @@ function parseScorecardMeta(page1Items, matchId) {
   let result = '', winner = '', margin = '';
   const resM = fullText.match(/(Royal Cricket Blasters|Weekend Warriors)[^.]*?\bwon by\s+(\d+)\s+(wickets?|runs?)/i);
   if (resM) {
-    winner = resM[1].includes('Royal') ? 'Royal Cricket Blasters (RCB)' : 'Weekend Warriors (WW)';
+    winner = (getTeam(resM[1]) || { full: resM[1] }).full;
     margin = `${resM[2]} ${resM[3]}`;
     result = `${winner} won by ${margin}`;
   } else if (/\btied\b/i.test(fullText)) {
@@ -4028,8 +4512,8 @@ function tryParseBowlingRow(row, matchId, matchDate, innings, bowlingTeam) {
  */
 function parseInningsPage(pageItems, inningsNum, matchId, matchDate, battingTeam) {
   const rows        = groupIntoRows(pageItems);
-  const bowlingTeam = battingTeam.includes('RCB')
-    ? 'Weekend Warriors (WW)' : 'Royal Cricket Blasters (RCB)';
+  const _batEntry  = getTeam(battingTeam);
+  const bowlingTeam = teamList().find(t => t !== _batEntry)?.full || '';
 
   const batting = [], bowling = [];
   let mode = null;
@@ -4172,10 +4656,12 @@ function renderScorecardSections() {
   renderTossAnalysis(state.matchMeta);
   renderExtrasTeamChart(state.matchBowling);
   renderFunAwards(state.matchBatting, state.matchBowling);
+  renderRunningAwards(state.matchBalls);
   renderMatchRecords(state.matchBatting, state.matchBowling, state.matchMeta);
   renderExtrasLeaderboard(state.matchBowling);
   renderRunOutAnalysis(state.matchBatting);
   renderMatchupTable(state.matchBatting);
+  renderBallInsights(state.matchBalls, state.matchMeta);
   /* Re-render top heroes — it uses match data for recent form */
   renderTopHeroes(
     filterBatting(), filterBowling(), filterFielding(), filterMvp(),
@@ -4235,9 +4721,8 @@ function renderWeekHeroes(matchBatting, matchBowling) {
   title.textContent = `⚡ This Week's Heroes — ${dateLabel}`;
 
   const rankClass = i => ['gold','silver','bronze'][i] || '';
-  const isWW = t => (t||'').includes('WW') || (t||'').toLowerCase().includes('weekend');
-  const teamAbbr = t => isWW(t) ? 'WW' : 'RCB';
-  const teamColor = t => isWW(t) ? 'var(--ww)' : 'var(--rcb)';
+  const teamAbbr2 = t => teamShort(t);
+  const teamColor = t => teamCssVar(t);
   const initials = name => name.split(' ').map(w => w[0]||'').join('').slice(0,2).toUpperCase();
 
   const batCards = top3bat.map(([name, d], i) => `
@@ -4246,7 +4731,7 @@ function renderWeekHeroes(matchBatting, matchBowling) {
       <div class="week-hero-avatar" style="background:${teamColor(d.team)}">${initials(name)}</div>
       <div class="week-hero-info">
         <div class="week-hero-name">${esc(name)}</div>
-        <div class="week-hero-team">${teamAbbr(d.team)}</div>
+        <div class="week-hero-team">${teamAbbr2(d.team)}</div>
       </div>
       <div class="week-hero-stat">${d.runs}<span>runs</span></div>
     </div>`).join('');
@@ -4259,7 +4744,7 @@ function renderWeekHeroes(matchBatting, matchBowling) {
       <div class="week-hero-avatar" style="background:${teamColor(d.team)}">${initials(name)}</div>
       <div class="week-hero-info">
         <div class="week-hero-name">${esc(name)}</div>
-        <div class="week-hero-team">${teamAbbr(d.team)}</div>
+        <div class="week-hero-team">${teamAbbr2(d.team)}</div>
       </div>
       <div class="week-hero-stat">${d.wickets}W<span>eco ${eco}</span></div>
     </div>`;
@@ -4287,16 +4772,18 @@ function renderWeekHeroes(matchBatting, matchBowling) {
 async function loadScorecards() {
   /* ── Fast path: pre-built CSVs from extract_scorecards.py (milliseconds) ── */
   try {
-    const [metaRes, batRes, bowlRes] = await Promise.all([
+    const [metaRes, batRes, bowlRes, ballsRes] = await Promise.all([
       loadCSV(CSV_FILES.matchMeta),
       loadCSV(CSV_FILES.matchBatting),
       loadCSV(CSV_FILES.matchBowling),
+      loadCSV(CSV_FILES.matchBalls).catch(() => []),
     ]);
     const valid = r => r?.length > 0 && r[0].match_id !== undefined;
     if (valid(metaRes) && valid(batRes) && valid(bowlRes)) {
       state.matchMeta    = metaRes;
       state.matchBatting = batRes;
       state.matchBowling = bowlRes;
+      state.matchBalls   = ballsRes || [];
       state.matchBatting.forEach(r => { r.player = _trimDismissal(r.player); });
       state.matchBowling.forEach(r => { r.player = _trimDismissal(r.player); });
       renderScorecardSections();
@@ -4345,6 +4832,9 @@ async function init() {
       const ptRows = await loadCSV(CSV_FILES.pointsTable).catch(() => []);
       POINTS_TABLE = parsePointsTable(ptRows);
     }
+
+    buildTeamRegistry(POINTS_TABLE);
+    populateDynamicHTML();
 
     renderPointsTable();
     renderWinLossChart();

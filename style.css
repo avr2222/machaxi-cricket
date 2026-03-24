@@ -35,10 +35,10 @@
   --gold:     #f0a500;
 
   /* Team colours */
-  --rcb:    #e53935;
-  --rcb-lt: rgba(229, 57, 53, 0.09);
-  --ww:     #1976d2;
-  --ww-lt:  rgba(25, 118, 210, 0.09);
+  --team-0:    #e53935;
+  --team-0-lt: rgba(229, 57, 53, 0.09);
+  --team-1:     #1976d2;
+  --team-1-lt:  rgba(25, 118, 210, 0.09);
 
   /* Shape */
   --radius-sm: 3px;
@@ -210,11 +210,11 @@ body.loading .chart-wrap::after {
   padding: 2px 10px; border-radius: 2px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
 }
-.team-badge.rcb {
+.team-badge.team-0 {
   background: rgba(229,57,53,0.18); color: #ff8a80;
   border: 1px solid rgba(229,57,53,0.28);
 }
-.team-badge.ww {
+.team-badge.team-1 {
   background: rgba(25,118,210,0.18); color: #82b1ff;
   border: 1px solid rgba(25,118,210,0.28);
 }
@@ -830,8 +830,8 @@ body.loading .chart-wrap::after {
   background: var(--surface);
   box-shadow: 2px 0 4px rgba(0,0,0,0.15);
 }
-.hm-name.hm-rcb { border-left: 3px solid var(--rcb); }
-.hm-name.hm-ww  { border-left: 3px solid var(--ww);  }
+.hm-name.hm-team-0 { border-left: 3px solid var(--team-0); }
+.hm-name.hm-team-1  { border-left: 3px solid var(--team-1);  }
 .hm-cell {
   text-align: center; padding: 5px 4px; font-size: 0.75rem;
   font-weight: 600; border: 1px solid rgba(255,255,255,0.04);
@@ -932,8 +932,8 @@ body.loading .chart-wrap::after {
 }
 .form-chip:hover { border-color: var(--accent); color: var(--accent); }
 .form-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.form-chip.rcb-chip.active { background: var(--rcb); border-color: var(--rcb); }
-.form-chip.ww-chip.active  { background: var(--ww);  border-color: var(--ww); }
+.form-chip.team-chip-0.active { background: var(--team-0); border-color: var(--team-0); }
+.form-chip.team-chip-1.active  { background: var(--team-1);  border-color: var(--team-1); }
 
 /* ── Scorecard Viewer ── */
 .scorecard-viewer-wrap { display: flex; flex-direction: column; gap: 12px; }
@@ -1029,7 +1029,7 @@ body.loading .chart-wrap::after {
 .matchup-table td { padding: 7px 10px; text-align: center; border-top: 1px solid var(--border); }
 .matchup-table td:first-child { text-align: left; font-weight: 600; min-width: 110px; }
 .matchup-cell-hit {
-  background: rgba(229,57,53,0.12); color: var(--rcb);
+  background: rgba(229,57,53,0.12); color: var(--team-0);
   font-weight: 700; border-radius: 3px;
 }
 .matchup-cell-hit2 { background: rgba(229,57,53,0.28); }
@@ -1150,8 +1150,8 @@ body.loading .chart-wrap::after {
   border-radius: 5px; padding: 2px 8px;
   font-size: 0.72rem; font-weight: 600; white-space: nowrap;
 }
-.ro-fielder.ro-rcb { background: rgba(229,57,53,0.15); color: #f87171; border-color: rgba(229,57,53,0.3); }
-.ro-fielder.ro-ww  { background: rgba(59,130,246,0.15); color: #93c5fd; border-color: rgba(59,130,246,0.3); }
+.ro-fielder.ro-team-0 { background: rgba(229,57,53,0.15); color: #f87171; border-color: rgba(229,57,53,0.3); }
+.ro-fielder.ro-team-1  { background: rgba(59,130,246,0.15); color: #93c5fd; border-color: rgba(59,130,246,0.3); }
 .ro-event-pill {
   display: inline-flex; align-items: center; gap: 4px;
   background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);

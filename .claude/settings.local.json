@@ -42,7 +42,28 @@
       "WebFetch(domain:blog.cricheroes.com)",
       "WebFetch(domain:medium.com)",
       "Bash(wc -l /c/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/data/*.csv)",
-      "Bash(grep -n \"const.*=.*{$\\\\|function.*{$\" /c/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/script.js)"
+      "Bash(grep -n \"const.*=.*{$\\\\|function.*{$\" /c/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/script.js)",
+      "Bash(head -1 *.csv)",
+      "Bash(wc -l ./data/*.csv)",
+      "Bash(wc -l *.csv)",
+      "Bash(pip show:*)",
+      "Bash(python scrape_cricheroes.py --list-only)",
+      "Bash(reg query:*)",
+      "Bash(powershell -command \"\\(Get-Item ''C:/Program Files/Google/Chrome/Application/chrome.exe''\\).VersionInfo.FileVersion\")",
+      "Bash(python scrape_cricheroes.py)",
+      "Bash(python3:*)",
+      "Bash(rm -f scraped_matches.json)",
+      "Bash(python scrape_cricheroes.py --full-refresh)",
+      "Bash(ls -la c:/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/*.csv)",
+      "Bash(node --check \"C:/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/script.js\")",
+      "Bash(node -e \"require\\(''''puppeteer''''\\)\")",
+      "Bash(node -e \"require\\(''''playwright''''\\)\")",
+      "Bash(python -c \"from selenium import webdriver; print\\(''selenium ok''\\)\")",
+      "Bash(python:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8765/)",
+      "Bash(start http://127.0.0.1:8765/)",
+      "Bash(grep -n \"rcb-chip\\\\|ww-chip\\\\|hm-rcb\\\\|hm-ww\" /c/Users/venkateswara.rao/Documents/GitHub/machaxi-cricket/*.css)",
+      "Bash(ls *leaderboard*)"
     ]
   }
 }

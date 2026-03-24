@@ -1,0 +1,20 @@
+======================================== 
+Run started: Tue 03/24/2026 16:08:25.67              
+======================================== 
+============================================================
+CricHeroes Tournament Scraper
+Started: 2026-03-24 16:08:33
+============================================================
+
+[DISCOVERY] Loading tournament page...
+  URL: https://cricheroes.com/tournament/1874258/machaxi-box-cricket-season-2/matches/past-matches
+  Scrolled 1 round(s) to load all matches.
+  Clicked 'Load more' 1 time(s) — scrolling again...
+    [debug] HTML saved -> debug_html\tournament_page.html
+  Found 15 unique match URL(s).
+
+Matches found:   15
+Already scraped: 15
+To scrape now:   0
+
+Nothing new to scrape. All matches are up to date.

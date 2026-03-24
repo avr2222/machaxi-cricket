@@ -40,12 +40,10 @@
         <span class="header-logo" aria-hidden="true">🏏</span>
         <h1>Machaxi Box Cricket — Season 2</h1>
         <div class="header-divider" aria-hidden="true"></div>
-        <p class="header-subtitle">Analytics Dashboard · RCB vs WW</p>
+        <p class="header-subtitle" id="header-subtitle">Analytics Dashboard</p>
       </div>
       <div class="team-badges" aria-label="Competing teams">
-        <span class="team-badge rcb">RCB</span>
-        <span class="vs-text" aria-hidden="true">vs</span>
-        <span class="team-badge ww">WW</span>
+        <span id="team-badges-container"></span>
       </div>
     </div>
   </header>
@@ -84,8 +82,6 @@
         <label for="teamFilter">Team</label>
         <select id="teamFilter" aria-label="Filter by team">
           <option value="ALL">All Teams</option>
-          <option value="Royal Cricket Blasters (RCB)">Royal Cricket Blasters (RCB)</option>
-          <option value="Weekend Warriors (WW)">Weekend Warriors (WW)</option>
         </select>
       </div>
       <div class="filter-group">
@@ -263,6 +259,53 @@
           <select id="matchSelect"><option value="">— Select a match —</option></select>
         </div>
         <div id="scorecardContent" class="scorecard-content"></div>
+
+        <!-- Match Worm Chart -->
+        <div id="wormChartWrap" style="display:none;margin-top:24px;">
+          <div class="chart-title" style="padding:0 4px 8px;">📈 Match Worm Chart — Cumulative Runs</div>
+          <div class="chart-wrap" style="height:280px;">
+            <canvas id="wormChart" role="img" aria-label="Match worm chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ball Insights Section -->
+    <section class="section" aria-labelledby="ball-insights-heading">
+      <div class="section-header"><h2 id="ball-insights-heading">⚡ Ball-by-Ball Insights</h2></div>
+
+      <div class="charts-grid-2">
+        <!-- Over-by-Over Run Rate -->
+        <div class="chart-card">
+          <div class="chart-title">Over-by-Over Run Rate &amp; Dot Ball %</div>
+          <div class="chart-wrap" style="height:260px;">
+            <canvas id="overByOverChart" role="img" aria-label="Over by over run rate chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Win Margin Timeline -->
+        <div class="chart-card">
+          <div class="chart-title">Win Margin per Match <span class="chart-note" id="win-margin-legend"></span></div>
+          <div class="chart-wrap" style="height:260px;">
+            <canvas id="winMarginChart" role="img" aria-label="Win margin timeline chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Death Overs Bowling (full width) -->
+      <div class="chart-card" style="margin-top:20px;">
+        <div class="chart-title">Death Overs (Last 5) Bowling — Economy &amp; Dot %</div>
+        <div class="chart-wrap" style="height:260px;">
+          <canvas id="deathOverBowlChart" role="img" aria-label="Death overs bowling chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Bowler Scoring Distribution (full width) -->
+      <div class="chart-card" style="margin-top:20px;">
+        <div class="chart-title">Bowler Scoring Distribution — Dots / Singles / Twos / Boundaries</div>
+        <div class="chart-wrap" style="height:320px;">
+          <canvas id="scoringDistChart" role="img" aria-label="Bowler scoring distribution chart"></canvas>
+        </div>
       </div>
     </section>
 
@@ -442,7 +485,7 @@
     <!-- Team Comparison -->
     <section class="section" aria-labelledby="team-heading">
       <div class="section-header">
-        <h2 id="team-heading">RCB vs WW — Team Comparison</h2>
+        <h2 id="team-heading">Team Comparison</h2>
       </div>
       <div class="charts-grid-2 mt-16">
         <div class="chart-card">
@@ -496,6 +539,39 @@
       <div class="section-header"><h2 id="matchup-heading">⚔️ Bowler vs Batsman Matchups</h2></div>
       <div id="matchupBanner" class="matchup-banner hidden">Matchup data requires scorecard extraction — refresh if scorecards just loaded.</div>
       <div class="table-scroll-wrap"><div id="matchupTableWrap"></div></div>
+    </section>
+
+    <!-- Run-Out Deep Dive Analysis -->
+    <section class="section" aria-labelledby="runout-heading">
+      <div class="section-header"><h2 id="runout-heading">🏃 Run-Out Deep Dive</h2></div>
+
+      <div class="charts-grid-2">
+        <div class="chart-card">
+          <div class="chart-title">Run-Out Victims 🎯</div>
+          <div class="chart-wrap"><canvas id="runOutVictimsChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Run-Out Enforcers (Fielders) ⚡</div>
+          <div class="chart-wrap"><canvas id="runOutEnforcersChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="charts-grid-2" style="margin-top:16px;">
+        <div class="chart-card">
+          <div class="chart-title">Partners at Crease When Run-Out Happened 🤝</div>
+          <div class="chart-wrap"><canvas id="runOutPartnerChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Run-Out Pair Combinations 🔁</div>
+          <p class="ro-explainer">Who called the run that got their partner out?</p>
+          <div class="table-scroll-wrap" style="margin-top:8px;"><div id="runOutPairTableWrap"></div></div>
+        </div>
+      </div>
+
+      <div class="chart-card" style="margin-top:16px;">
+        <div class="chart-title">Full Run-Out Detail — Every Victim, Partner &amp; Fielder</div>
+        <div class="table-scroll-wrap"><div id="runOutTableWrap"></div></div>
+      </div>
     </section>
 
     <!-- Full Player Stats Table -->
