@@ -28,7 +28,7 @@ jobs:
         uses: browser-actions/setup-chrome@v1
 
       - name: Run scraper
-        run: python scrape_cricheroes.py
+        run: python scrape_cricheroes.py 2>&1 | tee scraper_log.txt
         timeout-minutes: 30
 
       - name: Commit updated data
