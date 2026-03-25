@@ -2749,24 +2749,23 @@ function renderTopHeroes(batting, bowling, fielding, _mvp, matchBatting, matchBo
   }
 
   grid.innerHTML =
-    /* Row 1 — Match awards */
+    /* — Overall — */
     heroCard('🏅', 'Man of the Match',  tMOM,          null,          'team_name',   'times MOM', 'hero-card-mom') +
-    heroCard('🏏', 'Best Batter',       tBestBatCount, null,          'team_name',   'times top scorer') +
-    heroCard('🎳', 'Best Bowler',       tBestBowlCount,null,          'team_name',   'times top wicket taker') +
-    /* Row 2 — Season totals */
-    heroCard('📊', 'Most Runs',         tBat,          null,          'team_name',   'runs') +
-    heroCard('🎯', 'Most Wickets',      tBowl,         null,          'team_name',   'wickets') +
-    heroCard('🧤', 'Top Fielder',       tField,        null,          'team_name',   'dismissals') +
     heroCard('🏆', 'Season MVP',        tMvp,          'Player Name', 'Team Name',   'pts') +
-    /* Row 3 — Batting specials */
+    /* — Batting — */
+    heroCard('🏏', 'Best Batter',       tBestBatCount, null,          'team_name',   'times top scorer') +
+    heroCard('📊', 'Most Runs',         tBat,          null,          'team_name',   'runs') +
     heroCard('💥', 'Six Machine',       tSixes,        null,          'team_name',   'sixes') +
     heroCard('⏱️', 'Most Balls Faced',  tBalls,        null,          'team_name',   'balls') +
-    /* Row 4 — Bowling specials */
+    /* — Bowling — */
+    heroCard('🎳', 'Best Bowler',       tBestBowlCount,null,          'team_name',   'times top wicket taker') +
+    heroCard('🎯', 'Most Wickets',      tBowl,         null,          'team_name',   'wickets') +
     heroCard('🔒', 'Dot Ball King',     tDots,         null,          'team_name',   'dots bowled') +
     heroCard('🎖️', 'Maiden Master',    tMaiden,       null,          'team_name',   'maidens') +
     heroCard('⚡', 'Best Bowl SR',      tBowlSR,       null,          'team_name',   'SR') +
     heroCard('🏃', 'Workhorse',         tOvers,        null,          'team_name',   'overs') +
-    /* Row 5 — Fielding specials */
+    /* — Fielding — */
+    heroCard('🧤', 'Top Fielder',       tField,        null,          'team_name',   'dismissals') +
     heroCard('🙌', 'Catch King',        tCatches,      null,          'team_name',   'catches') +
     heroCard('🚀', 'Run Out Hero',      tRunOut,       null,          'team_name',   'run outs');
 }
@@ -2809,7 +2808,7 @@ function _awardCard(icon, title, player, team, value, detail, color) {
   </div>`;
 }
 
-function renderFunAwards(matchBatting, matchBowling) {
+function renderFunAwards(matchBatting, matchBowling, balls) {
   const grid = document.getElementById('funAwardsGrid');
   if (!grid) return;
   if (!matchBatting?.length || !matchBowling?.length) {
@@ -2981,18 +2980,74 @@ function renderFunAwards(matchBatting, matchBowling) {
   const slowName = slowTied.map(([n]) => n).join(' & ') || '—';
   const slowD    = slowTied[0]?.[1] || { n: 0, team: '' };
 
+  /* Running awards (batting category) computed from ball-by-ball data */
+  let singlesName = '—', singlesTeam = '', singlesVal = 0;
+  let qhName = '—', qhTeam = '', qhVal = 0;
+  let doubName = '—', doubTeam = '', doubVal = 0;
+  let rmName = '—', rmTeam = '', rmVal = 0;
+  if (balls?.length) {
+    const map = {};
+    balls.forEach(b => {
+      const bat   = (b.batsman || '').trim(); if (!bat) return;
+      const run   = parseInt(b.run) || 0;
+      const extra = (b.extra_type || '').trim();
+      const isWide = extra === 'WD';
+      if (!map[bat]) map[bat] = { singles: 0, doubles: 0, totalRuns: 0, balls: 0, runRuns: 0, team: b.batting_team };
+      const d = map[bat];
+      if (extra === '') {
+        d.totalRuns += run;
+        if (run === 1) d.singles++;
+        if (run === 2) d.doubles++;
+        if (run === 1 || run === 2 || run === 3) d.runRuns += run;
+      }
+      if (!isWide) d.balls++;
+    });
+    const singlesArr = Object.entries(map).sort((a, b) => b[1].singles - a[1].singles);
+    singlesVal  = singlesArr[0]?.[1]?.singles || 0;
+    singlesName = singlesArr.filter(([,d]) => d.singles === singlesVal).map(([n]) => n).join(' & ') || '—';
+    singlesTeam = singlesArr.filter(([,d]) => d.singles === singlesVal)[0]?.[1]?.team || '';
+
+    const srArr = Object.entries(map)
+      .filter(([, d]) => d.balls >= 20)
+      .map(([n, d]) => [n, { pct: d.balls > 0 ? (d.singles / d.balls * 100) : 0, team: d.team }])
+      .sort((a, b) => b[1].pct - a[1].pct);
+    qhVal  = srArr[0] ? Math.round(srArr[0][1].pct) : 0;
+    qhName = srArr.filter(([,d]) => Math.round(d.pct) === qhVal).map(([n]) => n).join(' & ') || '—';
+    qhTeam = srArr.filter(([,d]) => Math.round(d.pct) === qhVal)[0]?.[1]?.team || '';
+
+    const doubArr = Object.entries(map).sort((a, b) => b[1].doubles - a[1].doubles);
+    doubVal  = doubArr[0]?.[1]?.doubles || 0;
+    doubName = doubArr.filter(([,d]) => d.doubles === doubVal).map(([n]) => n).join(' & ') || '—';
+    doubTeam = doubArr.filter(([,d]) => d.doubles === doubVal)[0]?.[1]?.team || '';
+
+    const rmArr = Object.entries(map)
+      .filter(([, d]) => d.totalRuns >= 20)
+      .map(([n, d]) => [n, { pct: d.totalRuns > 0 ? (d.runRuns / d.totalRuns * 100) : 0, team: d.team }])
+      .sort((a, b) => b[1].pct - a[1].pct);
+    rmVal  = rmArr[0] ? Math.round(rmArr[0][1].pct) : 0;
+    rmName = rmArr.filter(([,d]) => Math.round(d.pct) === rmVal).map(([n]) => n).join(' & ') || '—';
+    rmTeam = rmArr.filter(([,d]) => Math.round(d.pct) === rmVal)[0]?.[1]?.team || '';
+  }
+
   grid.innerHTML =
-    _awardCard('🏃', 'Run-Out Magnet',      roName,     roD.team,     roD.n,     'times run out this season',    'c-danger') +
-    _awardCard('📞', 'Run-Out Caller',       callerName, callerD.team, callerBest,'times at crease when partner was run out', 'c-danger') +
+    /* — Batting — */
     _awardCard('🦆', 'Duck King',            dkName,     dkD.team,     dkD.n,     'dismissed for zero',            'c-warning') +
-    _awardCard('💨', 'Wide Man',             wdName,     wdD.team,     wdD.n,     'wides bowled this season',      'c-warning') +
-    _awardCard('⚾', 'No-Ball King',         nbName,     nbD.team,     nbD.n,     'no-balls this season',          'c-info') +
-    _awardCard('🧱', 'Dot Absorber',         daName,     daD.team,     daBest,    'dot balls faced as batsman',    'c-info') +
-    _awardCard('😈', 'Bogey Bowler',         nemName,    nemD.team,    nemBest,   nemDetail,                       'c-danger') +
-    _awardCard('🍭', 'Six-O-Matic',         scName,     scD.team,     scBest,    'sixes conceded this season',    'c-warning') +
-    _awardCard('🐢', 'Slowcoach',           slowName,   slowD.team,   slowBest ?? '—', 'strike rate (min 20 balls)', 'c-info') +
-    _awardCard('🕸️', "Fielder's Friend",    ffName,     ffD.team,     ffBest,    'times dismissed caught',        'c-warning') +
-    _awardCard('🎨', 'Boundary Painter',    bpName,     bpD.team,     bpBest,    'fours conceded this season',    'c-info');
+    _awardCard('🏃', 'Run-Out Magnet',        roName,     roD.team,     roD.n,     'times run out this season',     'c-danger') +
+    _awardCard('📞', 'Run-Out Caller',        callerName, callerD.team, callerBest,'times at crease when partner was run out', 'c-danger') +
+    _awardCard('🧱', 'Dot Absorber',          daName,     daD.team,     daBest,    'dot balls faced as batsman',    'c-info') +
+    _awardCard('🐢', 'Slowcoach',             slowName,   slowD.team,   slowBest ?? '—', 'strike rate (min 20 balls)', 'c-info') +
+    _awardCard('😈', 'Bogey Bowler',          nemName,    nemD.team,    nemBest,   nemDetail,                       'c-danger') +
+    _awardCard('🕸️', "Fielder's Friend",     ffName,     ffD.team,     ffBest,    'times dismissed caught',        'c-warning') +
+    /* — Running / Batting — */
+    _awardCard('1️⃣', 'Singles King',         singlesName, singlesTeam, singlesVal,  'singles taken this season',         'c-info') +
+    _awardCard('👐', 'Quick Hands',           qhName,      qhTeam,      `${qhVal}%`, 'singles per ball (min 20 balls)',    'c-success') +
+    _awardCard('2️⃣', 'Doubles Dynamo',       doubName,    doubTeam,    doubVal,     'doubles taken this season',         'c-success') +
+    _awardCard('🏃', 'Running Machine',       rmName,      rmTeam,      `${rmVal}%`, '% runs from running (min 20 runs)', 'c-success') +
+    /* — Bowling — */
+    _awardCard('💨', 'Wide Man',              wdName,     wdD.team,     wdD.n,     'wides bowled this season',      'c-warning') +
+    _awardCard('⚾', 'No-Ball King',          nbName,     nbD.team,     nbD.n,     'no-balls this season',          'c-info') +
+    _awardCard('🍭', 'Six-O-Matic',           scName,     scD.team,     scBest,    'sixes conceded this season',    'c-warning') +
+    _awardCard('🎨', 'Boundary Painter',      bpName,     bpD.team,     bpBest,    'fours conceded this season',    'c-info');
 }
 
 /* ══════════════════════════════════════════════════════
@@ -4655,8 +4710,7 @@ function renderScorecardSections() {
   renderDismissalAnalysis(state.matchBatting);
   renderTossAnalysis(state.matchMeta);
   renderExtrasTeamChart(state.matchBowling);
-  renderFunAwards(state.matchBatting, state.matchBowling);
-  renderRunningAwards(state.matchBalls);
+  renderFunAwards(state.matchBatting, state.matchBowling, state.matchBalls);
   renderMatchRecords(state.matchBatting, state.matchBowling, state.matchMeta);
   renderExtrasLeaderboard(state.matchBowling);
   renderRunOutAnalysis(state.matchBatting);
