@@ -4,7 +4,14 @@ on:
   schedule:
     # Every Sunday at 8:00 PM IST (2:30 PM UTC)
     - cron: '30 14 * * 0'
-  workflow_dispatch:   # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+    inputs:
+      full_refresh:
+        description: 'Re-scrape all matches (ignore tracker)'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
 
 jobs:
   scrape:
@@ -28,7 +35,12 @@ jobs:
         uses: browser-actions/setup-chrome@v1
 
       - name: Run scraper
-        run: python scrape_cricheroes.py 2>&1 | tee scraper_log.txt
+        run: |
+          EXTRA_FLAGS=""
+          if [ "${{ github.event.inputs.full_refresh }}" = "true" ]; then
+            EXTRA_FLAGS="--full-refresh"
+          fi
+          python scrape_cricheroes.py $EXTRA_FLAGS 2>&1 | tee scraper_log.txt
         timeout-minutes: 30
 
       - name: Commit updated data
