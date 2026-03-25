@@ -69,10 +69,9 @@ class MatchScraper:
 
     def scrape(self, match_id: str, url: str) -> ScrapeResult:
         # ── Primary: direct API (no Selenium, no Cloudflare) ──
-        info, batting, bowling = self._api.fetch_scorecard(match_id, url)
+        info, batting, bowling, innings_meta = self._api.fetch_scorecard(match_id, url)
         if batting or bowling:
             log.info("    [API] %d batting, %d bowling rows", len(batting), len(bowling))
-            innings_meta = self._innings_meta_from_debug(match_id)
             balls = self._api.fetch_commentary(match_id, innings_meta) if innings_meta else []
             return ScrapeResult(info=info, batting=batting, bowling=bowling, balls=balls)
 

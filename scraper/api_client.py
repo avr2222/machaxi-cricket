@@ -103,21 +103,40 @@ class CricHeroesAPIClient:
 
     def fetch_scorecard(
         self, match_id: str, url: str
-    ) -> tuple[MatchInfo | None, list[BattingRow], list[BowlingRow]]:
+    ) -> tuple[MatchInfo | None, list[BattingRow], list[BowlingRow], list["InningsInfo"]]:
         try:
             data = self._get(f"scorecard/v2/get-scorecard/{match_id}")
         except Exception as exc:
             log.warning("[API] get-scorecard %s: %s", match_id, exc)
-            return None, [], []
+            return None, [], [], []
 
         if not data.get("status"):
             log.warning("[API] get-scorecard %s returned status=false", match_id)
-            return None, [], []
+            return None, [], [], []
 
         d = data["data"]
         info = self._parse_match_info(d, match_id, url)
         batting, bowling = self._parse_innings(d, match_id)
-        return info, batting, bowling
+        innings_meta = self._parse_innings_meta(d)
+        return info, batting, bowling, innings_meta
+
+    def _parse_innings_meta(self, d: dict) -> list["InningsInfo"]:
+        """Extract innings metadata (team_id, inning_num) from scorecard data."""
+        from .models import InningsInfo
+        meta: list[InningsInfo] = []
+        for team_key in ("team_a", "team_b"):
+            team_data = d.get(team_key, {})
+            team_id = int(team_data.get("team_id") or team_data.get("id") or 0)
+            team_name = team_data.get("name", "")
+            for sc in team_data.get("scorecard", []):
+                inn_num = int(sc.get("inning", 0))
+                if team_id and inn_num:
+                    meta.append(InningsInfo(
+                        inning_num=inn_num,
+                        team_id=team_id,
+                        team_name=team_name,
+                    ))
+        return meta
 
     def _parse_match_info(self, d: dict, match_id: str, url: str) -> MatchInfo:
         raw_dt = d.get("start_datetime", "")
