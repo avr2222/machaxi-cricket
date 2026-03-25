@@ -3,10 +3,10 @@
  * Cricket Analytics Dashboard — script.js
  * ============================================================
  * Reads four CricHeroes leaderboard CSVs using PapaParse:
- *   1874258_batting_leaderboard.csv
- *   1874258_bowling_leaderboard.csv
- *   1874258_fielding_leaderboard.csv
- *   1874258_mvp_leaderboard.csv
+ *   batting_leaderboard.csv
+ *   bowling_leaderboard.csv
+ *   fielding_leaderboard.csv
+ *   mvp_leaderboard.csv
  *
  * Columns used:
  *  Batting:  player_id, name, team_name, total_match, innings,
