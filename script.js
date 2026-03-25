@@ -4848,34 +4848,10 @@ async function init() {
     hideSpinner();
   }
 
-  /* ── Phase 2: Load scorecards lazily — only when the user scrolls to a
-       relevant section (Form Tracker, Scorecard Viewer, Ball Insights).
-       Falls back to loading after 45 s if the user never scrolls there.
-       Saves bandwidth on mobile / slow connections. ── */
-  let _scorecardsTriggered = false;
-  function _triggerScorecards() {
-    if (_scorecardsTriggered) return;
-    _scorecardsTriggered = true;
-    if (_obs) _obs.disconnect();
-    loadScorecards();
-  }
-
-  // 'fun-heading' is near the top (Fun Awards needs match-level data) so Phase 2
-  // triggers immediately on page load rather than waiting for deep scroll.
-  const _watchIds = ['fun-heading', 'form-heading', 'scorecard-heading', 'ball-insights-heading'];
-  let _obs = null;
-  if (typeof IntersectionObserver !== 'undefined') {
-    _obs = new IntersectionObserver(
-      (entries) => { if (entries.some(e => e.isIntersecting)) _triggerScorecards(); },
-      { rootMargin: '300px' }   // pre-load 300 px before section enters viewport
-    );
-    _watchIds.forEach(id => { const el = document.getElementById(id); if (el) _obs.observe(el); });
-  } else {
-    // Fallback for very old browsers
-    _triggerScorecards();
-  }
-  // Hard timeout: always load within 45 s even if user never scrolls
-  setTimeout(_triggerScorecards, 45000);
+  /* ── Phase 2: Load scorecards in background — dashboard already visible.
+       CSV fast-path completes in milliseconds so no deferral needed.
+       PDF extraction (slow fallback) only runs when CSVs are unavailable. ── */
+  loadScorecards();
 }
 
 init();
