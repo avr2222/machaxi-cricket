@@ -1160,3 +1160,88 @@ body.loading .chart-wrap::after {
 }
 .ro-fielder-sm { font-size: 0.62rem; color: var(--text-muted); font-weight: 400; }
 .ro-explainer  { font-size: 0.78rem; color: var(--text-muted); margin: 4px 0 0 0; line-height: 1.5; font-style: italic; }
+
+/* ── Mobile UX Improvements ──────────────────────────────────────────────── */
+
+/* Swipe hint on all scrollable table wrappers on mobile */
+@media (max-width: 700px) {
+  .table-scroll-wrap {
+    position: relative;
+  }
+  .table-scroll-wrap::after {
+    content: '← swipe to scroll →';
+    display: block;
+    text-align: center;
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    padding: 4px 0 0;
+    letter-spacing: 0.03em;
+    opacity: 0.7;
+  }
+
+  /* Heatmap: bump font up so cells are readable */
+  .hm-table  { font-size: 0.75rem; }
+  .hm-name   { font-size: 0.75rem; }
+  .hm-cell   { font-size: 0.72rem; }
+
+  /* Heatmap legend: tighter gap, always visible */
+  .hm-legend-row { gap: 4px; font-size: 0.68rem; }
+
+  /* Header: slightly shorter on mobile */
+  .header { height: 44px; padding: 0 12px; }
+  .top-load-bar { top: 44px; }
+
+  /* KPI: use auto-fit so 3 per row on medium phones, 2 on small */
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+}
+
+/* ── Phone-specific (≤480px) ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Header: collapse to logo + title only, reduce height */
+  .header { height: auto; min-height: 40px; padding: 8px 12px; }
+  .header-content { flex-wrap: wrap; gap: 6px; }
+  .header-title h1 { font-size: 12px; }
+  .top-load-bar { top: 0; }   /* fixed to very top when header is taller */
+
+  /* Toast: full-width at bottom (avoids overlap on narrow screens) */
+  .extraction-toast {
+    bottom: 8px;
+    right: 8px;
+    left: 8px;
+    width: auto;
+  }
+
+  /* KPI: 2 columns, compact */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-card { padding: 10px 8px; }
+  .kpi-icon { font-size: 16px; }
+  .kpi-label { font-size: 0.63rem; }
+
+  /* Heroes: single column on phones */
+  .heroes-grid { grid-template-columns: 1fr; }
+
+  /* Fun awards: single column */
+  .fun-awards-grid { grid-template-columns: 1fr !important; }
+
+  /* Heatmap legend: hide text labels, keep colour swatches only */
+  .hm-legend-text { display: none; }
+  .hm-swatch { padding: 2px 5px; font-size: 0.62rem; }
+
+  /* Scorecard tables: tighter on narrow screens */
+  .sc-table { font-size: 0.7rem; }
+  .sc-table th,
+  .sc-table td { padding: 5px 4px; }
+
+  /* Section headings: smaller on phones */
+  .section-header h2 { font-size: 0.95rem; }
+
+  /* Filter row: smaller selects */
+  .filter-group select,
+  .filter-group label { font-size: 0.75rem; }
+  .reset-btn { font-size: 0.75rem; padding: 7px 14px; }
+
+  /* Chart cards: less padding */
+  .chart-card { padding: 14px 10px 10px; }
+}
