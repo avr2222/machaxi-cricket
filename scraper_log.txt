@@ -1,6 +1,6 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-03-25 03:16:02
+Started: 2026-03-25 03:54:04
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
@@ -19,4 +19,4 @@ Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/1
 [Selenium] Scrolled 1 round(s)
 [Selenium] Found 0 unique match URL(s)
 [ERROR] No match URLs found. Check debug_html/tournament_page.html
-Done: 2026-03-25 03:16:21
+Done: 2026-03-25 03:54:16
