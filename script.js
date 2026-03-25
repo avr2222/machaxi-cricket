@@ -4860,7 +4860,9 @@ async function init() {
     loadScorecards();
   }
 
-  const _watchIds = ['form-heading', 'scorecard-heading', 'ball-insights-heading'];
+  // 'fun-heading' is near the top (Fun Awards needs match-level data) so Phase 2
+  // triggers immediately on page load rather than waiting for deep scroll.
+  const _watchIds = ['fun-heading', 'form-heading', 'scorecard-heading', 'ball-insights-heading'];
   let _obs = null;
   if (typeof IntersectionObserver !== 'undefined') {
     _obs = new IntersectionObserver(
