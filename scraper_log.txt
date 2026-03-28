@@ -1,22 +1,22 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-03-25 03:54:04
+Started: 2026-03-28 11:37:33
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
 Get LATEST chromedriver version for google-chrome
-There is no [linux64] chromedriver "145.0.7632.117" for browser google-chrome "145.0.7632" in cache
+There is no [linux64] chromedriver "146.0.7680.165" for browser google-chrome "146.0.7680" in cache
 Get LATEST chromedriver version for google-chrome
-WebDriver version 145.0.7632.117 selected
-Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/145.0.7632.117/linux64/chromedriver-linux64.zip
-About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/145.0.7632.117/linux64/chromedriver-linux64.zip
+WebDriver version 146.0.7680.165 selected
+Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/146.0.7680.165/linux64/chromedriver-linux64.zip
+About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/146.0.7680.165/linux64/chromedriver-linux64.zip
 Driver downloading response is 200
 Get LATEST chromedriver version for google-chrome
-Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/145.0.7632.117]
+Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/146.0.7680.165]
 [API] Tournament discovery failed — will use Selenium fallback
 [Discovery] API failed — using Selenium browser
 [Selenium] Loading tournament page: https://cricheroes.com/tournament/1874258/machaxi-box-cricket-season-2/matches/past-matches
 [Selenium] Scrolled 1 round(s)
 [Selenium] Found 0 unique match URL(s)
 [ERROR] No match URLs found. Check debug_html/tournament_page.html
-Done: 2026-03-25 03:54:16
+Done: 2026-03-28 11:37:50
