@@ -1,16 +1,16 @@
 match_id,innings,bowling_team,player,player_id,overs,maidens,runs,wickets,wides,no_balls,economy
-23247987,1,Weekend Warriors (WW),Pabitra,36285740,2.12,0,4,0,1,0,2.00
-23247987,1,Weekend Warriors (WW),Srikanta Maddara,15990447,2.12,0,19,0,1,0,9.50
-23247987,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,1.6,0,11,1,0,1,11.00
-23247987,1,Weekend Warriors (WW),Venkat A,5945797,2.12,0,7,2,0,0,3.50
-23247987,1,Weekend Warriors (WW),Vinod Reddy,36285741,2.12,0,5,4,0,0,2.50
-23247987,1,Weekend Warriors (WW),Karthik Reddy,36266644,1.6,0,10,0,0,2,10.00
-23247987,2,Royal Cricket Blasters (RCB),Leel,7577506,2.6,0,7,0,1,0,3.50
-23247987,2,Royal Cricket Blasters (RCB),Mahesh,27687690,2.12,0,10,1,1,0,5.00
-23247987,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,2.6,0,10,2,0,1,5.00
-23247987,2,Royal Cricket Blasters (RCB),Gopi,34607385,1.6,0,3,1,2,0,3.00
-23247987,2,Royal Cricket Blasters (RCB),Jithin Tj,24920096,1.6,0,4,2,1,0,4.00
-23247987,2,Royal Cricket Blasters (RCB),Mithun,39978351,2.6,1,13,2,0,0,6.50
+23247987,1,Weekend Warriors (WW),Pabitra,36285740,2.0,0,4,0,1,0,2.00
+23247987,1,Weekend Warriors (WW),Srikanta Maddara,15990447,2.0,0,19,0,1,0,9.50
+23247987,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,1.0,0,11,1,0,1,11.00
+23247987,1,Weekend Warriors (WW),Venkat A,5945797,2.0,0,7,2,0,0,3.50
+23247987,1,Weekend Warriors (WW),Vinod Reddy,36285741,2.0,0,5,4,0,0,2.50
+23247987,1,Weekend Warriors (WW),Karthik Reddy,36266644,1.0,0,10,0,0,2,10.00
+23247987,2,Royal Cricket Blasters (RCB),Leel,7577506,2.0,0,7,0,1,0,3.50
+23247987,2,Royal Cricket Blasters (RCB),Mahesh,27687690,2.0,0,10,1,1,0,5.00
+23247987,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,2.0,0,10,2,0,1,5.00
+23247987,2,Royal Cricket Blasters (RCB),Gopi,34607385,1.0,0,3,1,2,0,3.00
+23247987,2,Royal Cricket Blasters (RCB),Jithin Tj,24920096,1.0,0,4,2,1,0,4.00
+23247987,2,Royal Cricket Blasters (RCB),Mithun,39978351,2.0,1,13,2,0,0,6.50
 23110064,1,Royal Cricket Blasters (RCB),Mahesh,27687690,2.0,0,7,3,2,0,3.50
 23110064,1,Royal Cricket Blasters (RCB),Gopi,34607385,2.0,0,16,0,1,1,8.00
 23110064,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,2.0,0,6,1,0,0,3.00
@@ -45,17 +45,6 @@ match_id,innings,bowling_team,player,player_id,overs,maidens,runs,wickets,wides,
 22786419,2,Royal Cricket Blasters (RCB),Arun,43156255,2.0,0,11,0,2,0,5.50
 22786419,2,Royal Cricket Blasters (RCB),Leel,7577506,1.0,0,4,0,2,0,4.00
 22786419,2,Royal Cricket Blasters (RCB),Pavan,22711554,1.0,0,15,0,3,0,9.00
-22632662,1,Weekend Warriors (WW),Pabitra,36285740,2.0,0,5,1,0,1,2.50
-22632662,1,Weekend Warriors (WW),Sudhir Midtown,36566491,2.0,0,12,1,6,3,6.00
-22632662,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,2.0,1,3,0,1,0,1.50
-22632662,1,Weekend Warriors (WW),Srikanta Maddara,15990447,2.0,0,20,1,1,0,10.00
-22632662,1,Weekend Warriors (WW),Venkat A,5945797,1.0,0,6,0,0,0,6.00
-22632662,1,Weekend Warriors (WW),Vinod Reddy,36285741,1.0,0,4,1,1,0,4.00
-22632662,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,2.0,0,8,0,2,0,4.00
-22632662,2,Royal Cricket Blasters (RCB),shaik azeed,32475183,2.0,0,16,0,4,0,8.00
-22632662,2,Royal Cricket Blasters (RCB),Arun,43156255,2.0,0,14,2,4,0,7.00
-22632662,2,Royal Cricket Blasters (RCB),Pavan,22711554,2.0,0,9,0,1,0,4.50
-22632662,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,0.0,0,5,0,1,0,15.00
 23247977,1,Royal Cricket Blasters (RCB),Mahesh,27687690,2.0,0,21,1,0,0,10.50
 23247977,1,Royal Cricket Blasters (RCB),Gopi,34607385,1.0,0,13,0,0,0,13.00
 23247977,1,Royal Cricket Blasters (RCB),Jithin Tj,24920096,2.0,0,24,0,2,0,12.00
@@ -104,19 +93,6 @@ match_id,innings,bowling_team,player,player_id,overs,maidens,runs,wickets,wides,
 22786418,2,Royal Cricket Blasters (RCB),Jithin Tj,24920096,2.0,0,17,0,0,0,8.50
 22786418,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,1.0,0,14,0,0,0,14.00
 22786418,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,1.0,0,3,0,0,2,3.00
-22632661,1,Weekend Warriors (WW),Pabitra,36285740,2.0,0,13,0,1,0,6.50
-22632661,1,Weekend Warriors (WW),Sudhir Midtown,36566491,2.0,0,8,0,1,0,4.00
-22632661,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,2.0,0,19,0,1,1,9.50
-22632661,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,2.0,0,15,1,0,0,7.50
-22632661,1,Weekend Warriors (WW),Venkat A,5945797,2.0,0,8,0,0,1,4.00
-22632661,1,Weekend Warriors (WW),Srikanta Maddara,15990447,1.0,0,2,0,0,0,2.00
-22632661,1,Weekend Warriors (WW),Vinod Reddy,36285741,1.0,0,3,0,2,0,3.00
-22632661,2,Royal Cricket Blasters (RCB),Deepak Kumar,36285780,2.0,0,10,1,2,0,5.00
-22632661,2,Royal Cricket Blasters (RCB),Gopi,34607385,1.0,0,12,0,0,0,12.00
-22632661,2,Royal Cricket Blasters (RCB),shaik azeed,32475183,2.0,0,8,0,3,0,4.00
-22632661,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,2.0,0,12,0,1,0,6.00
-22632661,2,Royal Cricket Blasters (RCB),Arun,43156255,2.0,1,6,0,0,1,3.00
-22632661,2,Royal Cricket Blasters (RCB),Pavan,22711554,3.0,0,20,0,4,0,6.67
 23247962,1,Royal Cricket Blasters (RCB),Gopi,34607385,2.0,0,15,0,0,0,7.50
 23247962,1,Royal Cricket Blasters (RCB),Mahesh,27687690,2.0,0,17,0,4,0,8.50
 23247962,1,Royal Cricket Blasters (RCB),Jithin Tj,24920096,2.0,0,9,0,3,0,4.50
@@ -163,6 +139,30 @@ match_id,innings,bowling_team,player,player_id,overs,maidens,runs,wickets,wides,
 22786417,2,Royal Cricket Blasters (RCB),Arun,43156255,2.0,0,12,0,0,0,6.00
 22786417,2,Royal Cricket Blasters (RCB),Pavan,22711554,1.0,0,12,1,1,1,10.29
 22786417,2,Royal Cricket Blasters (RCB),Jithin Tj,24920096,1.0,0,6,0,0,0,6.00
+22632662,1,Weekend Warriors (WW),Pabitra,36285740,2.0,0,5,1,0,1,2.50
+22632662,1,Weekend Warriors (WW),Sudhir Midtown,36566491,2.0,0,12,1,6,3,6.00
+22632662,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,2.0,1,3,0,1,0,1.50
+22632662,1,Weekend Warriors (WW),Srikanta Maddara,15990447,2.0,0,20,1,1,0,10.00
+22632662,1,Weekend Warriors (WW),Venkat A,5945797,1.0,0,6,0,0,0,6.00
+22632662,1,Weekend Warriors (WW),Vinod Reddy,36285741,1.0,0,4,1,1,0,4.00
+22632662,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,2.0,0,8,0,2,0,4.00
+22632662,2,Royal Cricket Blasters (RCB),shaik azeed,32475183,2.0,0,16,0,4,0,8.00
+22632662,2,Royal Cricket Blasters (RCB),Arun,43156255,2.0,0,14,2,4,0,7.00
+22632662,2,Royal Cricket Blasters (RCB),Pavan,22711554,2.0,0,9,0,1,0,4.50
+22632662,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,0.0,0,5,0,1,0,15.00
+22632661,1,Weekend Warriors (WW),Pabitra,36285740,2.0,0,13,0,1,0,6.50
+22632661,1,Weekend Warriors (WW),Sudhir Midtown,36566491,2.0,0,8,0,1,0,4.00
+22632661,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,2.0,0,19,0,1,1,9.50
+22632661,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,2.0,0,15,1,0,0,7.50
+22632661,1,Weekend Warriors (WW),Venkat A,5945797,2.0,0,8,0,0,1,4.00
+22632661,1,Weekend Warriors (WW),Srikanta Maddara,15990447,1.0,0,2,0,0,0,2.00
+22632661,1,Weekend Warriors (WW),Vinod Reddy,36285741,1.0,0,3,0,2,0,3.00
+22632661,2,Royal Cricket Blasters (RCB),Deepak Kumar,36285780,2.0,0,10,1,2,0,5.00
+22632661,2,Royal Cricket Blasters (RCB),Gopi,34607385,1.0,0,12,0,0,0,12.00
+22632661,2,Royal Cricket Blasters (RCB),shaik azeed,32475183,2.0,0,8,0,3,0,4.00
+22632661,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,2.0,0,12,0,1,0,6.00
+22632661,2,Royal Cricket Blasters (RCB),Arun,43156255,2.0,1,6,0,0,1,3.00
+22632661,2,Royal Cricket Blasters (RCB),Pavan,22711554,3.0,0,20,0,4,0,6.67
 22632660,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,2.0,0,14,1,1,0,7.00
 22632660,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,2.0,0,16,1,1,0,8.00
 22632660,1,Weekend Warriors (WW),Vinod Reddy,36285741,3.0,0,11,0,1,0,3.67

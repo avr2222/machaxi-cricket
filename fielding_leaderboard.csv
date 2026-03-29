@@ -1,38 +1,30 @@
 player_id,name,team_id,team_name,total_match,catches,caught_behind,run_outs,assist_run_outs,stumpings,caught_and_bowl,total_catches,total_dismissal
-35651267,Ashok Adapala,12519693,Weekend Warriors (WW),9,5,5,4,0,4,0,10,18
-36285742,Manjunath,12519660,Royal Cricket Blasters (RCB),12,2,6,3,0,0,0,8,11
-5945797,Venkat A,12519693,Weekend Warriors (WW),15,3,0,6,0,0,0,3,9
-22711554,Pavan,12519660,Royal Cricket Blasters (RCB),6,7,0,1,0,0,0,7,8
-7577506,Leela Anna,12519660,Royal Cricket Blasters (RCB),12,4,0,4,0,0,0,4,8
-24920096,Jithin Tj,12519660,Royal Cricket Blasters (RCB),12,3,0,2,0,3,0,3,8
-24500548,Mahesh,12519693,Weekend Warriors (WW),9,5,0,2,0,0,0,5,7
-42607170,Murali Cn Cricket,12519660,Royal Cricket Blasters (RCB),12,3,0,4,0,0,0,3,7
-42607076,Sudheer Nidiginti,12519693,Weekend Warriors (WW),12,5,0,1,0,0,0,5,6
-37092656,Vijay 208,12519660,Royal Cricket Blasters (RCB),6,2,1,2,0,0,0,3,5
-45730696,Firoz,12519693,Weekend Warriors (WW),6,1,0,4,0,0,0,1,5
-43156222,Girish Cricket,12519693,Weekend Warriors (WW),9,1,0,4,0,0,0,1,5
-42545298,Arun 102raaga,12519660,Royal Cricket Blasters (RCB),9,0,0,5,0,0,0,0,5
-43156255,Arun,12519660,Royal Cricket Blasters (RCB),12,4,0,1,0,0,0,4,5
-34607385,Gopi,12519660,Royal Cricket Blasters (RCB),12,0,0,5,0,0,0,0,5
-23317841,Lokesh Kumar Yc,12519693,Weekend Warriors (WW),12,2,0,3,0,0,0,2,5
-23317824,Ashok,12519693,Weekend Warriors (WW),6,2,0,2,0,0,0,2,4
-36266644,Karthik Reddy,12519693,Weekend Warriors (WW),6,0,0,4,0,0,0,0,4
-39978351,Mithun,12519660,Royal Cricket Blasters (RCB),6,2,0,2,0,0,0,2,4
-36285780,Deepak Kumar,12519660,Royal Cricket Blasters (RCB),6,1,0,3,0,0,0,1,4
-23317827,Balaji Balaraju,12519693,Weekend Warriors (WW),9,1,1,2,0,0,0,2,4
-32252331,Rajkumar Muddasu,12519693,Weekend Warriors (WW),12,1,1,2,0,0,0,2,4
-36272025,Srinivas Vemulapalli,12519660,Royal Cricket Blasters (RCB),15,1,0,3,0,0,0,1,4
-36285740,Pabitra,12519693,Weekend Warriors (WW),15,1,0,3,0,0,0,1,4
-28100363,Rk,12519693,Weekend Warriors (WW),15,3,0,0,1,1,0,3,4
-36566491,Sudhir Midtown,12519693,Weekend Warriors (WW),6,1,0,1,0,0,1,2,3
-23317861,Seenu,12519693,Weekend Warriors (WW),6,2,0,1,0,0,0,2,3
-36284615,Vinay Ks,12519660,Royal Cricket Blasters (RCB),15,2,0,1,0,0,0,2,3
-24133065,Ashik Jain,12519693,Weekend Warriors (WW),3,2,0,0,0,0,0,2,2
-43374562,Subbu,12519693,Weekend Warriors (WW),15,0,0,2,0,0,0,0,2
-15990447,Srikanta Maddara,12519693,Weekend Warriors (WW),15,1,0,1,0,0,0,1,2
-48022578,Vishwanath Cricket,12519660,Royal Cricket Blasters (RCB),3,0,0,1,0,0,0,0,1
-36285741,Vinod Reddy,12519693,Weekend Warriors (WW),6,0,0,1,0,0,0,0,1
-32475183,Shaik Azeed,12519660,Royal Cricket Blasters (RCB),6,0,0,1,0,0,0,0,1
-48699330,Kranthi 202 Midtown Raaga,12519660,Royal Cricket Blasters (RCB),6,1,0,0,0,0,0,1,1
-27687690,Mahesh,12519660,Royal Cricket Blasters (RCB),9,0,0,1,0,0,0,0,1
-46521634,Satyam Goyal,12519660,Royal Cricket Blasters (RCB),9,0,0,1,0,0,0,0,1
+,Ashok adapala,,Weekend Warriors (WW),7,10,0,0,0,4,0,10,14
+,Pavan,,Royal Cricket Blasters (RCB),3,7,0,0,0,0,0,7,7
+,Jithin Tj,,Royal Cricket Blasters (RCB),4,3,0,0,0,3,0,3,6
+,Sudheer Nidiginti,,Weekend Warriors (WW),3,5,0,0,0,0,0,5,5
+,Manjunath H,,Royal Cricket Blasters (RCB),3,5,0,0,0,0,0,5,5
+,Mahesh,,Royal Cricket Blasters (RCB),3,5,0,0,0,0,0,5,5
+,Leel,,Royal Cricket Blasters (RCB),3,4,0,0,0,0,0,4,4
+,Arun,,Royal Cricket Blasters (RCB),4,4,0,0,0,0,0,4,4
+,RK,,Weekend Warriors (WW),4,3,0,0,0,1,0,3,4
+,Murali Cn Cricket,,Royal Cricket Blasters (RCB),3,3,0,0,0,0,0,3,3
+,Vijay 208,,Royal Cricket Blasters (RCB),3,3,0,0,0,0,0,3,3
+,Manjunath,,Royal Cricket Blasters (RCB),2,3,0,0,0,0,0,3,3
+,Venkat A,,Weekend Warriors (WW),2,3,0,0,0,0,0,3,3
+,seenu,,Weekend Warriors (WW),2,2,0,0,0,0,0,2,2
+,Mithun,,Royal Cricket Blasters (RCB),1,2,0,0,0,0,0,2,2
+,Vinay KS,,Royal Cricket Blasters (RCB),2,2,0,0,0,0,0,2,2
+,Ashik Jain,,Weekend Warriors (WW),2,2,0,0,0,0,0,2,2
+,Sudhir Midtown,,Weekend Warriors (WW),1,2,0,0,0,0,0,2,2
+,Rajkumar Muddasu,,Weekend Warriors (WW),2,2,0,0,0,0,0,2,2
+,Balaji Balaraju,,Weekend Warriors (WW),2,2,0,0,0,0,0,2,2
+,Lokesh kumar YC,,,1,2,0,0,0,0,0,2,2
+,Ashok,,Weekend Warriors (WW),2,2,0,0,0,0,0,2,2
+,Kranthi 202 Midtown Raaga,,Royal Cricket Blasters (RCB),1,1,0,0,0,0,0,1,1
+,Srinivas Vemulapalli,,Royal Cricket Blasters (RCB),1,1,0,0,0,0,0,1,1
+,Pabitra,,Weekend Warriors (WW),1,1,0,0,0,0,0,1,1
+,Srikanta Maddara,,Weekend Warriors (WW),1,1,0,0,0,0,0,1,1
+,Firoz,,Weekend Warriors (WW),1,1,0,0,0,0,0,1,1
+,GIRISH G,,Weekend Warriors (WW),1,1,0,0,0,0,0,1,1
+,Deepak Kumar,,Royal Cricket Blasters (RCB),1,1,0,0,0,0,0,1,1

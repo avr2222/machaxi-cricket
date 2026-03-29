@@ -1,3 +1,12 @@
 {
-  "teams": []
+  "teams": [
+    {
+      "name": "Weekend Warriors (WW)",
+      "short": "WW"
+    },
+    {
+      "name": "Royal Cricket Blasters (RCB)",
+      "short": "RCB"
+    }
+  ]
 }
