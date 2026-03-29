@@ -326,7 +326,7 @@ class ScraperPipeline:
 
         if not matches:
             log.info("[Discovery] API failed — using Selenium browser")
-            discovery = MatchDiscovery(driver, self._cfg)
+            discovery = MatchDiscovery(driver, self._cfg, api)
             matches = discovery.discover(tournament_url)
 
         if not matches:

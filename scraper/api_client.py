@@ -54,50 +54,94 @@ class CricHeroesAPIClient:
         with urllib.request.urlopen(req, timeout=20) as resp:
             return json.loads(resp.read())
 
-    # ── Tournament match discovery (no Selenium) ──────────────────────────────
+    # ── Tournament match discovery ─────────────────────────────────────────────
 
     def discover_matches(self, tournament_id: str) -> list[dict[str, str]]:
         """
-        Try to list all past matches via API.
-        Returns a list of {match_id, url} dicts, or [] if the endpoint fails.
+        Discover past matches via the Next.js pagination API.
+        Returns [] if the endpoint fails (Selenium fallback will be used).
         """
-        # Try two common endpoint patterns
-        endpoints = [
-            f"tournament/matches/{tournament_id}?type=past&limit=200",
-            f"tournament/{tournament_id}/matches?type=past&limit=200",
-        ]
-        for ep in endpoints:
-            try:
-                data = self._get(ep)
-                matches = self._parse_tournament_matches(data, tournament_id)
-                if matches:
-                    log.info("[API] Discovered %d matches via %s", len(matches), ep)
-                    return matches
-            except Exception as exc:
-                log.debug("[API] Tournament endpoint %s failed: %s", ep, exc)
+        import time
+        base_url = (
+            f"https://cricheroes.com/match/get-tournament-matches/3/-1/-1"
+            f"?tournamentid={tournament_id}&status=3&pagesize=50&pageno=1"
+            f"&datetime={int(time.time() * 1000)}"
+        )
+        try:
+            matches = self._paginate_matches(base_url)
+            if matches:
+                log.info("[API] Discovered %d matches via pagination API", len(matches))
+                return matches
+        except Exception as exc:
+            log.debug("[API] Pagination discovery failed: %s", exc)
 
         log.info("[API] Tournament discovery failed — will use Selenium fallback")
         return []
 
-    def _parse_tournament_matches(
-        self, data: dict, tournament_id: str
-    ) -> list[dict[str, str]]:
-        if not data.get("status"):
-            return []
-        items = (
-            data.get("data", {}).get("data", [])
-            or data.get("data", {}).get("matches", [])
-            or data.get("data", [])
+    def discover_matches_from_html(self, html: str) -> list[dict[str, str]]:
+        """
+        Parse matches from __NEXT_DATA__ JSON embedded in the tournament page HTML,
+        then follow pagination to collect all matches.
+        """
+        m = re.search(
+            r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>',
+            html, re.DOTALL,
         )
-        matches = []
+        if not m:
+            return []
+        try:
+            data = json.loads(m.group(1))
+            mr = data["props"]["pageProps"]["matchResponse"]
+        except (KeyError, json.JSONDecodeError):
+            return []
+
+        matches: dict[str, dict] = {}
+        self._collect_items(mr.get("data", []), matches)
+
+        next_path = (mr.get("page") or {}).get("next")
+        while next_path:
+            try:
+                next_url = f"https://cricheroes.com{next_path}"
+                page_data = self._get_url(next_url)
+                self._collect_items(page_data.get("data", []), matches)
+                next_path = (page_data.get("page") or {}).get("next")
+            except Exception as exc:
+                log.debug("[API] Pagination page failed: %s", exc)
+                break
+
+        result = list(matches.values())
+        log.info("[API] Discovered %d matches from __NEXT_DATA__", len(result))
+        return result
+
+    def _paginate_matches(self, start_url: str) -> list[dict[str, str]]:
+        """Fetch all pages starting from start_url, following page.next links."""
+        matches: dict[str, dict] = {}
+        next_url: str | None = start_url
+        while next_url:
+            data = self._get_url(next_url)
+            self._collect_items(data.get("data", []), matches)
+            next_path = (data.get("page") or {}).get("next")
+            next_url = f"https://cricheroes.com{next_path}" if next_path else None
+        return list(matches.values())
+
+    def _collect_items(self, items: list, matches: dict) -> None:
+        """Parse match items and add to matches dict (keyed by match_id)."""
         for item in items:
-            mid = str(item.get("match_id") or item.get("id") or "")
-            if not mid:
+            mid = str(item.get("match_id") or "")
+            if not mid or mid in matches:
                 continue
-            slug = item.get("slug") or item.get("match_slug") or mid
-            url = f"https://cricheroes.com/scorecard/{mid}/{slug}/scorecard"
-            matches.append({"match_id": mid, "url": url})
-        return matches
+            t_slug = item.get("tournament_name", "").lower().replace(" ", "-")
+            team_a = item.get("team_a", "").lower().replace(" ", "-")
+            team_b = item.get("team_b", "").lower().replace(" ", "-")
+            match_slug = f"{team_a}-vs-{team_b}"
+            url = f"https://cricheroes.com/scorecard/{mid}/{t_slug}/{match_slug}/scorecard"
+            matches[mid] = {"match_id": mid, "url": url}
+
+    def _get_url(self, url: str) -> dict:
+        """GET an arbitrary URL with the configured headers."""
+        req = urllib.request.Request(url, headers=self._cfg.api_headers)
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            return json.loads(resp.read())
 
     # ── Scorecard ─────────────────────────────────────────────────────────────
 

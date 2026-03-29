@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+from .api_client import CricHeroesAPIClient
 from .config import ScraperConfig
 
 log = logging.getLogger(__name__)
@@ -39,9 +40,15 @@ def _to_scorecard_url(url: str) -> str:
 class MatchDiscovery:
     """Discovers past-match URLs from the tournament page via Selenium."""
 
-    def __init__(self, driver: webdriver.Chrome, config: ScraperConfig) -> None:
+    def __init__(
+        self,
+        driver: webdriver.Chrome,
+        config: ScraperConfig,
+        api: CricHeroesAPIClient | None = None,
+    ) -> None:
         self._driver = driver
         self._cfg = config
+        self._api = api or CricHeroesAPIClient(config)
 
     def discover(self, tournament_url: str) -> list[dict[str, str]]:
         log.info("[Selenium] Loading tournament page: %s", tournament_url)
@@ -58,6 +65,13 @@ class MatchDiscovery:
 
         html = self._driver.page_source
         self._save_debug("tournament_page.html", html)
+
+        # Try __NEXT_DATA__ + pagination first (fast, reliable)
+        matches = self._api.discover_matches_from_html(html)
+        if matches:
+            return matches
+
+        # Fallback: scrape <a href> links from the rendered DOM
         matches = self._extract_match_urls(html)
         log.info("[Selenium] Found %d unique match URL(s)", len(matches))
         return matches
