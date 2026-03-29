@@ -330,8 +330,19 @@ class ScraperPipeline:
             matches = discovery.discover(tournament_url)
 
         if not matches:
-            log.error("[ERROR] No match URLs found. Check debug_html/tournament_page.html")
-            return
+            if full_refresh and self._tracker.scraped_ids:
+                log.warning(
+                    "[Discovery] All discovery methods failed — "
+                    "falling back to %d match(es) in tracker for --full-refresh",
+                    len(self._tracker.scraped_ids),
+                )
+                matches = [
+                    {"match_id": mid, "url": info["url"]}
+                    for mid, info in self._tracker.scraped_entries.items()
+                ]
+            else:
+                log.error("[ERROR] No match URLs found. Check debug_html/tournament_page.html")
+                return
 
         if list_only:
             log.info("Found %d match(es):", len(matches))

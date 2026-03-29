@@ -106,6 +106,11 @@ class Tracker:
     def scraped_ids(self) -> frozenset[str]:
         return frozenset(self._data["scraped"])
 
+    @property
+    def scraped_entries(self) -> dict[str, dict]:
+        """Return the full {match_id: {url, scraped_at}} mapping."""
+        return dict(self._data["scraped"])
+
 
 # ── CSVStore ──────────────────────────────────────────────────────────────────
 
