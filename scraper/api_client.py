@@ -58,22 +58,57 @@ class CricHeroesAPIClient:
 
     def discover_matches(self, tournament_id: str) -> list[dict[str, str]]:
         """
-        Discover past matches via the Next.js pagination API.
-        Returns [] if the endpoint fails (Selenium fallback will be used).
+        Discover past matches. Tries api.cricheroes.in first (same API that
+        scorecards use), then falls back to cricheroes.com Next.js route.
+        Returns [] on failure so the caller can use Selenium.
         """
         import time
-        base_url = (
+        ts = int(time.time() * 1000)
+
+        # Try 1: internal API (same host as scorecard — works in GitHub Actions)
+        api_paths = [
+            f"match/get-tournament-matches/3/-1/-1?tournamentid={tournament_id}&status=3&pagesize=50&pageno=1&datetime={ts}",
+            f"tournament/match/list?tournament_id={tournament_id}&status=past&limit=200",
+        ]
+        for path in api_paths:
+            try:
+                data = self._get(path)
+                matches: dict[str, dict] = {}
+                self._collect_items(data.get("data", []) if isinstance(data.get("data"), list) else [], matches)
+                if not matches and isinstance(data.get("data"), dict):
+                    self._collect_items(data["data"].get("data", []), matches)
+                if matches:
+                    # follow pagination
+                    next_path = (data.get("page") or {}).get("next")
+                    while next_path:
+                        try:
+                            next_url = (
+                                next_path if next_path.startswith("http")
+                                else f"{self._cfg.api_base}/{next_path.lstrip('/')}"
+                            )
+                            pdata = self._get_url(next_url)
+                            self._collect_items(pdata.get("data", []), matches)
+                            next_path = (pdata.get("page") or {}).get("next")
+                        except Exception:
+                            break
+                    result = list(matches.values())
+                    log.info("[API] Discovered %d matches via %s", len(result), path.split("?")[0])
+                    return result
+            except Exception as exc:
+                log.debug("[API] %s failed: %s", path.split("?")[0], exc)
+
+        # Try 2: cricheroes.com Next.js pagination route
+        nextjs_url = (
             f"https://cricheroes.com/match/get-tournament-matches/3/-1/-1"
-            f"?tournamentid={tournament_id}&status=3&pagesize=50&pageno=1"
-            f"&datetime={int(time.time() * 1000)}"
+            f"?tournamentid={tournament_id}&status=3&pagesize=50&pageno=1&datetime={ts}"
         )
         try:
-            matches = self._paginate_matches(base_url)
-            if matches:
-                log.info("[API] Discovered %d matches via pagination API", len(matches))
-                return matches
+            result = self._paginate_matches(nextjs_url)
+            if result:
+                log.info("[API] Discovered %d matches via Next.js route", len(result))
+                return result
         except Exception as exc:
-            log.debug("[API] Pagination discovery failed: %s", exc)
+            log.debug("[API] Next.js route failed: %s", exc)
 
         log.info("[API] Tournament discovery failed — will use Selenium fallback")
         return []
@@ -88,11 +123,13 @@ class CricHeroesAPIClient:
             html, re.DOTALL,
         )
         if not m:
+            log.info("[API] __NEXT_DATA__ not found in page HTML (Cloudflare challenge?)")
             return []
         try:
             data = json.loads(m.group(1))
             mr = data["props"]["pageProps"]["matchResponse"]
-        except (KeyError, json.JSONDecodeError):
+        except (KeyError, json.JSONDecodeError) as exc:
+            log.info("[API] __NEXT_DATA__ parse failed: %s", exc)
             return []
 
         matches: dict[str, dict] = {}
