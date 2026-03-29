@@ -1,8 +1,189 @@
 match_id,innings,batting_team,bowler,batsman,total_balls,dot_balls,dot_pct,runs_off_bat,boundaries,sixes,wickets
+22632661,1,Royal Cricket Blasters (RCB),Pabitra,Arun 102.raaga,11,8,72.7,11,1,1,1
+22943979,2,Royal Cricket Blasters (RCB),Pabitra,Manjunath H,10,8,80.0,3,0,0,0
+22943981,2,Weekend Warriors (WW),Gopi,RK,11,8,72.7,13,0,2,0
+23064208,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Manjunath H,11,8,72.7,7,1,0,0
+23247962,1,Weekend Warriors (WW),Mithun,Balaji Balaraju,10,8,80.0,3,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Gopi,7,7,100.0,0,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Leel,10,7,70.0,9,0,1,0
+22786417,2,Weekend Warriors (WW),Mahesh,RK,11,7,63.6,6,0,0,1
+22786418,1,Royal Cricket Blasters (RCB),Venkat A,Pavan,12,7,58.3,11,0,1,0
+23064193,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Manjunath H,8,7,87.5,1,0,0,1
+23110064,1,Weekend Warriors (WW),Srinivas Vemulapalli,RK,9,7,77.8,3,0,0,1
+23247962,2,Royal Cricket Blasters (RCB),Vinod Reddy,Gopi,8,7,87.5,6,0,1,0
+22632660,1,Royal Cricket Blasters (RCB),Vinod Reddy,Manjunath H,9,6,66.7,4,0,0,0
+22632661,2,Weekend Warriors (WW),Arun,RK,6,6,100.0,0,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Arun 102.raaga,6,6,100.0,0,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Pabitra,Murali Cn Cricket,8,6,75.0,3,0,0,0
+22786419,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Arun,7,6,85.7,1,0,0,1
+22943980,1,Weekend Warriors (WW),Mithun,Venkat A,8,6,75.0,3,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Mithun,6,6,100.0,0,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Pabitra,GIRISH G,7,6,85.7,1,0,0,1
+22943981,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Manjunath H,9,6,66.7,11,1,1,0
+23064193,1,Weekend Warriors (WW),Arun,Ashok adapala,7,6,85.7,1,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Venkat A,Arun 102.raaga,6,6,100.0,0,0,0,0
+23064208,2,Weekend Warriors (WW),Arun,RK,10,6,60.0,11,0,1,0
+23110064,1,Weekend Warriors (WW),Jithin Tj,Ashok adapala,6,6,100.0,0,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Venkat A,Mithun,6,6,100.0,0,0,0,0
+23247987,1,Royal Cricket Blasters (RCB),Pabitra,Jithin Tj,7,6,85.7,1,0,0,0
+22632660,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Pavan,6,5,83.3,1,0,0,0
+22632660,1,Royal Cricket Blasters (RCB),Venkat A,Manjunath H,6,5,83.3,1,0,0,1
+22632661,2,Weekend Warriors (WW),Pavan,Vinod Reddy,8,5,62.5,5,0,0,1
+22632661,2,Weekend Warriors (WW),Pavan,seenu,6,5,83.3,6,0,1,1
+22632662,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vishwanath Cricket,6,5,83.3,2,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Vinay KS,6,5,83.3,2,0,0,0
+22786417,2,Weekend Warriors (WW),Deepak Kumar,Subbu,5,5,100.0,0,0,0,0
+22786418,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Pavan,6,5,83.3,6,0,1,0
+22786418,2,Weekend Warriors (WW),Mahesh,Srikanta Maddara,6,5,83.3,1,0,0,1
+22786419,1,Royal Cricket Blasters (RCB),Pabitra,Arun,6,5,83.3,6,0,1,0
+22786419,2,Weekend Warriors (WW),Leel,Subbu,6,5,83.3,2,0,0,0
+22943979,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Murali Cn Cricket,6,5,83.3,2,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Venkat A,Vinay KS,6,5,83.3,1,0,0,2
+22943980,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Manjunath H,6,5,83.3,1,0,0,0
+22943981,1,Royal Cricket Blasters (RCB),Venkat A,Manjunath H,6,5,83.3,2,0,0,0
+22943981,2,Weekend Warriors (WW),Srinivas Vemulapalli,RK,5,5,100.0,0,0,0,0
+23064193,1,Weekend Warriors (WW),Srinivas Vemulapalli,RK,6,5,83.3,6,0,1,0
+23110064,2,Royal Cricket Blasters (RCB),Pabitra,Vinay KS,7,5,71.4,12,0,2,1
+23247962,2,Royal Cricket Blasters (RCB),Vinod Reddy,Kranthi 202 Midtown Raaga,5,5,100.0,0,0,0,1
+23247977,1,Weekend Warriors (WW),Srinivas Vemulapalli,Pabitra,6,5,83.3,4,1,0,0
+23247987,2,Weekend Warriors (WW),Mahesh,Pabitra,5,5,100.0,0,0,0,1
 23454074,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Manjunath H,6,5,83.3,4,1,0,0
 23454074,2,Royal Cricket Blasters (RCB),Vinod Reddy,Vinay KS,6,5,83.3,4,1,0,1
 23454111,1,Weekend Warriors (WW),Arun,Sarat Kumar,9,5,55.6,13,1,1,0
+22632660,1,Royal Cricket Blasters (RCB),Pabitra,Pavan,6,4,66.7,8,0,1,0
+22632660,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Arun,7,4,57.1,13,0,2,0
+22632660,2,Weekend Warriors (WW),Pavan,RK,5,4,80.0,1,0,0,0
+22632660,2,Weekend Warriors (WW),shaik azeed,Balaji Balaraju,5,4,80.0,6,0,1,0
+22632661,1,Royal Cricket Blasters (RCB),Venkat A,Arun,7,4,57.1,3,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Vinay KS,7,4,57.1,13,0,2,0
+22632661,2,Weekend Warriors (WW),shaik azeed,seenu,7,4,57.1,3,0,0,0
+22632662,2,Weekend Warriors (WW),Arun,Sudhir Midtown,4,4,100.0,0,0,0,2
+22786417,1,Royal Cricket Blasters (RCB),Venkat A,Leel,4,4,100.0,0,0,0,2
+22786417,2,Weekend Warriors (WW),Srinivas Vemulapalli,GIRISH G,6,4,66.7,2,0,0,0
+22786418,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Mahesh,5,4,80.0,2,0,0,1
+22786418,2,Weekend Warriors (WW),Murali Cn Cricket,Lokesh kumar YC,5,4,80.0,1,0,0,0
+22786418,2,Weekend Warriors (WW),Srinivas Vemulapalli,Sudheer Nidiginti,5,4,80.0,2,0,0,1
+22786418,2,Weekend Warriors (WW),Srinivas Vemulapalli,Rajkumar Muddasu,6,4,66.7,2,0,0,0
+22786418,2,Weekend Warriors (WW),Jithin Tj,Srikanta Maddara,6,4,66.7,8,0,1,0
+22786419,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Vinay KS,5,4,80.0,6,0,1,1
+22786419,2,Weekend Warriors (WW),Pavan,Srikanta Maddara,5,4,80.0,2,0,0,1
+22943979,1,Weekend Warriors (WW),Mithun,Mahesh Reddy,5,4,80.0,1,0,0,2
+22943979,1,Weekend Warriors (WW),Leel,Subbu,6,4,66.7,3,0,0,1
+22943979,1,Weekend Warriors (WW),Leel,Mahesh Reddy,6,4,66.7,2,0,0,1
+22943979,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Vinay KS,7,4,57.1,8,1,0,0
+22943979,2,Royal Cricket Blasters (RCB),Venkat A,Arun,4,4,100.0,0,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Venkat A,Gopi,4,4,100.0,0,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Venkat A,Leel,5,4,80.0,1,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Leel,5,4,80.0,2,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Manjunath H,5,4,80.0,6,0,1,1
+22943981,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Leel,5,4,80.0,4,1,0,0
+22943981,2,Weekend Warriors (WW),Murali Cn Cricket,RK,7,4,57.1,5,0,0,1
+22943981,2,Weekend Warriors (WW),Jithin Tj,Mahesh Reddy,4,4,100.0,0,0,0,1
+23064193,1,Weekend Warriors (WW),Mahesh,RK,5,4,80.0,2,0,0,1
+23064193,1,Weekend Warriors (WW),Gopi,Ashok,4,4,100.0,0,0,0,0
+23064193,1,Weekend Warriors (WW),Gopi,seenu,5,4,80.0,1,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Venkat A,Mahesh,4,4,100.0,0,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Jithin Tj,5,4,80.0,2,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Venkat A,Arun,4,4,100.0,0,0,0,2
+23064208,2,Weekend Warriors (WW),Jithin Tj,Karthik Reddy,5,4,80.0,1,0,0,1
+23064208,2,Weekend Warriors (WW),Srinivas Vemulapalli,Srikanta Maddara,4,4,100.0,0,0,0,1
+23110064,1,Weekend Warriors (WW),Gopi,RK,7,4,57.1,10,0,1,1
+23110064,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vinay KS,6,4,66.7,3,0,0,1
+23247962,1,Weekend Warriors (WW),Mahesh,Ashik Jain,6,4,66.7,10,1,1,0
+23247962,1,Weekend Warriors (WW),Srinivas Vemulapalli,Balaji Balaraju,5,4,80.0,2,0,0,0
+23247962,1,Weekend Warriors (WW),Gopi,Balaji Balaraju,6,4,66.7,8,0,1,0
+23247962,2,Royal Cricket Blasters (RCB),Venkat A,Leel,5,4,80.0,1,0,0,1
+23247962,2,Royal Cricket Blasters (RCB),Pabitra,Leel,7,4,57.1,4,0,0,0
+23247977,1,Weekend Warriors (WW),Mahesh,Karthik Reddy,5,4,80.0,6,0,1,1
+23247977,2,Royal Cricket Blasters (RCB),Ashik Jain,Gopi,6,4,66.7,8,0,1,0
+23247987,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Mithun,6,4,66.7,8,0,1,0
+23247987,2,Weekend Warriors (WW),Leel,Venkat A,5,4,80.0,1,0,0,1
 23454074,1,Weekend Warriors (WW),shaik azeed,Sarat Kumar,5,4,80.0,1,0,0,0
+22632660,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Arun,5,3,60.0,12,0,2,0
+22632660,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Murali Cn Cricket,3,3,100.0,0,0,0,1
+22632660,2,Weekend Warriors (WW),Arun,Mahesh Reddy,4,3,75.0,1,0,0,0
+22632660,2,Weekend Warriors (WW),shaik azeed,Rajkumar Muddasu,3,3,100.0,0,0,0,0
+22632660,2,Weekend Warriors (WW),shaik azeed,Mahesh Reddy,3,3,100.0,0,0,0,1
+22632660,2,Weekend Warriors (WW),Gopi,Balaji Balaraju,5,3,60.0,4,0,0,2
+22632661,1,Royal Cricket Blasters (RCB),Vinod Reddy,Arun,3,3,100.0,0,0,0,1
+22632661,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Arun,6,3,50.0,11,1,1,0
+22632661,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Vinay KS,4,3,75.0,1,0,0,1
+22632661,2,Weekend Warriors (WW),Srinivas Vemulapalli,Srikanta Maddara,4,3,75.0,1,0,0,1
+22632661,2,Weekend Warriors (WW),Gopi,seenu,6,3,50.0,12,1,1,0
+22632661,2,Weekend Warriors (WW),Deepak Kumar,Balaji Balaraju,4,3,75.0,2,0,0,2
+22632662,1,Royal Cricket Blasters (RCB),Pabitra,Pavan,4,3,75.0,2,0,0,0
+22632662,2,Weekend Warriors (WW),Pavan,Mahesh Reddy,4,3,75.0,1,0,0,0
+22632662,2,Weekend Warriors (WW),Srinivas Vemulapalli,Mahesh Reddy,4,3,75.0,1,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Leel,6,3,50.0,9,0,1,0
+22786417,1,Royal Cricket Blasters (RCB),Venkat A,Jithin Tj,3,3,100.0,0,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Pabitra,Vinay KS,4,3,75.0,2,0,0,0
+22786417,2,Weekend Warriors (WW),Arun,Mahesh Reddy,5,3,60.0,5,1,0,0
+22786418,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Pavan,5,3,60.0,7,0,1,0
+22786418,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Arun,4,3,75.0,1,0,0,1
+22786419,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Srinivas Vemulapalli,3,3,100.0,0,0,0,1
+22786419,1,Royal Cricket Blasters (RCB),Pabitra,Murali Cn Cricket,4,3,75.0,2,0,0,0
+22786419,2,Weekend Warriors (WW),Srinivas Vemulapalli,Srikanta Maddara,4,3,75.0,1,0,0,0
+22786419,2,Weekend Warriors (WW),Mahesh,GIRISH G,4,3,75.0,1,0,0,1
+22943979,1,Weekend Warriors (WW),Srinivas Vemulapalli,Srikanta Maddara,4,3,75.0,1,0,0,0
+22943979,1,Weekend Warriors (WW),Srinivas Vemulapalli,Subbu,4,3,75.0,1,0,0,0
+22943979,1,Weekend Warriors (WW),Jithin Tj,RK,4,3,75.0,2,0,0,1
+22943979,2,Royal Cricket Blasters (RCB),Venkat A,Gopi,4,3,75.0,1,0,0,0
+22943979,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Vinay KS,5,3,60.0,3,0,0,1
+22943979,2,Royal Cricket Blasters (RCB),Venkat A,Leel,4,3,75.0,1,0,0,0
+22943979,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Arun,3,3,100.0,0,0,0,1
+22943979,2,Royal Cricket Blasters (RCB),Firoz,Arun,5,3,60.0,8,0,1,0
+22943980,1,Weekend Warriors (WW),Leel,Venkat A,7,3,42.9,6,0,0,0
+22943980,1,Weekend Warriors (WW),Leel,RK,3,3,100.0,0,0,0,1
+22943980,1,Weekend Warriors (WW),Gopi,Ashok adapala,5,3,60.0,4,0,0,1
+22943980,1,Weekend Warriors (WW),Arun,Ashok adapala,4,3,75.0,1,0,0,0
+22943980,1,Weekend Warriors (WW),Srinivas Vemulapalli,Ashok adapala,4,3,75.0,1,0,0,0
+22943980,1,Weekend Warriors (WW),Gopi,Subbu,3,3,100.0,0,0,0,0
+22943980,1,Weekend Warriors (WW),Gopi,Ashok,3,3,100.0,0,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Satyam Goyal,5,3,60.0,3,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Gopi,5,3,60.0,4,0,0,0
+22943981,2,Weekend Warriors (WW),Srinivas Vemulapalli,Srikanta Maddara,4,3,75.0,4,1,0,0
+23064193,1,Weekend Warriors (WW),Leel,Srikanta Maddara,4,3,75.0,1,0,0,0
+23064193,1,Weekend Warriors (WW),Mahesh,Venkat A,4,3,75.0,6,0,1,0
+23064193,1,Weekend Warriors (WW),Srinivas Vemulapalli,Venkat A,3,3,100.0,0,0,0,0
+23064193,1,Weekend Warriors (WW),Srinivas Vemulapalli,Ashok,3,3,100.0,0,0,0,1
+23064193,1,Weekend Warriors (WW),Jithin Tj,seenu,4,3,75.0,1,0,0,1
+23064193,1,Weekend Warriors (WW),Jithin Tj,Rajkumar Muddasu,5,3,60.0,2,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Leel,4,3,75.0,1,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Venkat A,Vijay 208,3,3,100.0,0,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Murali Cn Cricket,4,3,75.0,1,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Murali Cn Cricket,4,3,75.0,2,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Murali Cn Cricket,3,3,100.0,0,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Pabitra,Manjunath H,4,3,75.0,6,0,1,0
+23064208,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Jithin Tj,8,3,37.5,12,2,0,0
+23064208,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Manjunath H,9,3,33.3,17,1,1,0
+23064208,1,Royal Cricket Blasters (RCB),Pabitra,Manjunath H,4,3,75.0,1,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Venkat A,Jithin Tj,4,3,75.0,1,0,0,0
+23064208,2,Weekend Warriors (WW),Leel,seenu,3,3,100.0,0,0,0,1
+23064208,2,Weekend Warriors (WW),Srinivas Vemulapalli,Subbu,5,3,60.0,6,1,0,1
+23110064,1,Weekend Warriors (WW),Leel,RK,6,3,50.0,14,0,2,0
+23110064,1,Weekend Warriors (WW),Arun,RK,5,3,60.0,4,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Vinay KS,6,3,50.0,8,0,1,1
+23110064,2,Royal Cricket Blasters (RCB),Karthik Reddy,Vinay KS,5,3,60.0,10,1,1,0
+23247962,1,Weekend Warriors (WW),Mithun,Ashik Jain,4,3,75.0,1,0,0,2
+23247962,1,Weekend Warriors (WW),Srinivas Vemulapalli,Ashik Jain,5,3,60.0,5,1,0,0
+23247962,1,Weekend Warriors (WW),Mahesh,Balaji Balaraju,3,3,100.0,0,0,0,1
+23247962,1,Weekend Warriors (WW),Jithin Tj,RK,3,3,100.0,0,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Leel,4,3,75.0,4,1,0,1
+23247962,2,Royal Cricket Blasters (RCB),Venkat A,Vinay KS,4,3,75.0,1,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Leel,6,3,50.0,11,1,1,0
+23247977,1,Weekend Warriors (WW),Mithun,Venkat A,3,3,100.0,0,0,0,2
+23247977,1,Weekend Warriors (WW),Jithin Tj,Srikanta Maddara,6,3,50.0,12,1,1,0
+23247977,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Arun 102.raaga,3,3,100.0,0,0,0,1
+23247977,2,Royal Cricket Blasters (RCB),Vinod Reddy,Arun 102.raaga,4,3,75.0,1,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Pabitra,Arun 102.raaga,3,3,100.0,0,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Pabitra,Satyam Goyal,4,3,75.0,1,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Pabitra,Vinay KS,3,3,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Venkat A,Kranthi 202 Midtown Raaga,3,3,100.0,0,0,0,0
+23247987,1,Royal Cricket Blasters (RCB),Karthik Reddy,Mahesh,5,3,60.0,7,0,1,0
+23247987,1,Royal Cricket Blasters (RCB),Pabitra,Manjunath H,5,3,60.0,2,0,0,0
+23247987,2,Weekend Warriors (WW),Mithun,Ashok adapala,3,3,100.0,0,0,0,1
+23247987,2,Weekend Warriors (WW),Mithun,Srikanta Maddara,3,3,100.0,0,0,0,1
+23247987,2,Weekend Warriors (WW),Gopi,Karthik Reddy,3,3,100.0,0,0,0,1
 23454074,1,Weekend Warriors (WW),Mahesh,Firoz,4,3,75.0,4,1,0,0
 23454074,1,Weekend Warriors (WW),Mahesh,Balaji Balaraju,8,3,37.5,7,1,0,1
 23454074,1,Weekend Warriors (WW),Gopi,Balaji Balaraju,6,3,50.0,3,0,0,0
@@ -16,6 +197,133 @@ match_id,innings,batting_team,bowler,batsman,total_balls,dot_balls,dot_pct,runs_
 23454111,1,Weekend Warriors (WW),Mahesh,Balaji Balaraju,3,3,100.0,0,0,0,1
 23454111,2,Royal Cricket Blasters (RCB),Vinod Reddy,Arun,6,3,50.0,6,1,0,0
 23454111,2,Royal Cricket Blasters (RCB),Mithun,shaik azeed,3,3,100.0,0,0,0,1
+22632660,1,Royal Cricket Blasters (RCB),Vinod Reddy,Pavan,4,2,50.0,2,0,0,1
+22632660,1,Royal Cricket Blasters (RCB),Venkat A,Vinay KS,5,2,40.0,5,0,0,1
+22632660,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Satyam Goyal,3,2,66.7,2,0,0,1
+22632660,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Manjunath H,3,2,66.7,1,0,0,0
+22632660,2,Weekend Warriors (WW),Srinivas Vemulapalli,seenu,5,2,40.0,13,0,2,0
+22632661,1,Royal Cricket Blasters (RCB),Vinod Reddy,Manjunath H,3,2,66.7,1,0,0,1
+22632661,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Arun 102.raaga,2,2,100.0,0,0,0,1
+22632661,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Arun 102.raaga,4,2,50.0,3,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Sudhir Midtown,shaik azeed,3,2,66.7,1,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Arun 102.raaga,5,2,40.0,3,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Vishwanath Cricket,4,2,50.0,3,0,0,0
+22632661,2,Weekend Warriors (WW),Pavan,Srikanta Maddara,3,2,66.7,1,0,0,1
+22632661,2,Weekend Warriors (WW),Deepak Kumar,RK,4,2,50.0,3,0,0,0
+22632661,2,Weekend Warriors (WW),shaik azeed,RK,3,2,66.7,1,0,0,0
+22632661,2,Weekend Warriors (WW),Srinivas Vemulapalli,Subbu,3,2,66.7,1,0,0,1
+22632662,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Vishwanath Cricket,8,2,25.0,12,1,0,0
+22632662,1,Royal Cricket Blasters (RCB),Vinod Reddy,shaik azeed,2,2,100.0,0,0,0,1
+22632662,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Gopi,2,2,100.0,0,0,0,2
+22632662,1,Royal Cricket Blasters (RCB),Pabitra,Gopi,3,2,66.7,1,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Pabitra,Manjunath H,3,2,66.7,1,0,0,1
+22632662,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Pavan,2,2,100.0,0,0,0,1
+22632662,2,Weekend Warriors (WW),Pavan,Vinod Reddy,4,2,50.0,5,1,0,0
+22632662,2,Weekend Warriors (WW),shaik azeed,Sudhir Midtown,3,2,66.7,1,0,0,0
+22632662,2,Weekend Warriors (WW),shaik azeed,Sudheer Nidiginti,4,2,50.0,2,0,0,0
+22632662,2,Weekend Warriors (WW),Srinivas Vemulapalli,Sudheer Nidiginti,4,2,50.0,3,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Leel,5,2,40.0,6,0,0,1
+22786417,1,Royal Cricket Blasters (RCB),Firoz,Vinay KS,3,2,66.7,1,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Venkat A,Murali Cn Cricket,3,2,66.7,1,0,0,0
+22786417,2,Weekend Warriors (WW),Arun,Venkat A,4,2,50.0,5,1,0,0
+22786417,2,Weekend Warriors (WW),Pavan,Rajkumar Muddasu,2,2,100.0,0,0,0,1
+22786417,2,Weekend Warriors (WW),Srinivas Vemulapalli,Mahesh Reddy,3,2,66.7,1,0,0,1
+22786418,1,Royal Cricket Blasters (RCB),Venkat A,Leel,5,2,40.0,8,0,1,0
+22786418,1,Royal Cricket Blasters (RCB),Pabitra,Pavan,3,2,66.7,2,0,0,0
+22786418,1,Royal Cricket Blasters (RCB),Pabitra,Vinay KS,2,2,100.0,0,0,0,1
+22786418,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Arun,4,2,50.0,5,1,0,0
+22786418,1,Royal Cricket Blasters (RCB),Pabitra,Arun,3,2,66.7,4,1,0,0
+22786418,2,Weekend Warriors (WW),Leel,GIRISH G,2,2,100.0,0,0,0,1
+22786418,2,Weekend Warriors (WW),Leel,Venkat A,2,2,100.0,0,0,0,1
+22786418,2,Weekend Warriors (WW),Jithin Tj,RK,5,2,40.0,8,0,1,0
+22786418,2,Weekend Warriors (WW),Mahesh,Mahesh Reddy,4,2,50.0,3,0,0,1
+22786418,2,Weekend Warriors (WW),Leel,Srikanta Maddara,4,2,50.0,3,0,0,0
+22786418,2,Weekend Warriors (WW),Srinivas Vemulapalli,Firoz,2,2,100.0,0,0,0,1
+22786418,2,Weekend Warriors (WW),Srinivas Vemulapalli,Pabitra,3,2,66.7,1,0,0,0
+22786419,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Mahesh,4,2,50.0,2,0,0,0
+22786419,1,Royal Cricket Blasters (RCB),Venkat A,Pavan,4,2,50.0,8,0,1,1
+22786419,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Murali Cn Cricket,4,2,50.0,2,0,0,0
+22786419,2,Weekend Warriors (WW),Srinivas Vemulapalli,Mahesh Reddy,4,2,50.0,2,0,0,1
+22786419,2,Weekend Warriors (WW),Arun,Mahesh Reddy,4,2,50.0,2,0,0,0
+22786419,2,Weekend Warriors (WW),Jithin Tj,RK,3,2,66.7,1,0,0,1
+22786419,2,Weekend Warriors (WW),Mahesh,Mahesh Reddy,4,2,50.0,2,0,0,0
+22786419,2,Weekend Warriors (WW),Mahesh,Firoz,3,2,66.7,1,0,0,1
+22943979,1,Weekend Warriors (WW),Mithun,Firoz,3,2,66.7,2,0,0,1
+22943979,1,Weekend Warriors (WW),Gopi,Venkat A,2,2,100.0,0,0,0,1
+22943979,1,Weekend Warriors (WW),Arun,Venkat A,3,2,66.7,1,0,0,0
+22943979,1,Weekend Warriors (WW),Mithun,Ashok adapala,6,2,33.3,4,0,0,0
+22943979,1,Weekend Warriors (WW),Gopi,Ashok adapala,4,2,50.0,3,0,0,0
+22943979,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Jithin Tj,4,2,50.0,7,0,1,1
+22943979,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Leel,2,2,100.0,0,0,0,0
+22943980,1,Weekend Warriors (WW),Srinivas Vemulapalli,Venkat A,7,2,28.6,9,0,0,1
+22943980,1,Weekend Warriors (WW),Mithun,Srikanta Maddara,2,2,100.0,0,0,0,0
+22943980,1,Weekend Warriors (WW),Srinivas Vemulapalli,Firoz,2,2,100.0,0,0,0,1
+22943980,1,Weekend Warriors (WW),Gopi,Firoz,3,2,66.7,2,0,0,0
+22943980,1,Weekend Warriors (WW),Gopi,Pabitra,3,2,66.7,2,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Venkat A,Arun,2,2,100.0,0,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Pabitra,Leel,3,2,66.7,2,0,0,0
+22943981,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Arun,3,2,66.7,1,0,0,0
+22943981,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Arun,5,2,40.0,14,0,2,0
+22943981,1,Royal Cricket Blasters (RCB),Pabitra,Arun,6,2,33.3,18,3,1,0
+22943981,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Arun,5,2,40.0,7,1,0,0
+22943981,1,Royal Cricket Blasters (RCB),Venkat A,Arun,5,2,40.0,10,0,1,0
+22943981,1,Royal Cricket Blasters (RCB),Pabitra,GIRISH G,5,2,40.0,9,0,1,0
+22943981,2,Weekend Warriors (WW),Vinay KS,Lokesh kumar YC,2,2,100.0,0,0,0,1
+22943981,2,Weekend Warriors (WW),Manjunath H,Ashok,2,2,100.0,0,0,0,1
+22943981,2,Weekend Warriors (WW),Vinay KS,Subbu,3,2,66.7,2,0,0,1
+22943981,2,Weekend Warriors (WW),Jithin Tj,Srikanta Maddara,2,2,100.0,0,0,0,0
+23064193,1,Weekend Warriors (WW),Jithin Tj,Balaji Balaraju,2,2,100.0,0,0,0,1
+23064193,1,Weekend Warriors (WW),Gopi,Rajkumar Muddasu,3,2,66.7,1,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Ashok,Manjunath H,5,2,40.0,5,0,0,1
+23064208,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Jithin Tj,3,2,66.7,4,1,0,0
+23064208,1,Royal Cricket Blasters (RCB),Venkat A,Manjunath H,3,2,66.7,1,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Venkat A,Arun,2,2,100.0,0,0,0,1
+23064208,1,Royal Cricket Blasters (RCB),Venkat A,Srinivas Vemulapalli,4,2,50.0,2,0,0,1
+23064208,1,Royal Cricket Blasters (RCB),Pabitra,Vinay KS,2,2,100.0,0,0,0,1
+23064208,1,Royal Cricket Blasters (RCB),Venkat A,Vinay KS,3,2,66.7,1,0,0,0
+23064208,2,Weekend Warriors (WW),Srinivas Vemulapalli,RK,6,2,33.3,11,0,1,0
+23064208,2,Weekend Warriors (WW),Srinivas Vemulapalli,Karthik Reddy,2,2,100.0,0,0,0,0
+23064208,2,Weekend Warriors (WW),Gopi,seenu,3,2,66.7,4,1,0,0
+23064208,2,Weekend Warriors (WW),Gopi,Subbu,4,2,50.0,2,0,0,0
+23110064,1,Weekend Warriors (WW),Jithin Tj,Rajkumar Muddasu,6,2,33.3,12,0,1,0
+23110064,1,Weekend Warriors (WW),Mahesh,Lokesh kumar YC,2,2,100.0,0,0,0,1
+23110064,1,Weekend Warriors (WW),Mahesh,Pabitra,3,2,66.7,1,0,0,1
+23110064,1,Weekend Warriors (WW),Mahesh,Ashok adapala,5,2,40.0,4,0,0,0
+23110064,1,Weekend Warriors (WW),Gopi,Pabitra,4,2,50.0,3,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Murali Cn Cricket,4,2,50.0,5,1,0,0
+23110064,2,Royal Cricket Blasters (RCB),Srikanta Maddara,GIRISH G,6,2,33.3,5,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Vinay KS,4,2,50.0,3,0,0,0
+23247962,1,Weekend Warriors (WW),Jithin Tj,Balaji Balaraju,4,2,50.0,3,0,0,0
+23247962,1,Weekend Warriors (WW),Srinivas Vemulapalli,Rajkumar Muddasu,4,2,50.0,5,1,0,1
+23247962,1,Weekend Warriors (WW),Jithin Tj,Subbu,3,2,66.7,2,0,0,1
+23247962,1,Weekend Warriors (WW),Mahesh,Subbu,4,2,50.0,3,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Vinod Reddy,Mahesh,2,2,100.0,0,0,0,1
+23247962,2,Royal Cricket Blasters (RCB),Karthik Reddy,Jithin Tj,5,2,40.0,9,0,1,1
+23247962,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Mahesh,3,2,66.7,2,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Jithin Tj,3,2,66.7,1,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Pabitra,Vinay KS,2,2,100.0,0,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Pabitra,Arun 102.raaga,2,2,100.0,0,0,0,1
+23247977,1,Weekend Warriors (WW),Mahesh,RK,3,2,66.7,4,1,0,1
+23247977,1,Weekend Warriors (WW),Jithin Tj,Ashik Jain,3,2,66.7,1,0,0,0
+23247977,1,Weekend Warriors (WW),Gopi,Pabitra,3,2,66.7,6,0,1,0
+23247977,2,Royal Cricket Blasters (RCB),Vinod Reddy,Mithun,3,2,66.7,6,0,1,2
+23247977,2,Royal Cricket Blasters (RCB),Vinod Reddy,Gopi,2,2,100.0,0,0,0,1
+23247977,2,Royal Cricket Blasters (RCB),Karthik Reddy,Leel,4,2,50.0,3,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Arun 102.raaga,2,2,100.0,0,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Satyam Goyal,4,2,50.0,3,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Karthik Reddy,Arun 102.raaga,3,2,66.7,2,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Karthik Reddy,Satyam Goyal,3,2,66.7,1,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Pabitra,Manjunath H,2,2,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Vinod Reddy,Mahesh,4,2,50.0,2,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Vinod Reddy,Jithin Tj,4,2,50.0,2,0,0,0
+23247987,1,Royal Cricket Blasters (RCB),Venkat A,Leel,2,2,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Vinay KS,5,2,40.0,9,0,1,0
+23247987,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Manjunath H,5,2,40.0,9,0,1,0
+23247987,2,Weekend Warriors (WW),Jithin Tj,Balaji Balaraju,2,2,100.0,0,0,0,1
+23247987,2,Weekend Warriors (WW),Gopi,Balaji Balaraju,2,2,100.0,0,0,0,0
+23247987,2,Weekend Warriors (WW),Srinivas Vemulapalli,Sudheer Nidiginti,2,2,100.0,0,0,0,1
+23247987,2,Weekend Warriors (WW),Mahesh,Sudheer Nidiginti,4,2,50.0,2,0,0,0
+23247987,2,Weekend Warriors (WW),Leel,Sudheer Nidiginti,3,2,66.7,1,0,0,0
 23454074,1,Weekend Warriors (WW),Srinivas Vemulapalli,Rajkumar Muddasu,4,2,50.0,6,1,0,1
 23454074,1,Weekend Warriors (WW),Gopi,Rajkumar Muddasu,5,2,40.0,6,1,0,0
 23454074,1,Weekend Warriors (WW),Arun,Sarat Kumar,6,2,33.3,10,2,0,1
@@ -37,6 +345,192 @@ match_id,innings,batting_team,bowler,batsman,total_balls,dot_balls,dot_pct,runs_
 23454111,2,Royal Cricket Blasters (RCB),Mithun,Manjunath H,4,2,50.0,5,1,0,1
 23454111,2,Royal Cricket Blasters (RCB),Mithun,Vinay KS,2,2,100.0,0,0,0,1
 23454111,2,Royal Cricket Blasters (RCB),Vinod Reddy,Vinay KS,5,2,40.0,5,1,0,0
+22632660,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Pavan,3,1,33.3,7,0,1,0
+22632660,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vinay KS,3,1,33.3,3,0,0,0
+22632660,1,Royal Cricket Blasters (RCB),Vinod Reddy,Arun,3,1,33.3,2,0,0,0
+22632660,2,Weekend Warriors (WW),Gopi,Mahesh Reddy,3,1,33.3,3,0,0,0
+22632660,2,Weekend Warriors (WW),Gopi,Rajkumar Muddasu,3,1,33.3,4,0,0,1
+22632660,2,Weekend Warriors (WW),Srinivas Vemulapalli,Rajkumar Muddasu,5,1,20.0,7,0,0,0
+22632660,2,Weekend Warriors (WW),Gopi,Srikanta Maddara,1,1,100.0,0,0,0,0
+22632660,2,Weekend Warriors (WW),Gopi,Sudhir Midtown,1,1,100.0,0,0,0,1
+22632660,2,Weekend Warriors (WW),Deepak Kumar,RK,4,1,25.0,9,0,1,0
+22632660,2,Weekend Warriors (WW),shaik azeed,seenu,1,1,100.0,0,0,0,1
+22632660,2,Weekend Warriors (WW),Arun,RK,4,1,25.0,9,2,0,0
+22632660,2,Weekend Warriors (WW),Srinivas Vemulapalli,Subbu,1,1,100.0,0,0,0,1
+22632661,1,Royal Cricket Blasters (RCB),Venkat A,Murali Cn Cricket,2,1,50.0,1,0,0,1
+22632661,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Murali Cn Cricket,3,1,33.3,3,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Arun,2,1,50.0,1,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Venkat A,Vinay KS,3,1,33.3,3,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,shaik azeed,1,1,100.0,0,0,0,1
+22632661,2,Weekend Warriors (WW),Arun,Vinod Reddy,4,1,25.0,4,0,0,0
+22632661,2,Weekend Warriors (WW),Arun,Venkat A,1,1,100.0,0,0,0,1
+22632661,2,Weekend Warriors (WW),Srinivas Vemulapalli,Vinod Reddy,2,1,50.0,1,0,0,0
+22632661,2,Weekend Warriors (WW),Deepak Kumar,Srikanta Maddara,2,1,50.0,1,0,0,0
+22632661,2,Weekend Warriors (WW),shaik azeed,Subbu,2,1,50.0,1,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Murali Cn Cricket,3,1,33.3,7,0,1,1
+22632662,1,Royal Cricket Blasters (RCB),Vinod Reddy,Murali Cn Cricket,3,1,33.3,2,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Venkat A,Vishwanath Cricket,4,1,25.0,4,0,0,1
+22632662,1,Royal Cricket Blasters (RCB),Pabitra,Arun 102.raaga,1,1,100.0,0,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Manjunath H,3,1,33.3,3,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Pabitra,Satyam Goyal,1,1,100.0,0,0,0,1
+22632662,2,Weekend Warriors (WW),Vinay KS,Subbu,3,1,33.3,4,0,0,1
+22632662,2,Weekend Warriors (WW),Pavan,Subbu,2,1,50.0,1,0,0,0
+22632662,2,Weekend Warriors (WW),Arun,Subbu,1,1,100.0,0,0,0,0
+22632662,2,Weekend Warriors (WW),Arun,seenu,1,1,100.0,0,0,0,1
+22632662,2,Weekend Warriors (WW),Arun,Vinod Reddy,4,1,25.0,9,0,1,0
+22632662,2,Weekend Warriors (WW),shaik azeed,seenu,3,1,33.3,7,0,1,0
+22632662,2,Weekend Warriors (WW),shaik azeed,Mahesh Reddy,1,1,100.0,0,0,0,1
+22632662,2,Weekend Warriors (WW),Pavan,Sudhir Midtown,2,1,50.0,1,0,0,0
+22632662,2,Weekend Warriors (WW),Srinivas Vemulapalli,Sudhir Midtown,2,1,50.0,1,0,0,0
+22632662,2,Weekend Warriors (WW),Arun,Mahesh Reddy,2,1,50.0,1,0,0,0
+22632662,2,Weekend Warriors (WW),Arun,Venkat A,1,1,100.0,0,0,0,1
+22632662,2,Weekend Warriors (WW),Srinivas Vemulapalli,Venkat A,2,1,50.0,1,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Firoz,Murali Cn Cricket,3,1,33.3,3,0,0,1
+22786417,1,Royal Cricket Blasters (RCB),Venkat A,Vinay KS,2,1,50.0,1,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Venkat A,Pavan,1,1,100.0,0,0,0,1
+22786417,2,Weekend Warriors (WW),Pavan,Sudheer Nidiginti,2,1,50.0,1,0,0,1
+22786417,2,Weekend Warriors (WW),Arun,Sudheer Nidiginti,2,1,50.0,1,0,0,0
+22786417,2,Weekend Warriors (WW),Jithin Tj,Sudheer Nidiginti,3,1,33.3,2,0,0,0
+22786417,2,Weekend Warriors (WW),Pavan,Venkat A,1,1,100.0,0,0,0,1
+22786417,2,Weekend Warriors (WW),Srinivas Vemulapalli,Venkat A,2,1,50.0,2,0,0,0
+22786417,2,Weekend Warriors (WW),Srinivas Vemulapalli,RK,1,1,100.0,0,0,0,1
+22786418,1,Royal Cricket Blasters (RCB),Venkat A,Murali Cn Cricket,1,1,100.0,0,0,0,1
+22786418,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Leel,2,1,50.0,4,1,0,1
+22786418,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Leel,1,1,100.0,0,0,0,0
+22786418,1,Royal Cricket Blasters (RCB),Firoz,Arun,5,1,20.0,18,1,2,0
+22786418,1,Royal Cricket Blasters (RCB),Firoz,Vijay 208,1,1,100.0,0,0,0,1
+22786418,1,Royal Cricket Blasters (RCB),Pabitra,Vijay 208,3,1,33.3,3,0,0,0
+22786418,2,Weekend Warriors (WW),Murali Cn Cricket,Sudheer Nidiginti,1,1,100.0,0,0,0,1
+22786418,2,Weekend Warriors (WW),Leel,Subbu,1,1,100.0,0,0,0,0
+22786418,2,Weekend Warriors (WW),Leel,Sudheer Nidiginti,1,1,100.0,0,0,0,1
+22786418,2,Weekend Warriors (WW),Vinay KS,Venkat A,4,1,25.0,9,0,1,0
+22786418,2,Weekend Warriors (WW),Vinay KS,RK,3,1,33.3,5,1,0,1
+22786418,2,Weekend Warriors (WW),Mahesh,RK,3,1,33.3,2,0,0,0
+22786418,2,Weekend Warriors (WW),Leel,Rajkumar Muddasu,2,1,50.0,1,0,0,1
+22786419,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Leel,1,1,100.0,0,0,0,1
+22786419,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Jithin Tj,1,1,100.0,0,0,0,1
+22786419,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Jithin Tj,1,1,100.0,0,0,0,0
+22786419,1,Royal Cricket Blasters (RCB),Venkat A,Jithin Tj,2,1,50.0,6,0,1,0
+22786419,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vinay KS,2,1,50.0,1,0,0,1
+22786419,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Murali Cn Cricket,2,1,50.0,1,0,0,0
+22786419,1,Royal Cricket Blasters (RCB),Pabitra,Deepak Kumar,1,1,100.0,0,0,0,1
+22786419,1,Royal Cricket Blasters (RCB),Pabitra,Vijay 208,1,1,100.0,0,0,0,1
+22786419,2,Weekend Warriors (WW),Arun,Sudheer Nidiginti,4,1,25.0,4,0,0,0
+22786419,2,Weekend Warriors (WW),Arun,Subbu,3,1,33.3,2,0,0,1
+22786419,2,Weekend Warriors (WW),Pavan,Subbu,1,1,100.0,0,0,0,0
+22786419,2,Weekend Warriors (WW),Srinivas Vemulapalli,Venkat A,1,1,100.0,0,0,0,1
+22786419,2,Weekend Warriors (WW),Srinivas Vemulapalli,Firoz,3,1,33.3,2,0,0,0
+22943979,1,Weekend Warriors (WW),Mithun,Lokesh kumar YC,1,1,100.0,0,0,0,0
+22943979,1,Weekend Warriors (WW),Gopi,Sudhir Midtown,2,1,50.0,1,0,0,0
+22943979,1,Weekend Warriors (WW),Srinivas Vemulapalli,Venkat A,2,1,50.0,2,0,0,1
+22943979,1,Weekend Warriors (WW),Srinivas Vemulapalli,Ashok adapala,1,1,100.0,0,0,0,1
+22943979,1,Weekend Warriors (WW),Arun,Ashok adapala,3,1,33.3,2,0,0,0
+22943979,1,Weekend Warriors (WW),Mithun,Venkat A,3,1,33.3,2,0,0,0
+22943979,1,Weekend Warriors (WW),Gopi,Mahesh Reddy,2,1,50.0,1,0,0,0
+22943979,1,Weekend Warriors (WW),Jithin Tj,Mahesh Reddy,4,1,25.0,6,1,0,0
+22943979,1,Weekend Warriors (WW),Jithin Tj,Ashok adapala,3,1,33.3,3,0,0,0
+22943979,1,Weekend Warriors (WW),Srinivas Vemulapalli,Mahesh Reddy,2,1,50.0,1,0,0,0
+22943979,1,Weekend Warriors (WW),Jithin Tj,Ashok,1,1,100.0,0,0,0,0
+22943979,2,Royal Cricket Blasters (RCB),Venkat A,Vinay KS,5,1,20.0,4,0,0,1
+22943979,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Jithin Tj,2,1,50.0,1,0,0,0
+22943979,2,Royal Cricket Blasters (RCB),Venkat A,Manjunath H,1,1,100.0,0,0,0,1
+22943979,2,Royal Cricket Blasters (RCB),Firoz,GIRISH G,1,1,100.0,0,0,0,1
+22943979,2,Royal Cricket Blasters (RCB),Firoz,Murali Cn Cricket,1,1,100.0,0,0,0,1
+22943979,2,Royal Cricket Blasters (RCB),Pabitra,Murali Cn Cricket,2,1,50.0,1,0,0,0
+22943980,1,Weekend Warriors (WW),Leel,Srikanta Maddara,2,1,50.0,1,0,0,0
+22943980,1,Weekend Warriors (WW),Mithun,RK,2,1,50.0,1,0,0,0
+22943980,1,Weekend Warriors (WW),Gopi,Sudhir Midtown,1,1,100.0,0,0,0,0
+22943980,1,Weekend Warriors (WW),Arun,RK,1,1,100.0,0,0,0,0
+22943980,1,Weekend Warriors (WW),Arun,Subbu,1,1,100.0,0,0,0,1
+22943980,1,Weekend Warriors (WW),Jithin Tj,Firoz,4,1,25.0,7,1,0,0
+22943980,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Gopi,1,1,100.0,0,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Srinivas Vemulapalli,1,1,100.0,0,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Srinivas Vemulapalli,1,1,100.0,0,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Leel,3,1,33.3,7,0,1,1
+22943980,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Vinay KS,2,1,50.0,1,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Venkat A,Mithun,2,1,50.0,1,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Pabitra,Murali Cn Cricket,1,1,100.0,0,0,0,1
+22943980,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Arun,1,1,100.0,0,0,0,0
+22943981,1,Royal Cricket Blasters (RCB),Ashok,Manjunath H,3,1,33.3,7,0,1,0
+22943981,1,Royal Cricket Blasters (RCB),Venkat A,Leel,1,1,100.0,0,0,0,1
+22943981,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,GIRISH G,1,1,100.0,0,0,0,1
+22943981,1,Royal Cricket Blasters (RCB),Pabitra,Vinay KS,1,1,100.0,0,0,0,1
+22943981,2,Weekend Warriors (WW),Vinay KS,Pabitra,1,1,100.0,0,0,0,1
+22943981,2,Weekend Warriors (WW),Vinay KS,Sudhir Midtown,4,1,25.0,9,0,1,1
+22943981,2,Weekend Warriors (WW),Manjunath H,Pabitra,1,1,100.0,0,0,0,0
+22943981,2,Weekend Warriors (WW),Manjunath H,Srikanta Maddara,1,1,100.0,0,0,0,1
+22943981,2,Weekend Warriors (WW),Manjunath H,Sudhir Midtown,2,1,50.0,1,0,0,0
+22943981,2,Weekend Warriors (WW),Vinay KS,Srikanta Maddara,1,1,100.0,0,0,0,0
+22943981,2,Weekend Warriors (WW),Murali Cn Cricket,Subbu,4,1,25.0,5,0,0,0
+22943981,2,Weekend Warriors (WW),Murali Cn Cricket,Srikanta Maddara,1,1,100.0,0,0,0,0
+22943981,2,Weekend Warriors (WW),Gopi,Firoz,1,1,100.0,0,0,0,1
+23064193,1,Weekend Warriors (WW),Gopi,Srikanta Maddara,3,1,33.3,2,0,0,0
+23064193,1,Weekend Warriors (WW),Gopi,Subbu,2,1,50.0,2,0,0,1
+23064193,1,Weekend Warriors (WW),Arun,Srikanta Maddara,2,1,50.0,2,0,0,0
+23064193,1,Weekend Warriors (WW),Leel,Venkat A,1,1,100.0,0,0,0,1
+23064193,1,Weekend Warriors (WW),Mahesh,Ashok,2,1,50.0,1,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Gopi,4,1,25.0,13,0,2,1
+23064193,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vijay 208,1,1,100.0,0,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Kranthi 202 Midtown Raaga,1,1,100.0,0,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Vinay KS,2,1,50.0,1,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Manjunath H,1,1,100.0,0,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Arun 102.raaga,1,1,100.0,0,0,0,1
+23064193,2,Royal Cricket Blasters (RCB),Pabitra,Arun 102.raaga,2,1,50.0,1,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Manjunath H,4,1,25.0,3,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Pabitra,Jithin Tj,2,1,50.0,1,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Venkat A,Murali Cn Cricket,1,1,100.0,0,0,0,1
+23064208,1,Royal Cricket Blasters (RCB),Venkat A,Leel,1,1,100.0,0,0,0,1
+23064208,1,Royal Cricket Blasters (RCB),Pabitra,Murali Cn Cricket,3,1,33.3,8,0,1,0
+23064208,2,Weekend Warriors (WW),Vinay KS,Rajkumar Muddasu,2,1,50.0,1,0,0,0
+23064208,2,Weekend Warriors (WW),Jithin Tj,Rajkumar Muddasu,1,1,100.0,0,0,0,0
+23064208,2,Weekend Warriors (WW),Jithin Tj,RK,2,1,50.0,1,0,0,0
+23064208,2,Weekend Warriors (WW),Leel,Karthik Reddy,3,1,33.3,3,0,0,0
+23064208,2,Weekend Warriors (WW),Jithin Tj,seenu,4,1,25.0,10,2,0,0
+23064208,2,Weekend Warriors (WW),Gopi,Sudheer Nidiginti,3,1,33.3,10,1,1,1
+23110064,1,Weekend Warriors (WW),Mahesh,RK,1,1,100.0,0,0,0,0
+23110064,1,Weekend Warriors (WW),Gopi,Ashok adapala,2,1,50.0,1,0,0,0
+23110064,1,Weekend Warriors (WW),Mahesh,Ashok,1,1,100.0,0,0,0,1
+23110064,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Murali Cn Cricket,1,1,100.0,0,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vijay 208,1,1,100.0,0,0,0,1
+23110064,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Vijay 208,1,1,100.0,0,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,GIRISH G,3,1,33.3,2,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Pabitra,Mahesh,3,1,33.3,3,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Mahesh,2,1,50.0,1,0,0,0
+23247962,1,Weekend Warriors (WW),Mithun,Karthik Reddy,2,1,50.0,2,0,0,0
+23247962,1,Weekend Warriors (WW),Mithun,Venkat A,1,1,100.0,0,0,0,1
+23247962,1,Weekend Warriors (WW),Srinivas Vemulapalli,Ashok adapala,3,1,33.3,2,0,0,0
+23247962,1,Weekend Warriors (WW),Jithin Tj,Ashok adapala,2,1,50.0,1,0,0,0
+23247962,1,Weekend Warriors (WW),Srinivas Vemulapalli,RK,1,1,100.0,0,0,0,1
+23247962,2,Royal Cricket Blasters (RCB),Vinod Reddy,Mithun,2,1,50.0,1,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Jithin Tj,2,1,50.0,1,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Vinod Reddy,Vinay KS,1,1,100.0,0,0,0,1
+23247962,2,Royal Cricket Blasters (RCB),Pabitra,Satyam Goyal,1,1,100.0,0,0,0,1
+23247977,1,Weekend Warriors (WW),Leel,Balaji Balaraju,3,1,33.3,2,0,0,0
+23247977,1,Weekend Warriors (WW),Leel,Ashik Jain,3,1,33.3,2,0,0,1
+23247977,1,Weekend Warriors (WW),Mithun,Ashik Jain,3,1,33.3,2,0,0,0
+23247977,1,Weekend Warriors (WW),Srinivas Vemulapalli,Venkat A,3,1,33.3,2,0,0,0
+23247977,1,Weekend Warriors (WW),Srinivas Vemulapalli,Balaji Balaraju,3,1,33.3,7,0,1,0
+23247977,1,Weekend Warriors (WW),Mithun,Pabitra,2,1,50.0,1,0,0,1
+23247977,1,Weekend Warriors (WW),Gopi,Srikanta Maddara,3,1,33.3,7,0,1,0
+23247977,2,Royal Cricket Blasters (RCB),Vinod Reddy,Leel,3,1,33.3,2,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Venkat A,Leel,4,1,25.0,4,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Gopi,2,1,50.0,1,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Vinod Reddy,Satyam Goyal,1,1,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Vinod Reddy,Satyam Goyal,1,1,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Vinod Reddy,Gopi,1,1,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Vinod Reddy,Kranthi 202 Midtown Raaga,1,1,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Venkat A,Mithun,1,1,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Venkat A,Mahesh,3,1,33.3,2,0,0,0
+23247987,1,Royal Cricket Blasters (RCB),Karthik Reddy,Jithin Tj,1,1,100.0,0,0,0,1
+23247987,1,Royal Cricket Blasters (RCB),Venkat A,Jithin Tj,3,1,33.3,5,1,0,1
+23247987,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Manjunath H,1,1,100.0,0,0,0,1
+23247987,2,Weekend Warriors (WW),Srinivas Vemulapalli,Venkat A,3,1,33.3,3,0,0,1
+23247987,2,Weekend Warriors (WW),Jithin Tj,RK,2,1,50.0,1,0,0,1
+23247987,2,Weekend Warriors (WW),Jithin Tj,Subbu,1,1,100.0,0,0,0,1
+23247987,2,Weekend Warriors (WW),Srinivas Vemulapalli,Karthik Reddy,1,1,100.0,0,0,0,0
+23247987,2,Weekend Warriors (WW),Srinivas Vemulapalli,Subbu,2,1,50.0,1,0,0,0
+23247987,2,Weekend Warriors (WW),Mahesh,Rajkumar Muddasu,2,1,50.0,1,0,0,0
+23247987,2,Weekend Warriors (WW),Leel,Rajkumar Muddasu,3,1,33.3,3,0,0,0
 23454074,1,Weekend Warriors (WW),Gopi,Firoz,2,1,50.0,1,0,0,0
 23454074,1,Weekend Warriors (WW),Mahesh,Srikanta Maddara,1,1,100.0,0,0,0,1
 23454074,1,Weekend Warriors (WW),Arun,Balaji Balaraju,2,1,50.0,0,0,0,0
@@ -79,6 +573,112 @@ match_id,innings,batting_team,bowler,batsman,total_balls,dot_balls,dot_pct,runs_
 23454111,2,Royal Cricket Blasters (RCB),Vinod Reddy,Mahesh,1,1,100.0,0,0,0,1
 23454111,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Mahesh,2,1,50.0,1,0,0,0
 23454111,2,Royal Cricket Blasters (RCB),Mithun,Leel,3,1,33.3,6,1,0,0
+22632660,1,Royal Cricket Blasters (RCB),Vinod Reddy,Vinay KS,2,0,0.0,2,0,0,0
+22632660,1,Royal Cricket Blasters (RCB),Venkat A,Arun,2,0,0.0,2,0,0,0
+22632660,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Manjunath H,1,0,0.0,1,0,0,0
+22632660,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Manjunath H,2,0,0.0,2,0,0,0
+22632660,2,Weekend Warriors (WW),shaik azeed,Vinod Reddy,1,0,0.0,6,0,1,0
+22632660,2,Weekend Warriors (WW),Srinivas Vemulapalli,Mahesh Reddy,1,0,0.0,1,0,0,0
+22632660,2,Weekend Warriors (WW),Arun,Rajkumar Muddasu,2,0,0.0,3,0,0,0
+22632660,2,Weekend Warriors (WW),Deepak Kumar,Balaji Balaraju,2,0,0.0,2,0,0,0
+22632660,2,Weekend Warriors (WW),Pavan,Balaji Balaraju,1,0,0.0,1,0,0,0
+22632660,2,Weekend Warriors (WW),Arun,seenu,2,0,0.0,2,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vinay KS,1,0,0.0,1,0,0,0
+22632661,1,Royal Cricket Blasters (RCB),Pabitra,shaik azeed,1,0,0.0,1,0,0,0
+22632661,2,Weekend Warriors (WW),Arun,Sudhir Midtown,1,0,0.0,1,0,0,0
+22632661,2,Weekend Warriors (WW),Pavan,Venkat A,2,0,0.0,4,0,0,0
+22632661,2,Weekend Warriors (WW),Srinivas Vemulapalli,seenu,3,0,0.0,8,0,1,0
+22632661,2,Weekend Warriors (WW),Deepak Kumar,seenu,1,0,0.0,1,0,0,0
+22632661,2,Weekend Warriors (WW),Deepak Kumar,Subbu,1,0,0.0,1,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Vinod Reddy,Vishwanath Cricket,1,0,0.0,1,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Venkat A,shaik azeed,1,0,0.0,1,0,0,0
+22632662,1,Royal Cricket Blasters (RCB),Venkat A,Arun,1,0,0.0,1,0,0,0
+22632662,2,Weekend Warriors (WW),shaik azeed,Venkat A,2,0,0.0,2,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Jithin Tj,1,0,0.0,1,0,0,0
+22786417,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Jithin Tj,2,0,0.0,2,0,0,0
+22786417,2,Weekend Warriors (WW),Pavan,Srikanta Maddara,1,0,0.0,6,0,1,0
+22786417,2,Weekend Warriors (WW),Jithin Tj,Venkat A,3,0,0.0,4,0,0,0
+22786417,2,Weekend Warriors (WW),Pavan,GIRISH G,2,0,0.0,3,0,0,0
+22786417,2,Weekend Warriors (WW),Arun,GIRISH G,1,0,0.0,1,0,0,0
+22786417,2,Weekend Warriors (WW),Mahesh,Subbu,1,0,0.0,1,0,0,0
+22786417,2,Weekend Warriors (WW),Deepak Kumar,RK,1,0,0.0,0,0,0,0
+22786418,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Jithin Tj,1,0,0.0,1,0,0,0
+22786418,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Pavan,4,0,0.0,11,2,0,0
+22786418,1,Royal Cricket Blasters (RCB),Pabitra,Leel,1,0,0.0,1,0,0,0
+22786418,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vinay KS,2,0,0.0,3,0,0,0
+22786418,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Vinay KS,2,0,0.0,8,0,1,0
+22786418,2,Weekend Warriors (WW),Srinivas Vemulapalli,Lokesh kumar YC,1,0,0.0,1,0,0,0
+22786418,2,Weekend Warriors (WW),Jithin Tj,Rajkumar Muddasu,1,0,0.0,1,0,0,0
+22786418,2,Weekend Warriors (WW),Mahesh,Rajkumar Muddasu,5,0,0.0,7,0,0,0
+22786418,2,Weekend Warriors (WW),Srinivas Vemulapalli,Mahesh Reddy,1,0,0.0,1,0,0,0
+22786419,2,Weekend Warriors (WW),Pavan,Lokesh kumar YC,3,0,0.0,9,0,1,0
+22786419,2,Weekend Warriors (WW),Pavan,Sudheer Nidiginti,1,0,0.0,1,0,0,0
+22786419,2,Weekend Warriors (WW),Arun,Lokesh kumar YC,1,0,0.0,1,0,0,0
+22786419,2,Weekend Warriors (WW),Jithin Tj,Mahesh Reddy,3,0,0.0,4,0,0,0
+22786419,2,Weekend Warriors (WW),Mahesh,RK,1,0,0.0,1,0,0,0
+22943979,1,Weekend Warriors (WW),Mithun,Sudhir Midtown,1,0,0.0,1,0,0,0
+22943979,1,Weekend Warriors (WW),Gopi,Firoz,2,0,0.0,2,0,0,0
+22943979,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Vinay KS,2,0,0.0,7,0,1,0
+22943979,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Jithin Tj,1,0,0.0,1,0,0,0
+22943980,1,Weekend Warriors (WW),Arun,Venkat A,4,0,0.0,5,0,0,0
+22943980,1,Weekend Warriors (WW),Arun,Mahesh Reddy,2,0,0.0,2,0,0,0
+22943980,1,Weekend Warriors (WW),Jithin Tj,Ashok,2,0,0.0,2,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Mithun,1,0,0.0,1,0,0,0
+22943980,2,Royal Cricket Blasters (RCB),Pabitra,Manjunath H,1,0,0.0,1,0,0,0
+22943981,1,Royal Cricket Blasters (RCB),Ashok,Arun,3,0,0.0,7,1,0,0
+22943981,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Manjunath H,1,0,0.0,1,0,0,0
+22943981,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Manjunath H,1,0,0.0,1,0,0,0
+22943981,2,Weekend Warriors (WW),Vinay KS,Ashok adapala,1,0,0.0,1,0,0,0
+22943981,2,Weekend Warriors (WW),Srinivas Vemulapalli,Subbu,2,0,0.0,5,1,0,0
+22943981,2,Weekend Warriors (WW),Srinivas Vemulapalli,Mahesh Reddy,1,0,0.0,1,0,0,0
+23064193,1,Weekend Warriors (WW),Gopi,Lokesh kumar YC,1,0,0.0,1,0,0,0
+23064193,1,Weekend Warriors (WW),Arun,Subbu,2,0,0.0,2,0,0,0
+23064193,1,Weekend Warriors (WW),Leel,Ashok adapala,1,0,0.0,1,0,0,0
+23064193,1,Weekend Warriors (WW),Arun,Venkat A,1,0,0.0,2,0,0,0
+23064193,1,Weekend Warriors (WW),Mahesh,Ashok adapala,1,0,0.0,1,0,0,0
+23064193,1,Weekend Warriors (WW),Jithin Tj,RK,1,0,0.0,2,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Mahesh,1,0,0.0,1,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Kranthi 202 Midtown Raaga,1,0,0.0,1,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Vijay 208,1,0,0.0,1,0,0,0
+23064193,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Vinay KS,1,0,0.0,1,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Ashok,Vijay 208,1,0,0.0,1,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Jithin Tj,1,0,0.0,1,0,0,0
+23064208,1,Royal Cricket Blasters (RCB),Pabitra,Srinivas Vemulapalli,1,0,0.0,1,0,0,0
+23064208,2,Weekend Warriors (WW),Arun,Rajkumar Muddasu,2,0,0.0,1,0,0,0
+23064208,2,Weekend Warriors (WW),Srinivas Vemulapalli,Rajkumar Muddasu,1,0,0.0,1,0,0,0
+23064208,2,Weekend Warriors (WW),Gopi,Karthik Reddy,2,0,0.0,2,0,0,0
+23110064,1,Weekend Warriors (WW),Srinivas Vemulapalli,Rajkumar Muddasu,2,0,0.0,2,0,0,0
+23110064,1,Weekend Warriors (WW),Arun,Rajkumar Muddasu,1,0,0.0,1,0,0,0
+23110064,1,Weekend Warriors (WW),Srinivas Vemulapalli,Ashok adapala,1,0,0.0,1,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Manjunath H,2,0,0.0,2,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Manjunath H,1,0,0.0,1,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Pabitra,GIRISH G,2,0,0.0,3,0,0,0
+23110064,2,Royal Cricket Blasters (RCB),Karthik Reddy,GIRISH G,1,0,0.0,1,0,0,0
+23247962,1,Weekend Warriors (WW),Gopi,Ashik Jain,3,0,0.0,3,0,0,0
+23247962,1,Weekend Warriors (WW),Gopi,Ashok adapala,3,0,0.0,4,0,0,0
+23247962,1,Weekend Warriors (WW),Mithun,Rajkumar Muddasu,2,0,0.0,1,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Karthik Reddy,Mahesh,1,0,0.0,1,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Venkat A,Jithin Tj,2,0,0.0,2,0,0,0
+23247962,2,Royal Cricket Blasters (RCB),Venkat A,Mahesh,1,0,0.0,1,0,0,0
+23247977,1,Weekend Warriors (WW),Mahesh,Sudheer Nidiginti,1,0,0.0,2,0,0,0
+23247977,1,Weekend Warriors (WW),Mahesh,Balaji Balaraju,2,0,0.0,7,0,1,0
+23247977,1,Weekend Warriors (WW),Jithin Tj,Balaji Balaraju,3,0,0.0,9,0,1,0
+23247977,1,Weekend Warriors (WW),Mithun,Balaji Balaraju,2,0,0.0,2,0,0,0
+23247977,1,Weekend Warriors (WW),Mithun,Srikanta Maddara,2,0,0.0,2,0,0,0
+23247977,1,Weekend Warriors (WW),Mahesh,Pabitra,1,0,0.0,2,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Venkat A,Gopi,2,0,0.0,2,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Karthik Reddy,Gopi,2,0,0.0,3,0,0,0
+23247977,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Leel,1,0,0.0,1,0,0,0
+23247987,1,Royal Cricket Blasters (RCB),Vinod Reddy,Srinivas Vemulapalli,1,0,0.0,1,0,0,0
+23247987,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Jithin Tj,1,0,0.0,1,0,0,0
+23247987,2,Weekend Warriors (WW),Srinivas Vemulapalli,Srikanta Maddara,3,0,0.0,4,0,0,0
+23247987,2,Weekend Warriors (WW),Leel,Srikanta Maddara,1,0,0.0,1,0,0,0
+23247987,2,Weekend Warriors (WW),Mithun,Vinod Reddy,3,0,0.0,9,0,1,0
+23247987,2,Weekend Warriors (WW),Mithun,Venkat A,3,0,0.0,4,0,0,0
+23247987,2,Weekend Warriors (WW),Mahesh,Vinod Reddy,1,0,0.0,6,0,0,0
+23247987,2,Weekend Warriors (WW),Jithin Tj,Venkat A,1,0,0.0,2,0,0,0
+23247987,2,Weekend Warriors (WW),Gopi,Subbu,1,0,0.0,1,0,0,0
+23247987,2,Weekend Warriors (WW),Srinivas Vemulapalli,Rajkumar Muddasu,1,0,0.0,1,0,0,1
 23454074,1,Weekend Warriors (WW),Srinivas Vemulapalli,Vinod Reddy,2,0,0.0,6,1,0,0
 23454074,1,Weekend Warriors (WW),Gopi,Karthik Reddy,2,0,0.0,2,0,0,1
 23454074,1,Weekend Warriors (WW),Srinivas Vemulapalli,Balaji Balaraju,1,0,0.0,1,0,0,0

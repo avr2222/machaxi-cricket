@@ -25,3 +25,180 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 23454074,2026-03-28,2,Weekend Warriors (WW),Lokesh kumar YC  (c),3.0,0,21,1,8,1,1,1,0,7.00
 23454074,2026-03-28,2,Weekend Warriors (WW),Sudheer Nidiginti,2.0,0,18,3,5,0,0,4,1,6.75
 23454074,2026-03-28,2,Weekend Warriors (WW),Srikanta Maddara,3.0,0,29,2,6,4,0,2,0,9.67
+23247987,2026-03-21,1,Weekend Warriors (WW),Pabitra,2.0,0,4,0,9,0,0,1,0,2.00
+23247987,2026-03-21,1,Weekend Warriors (WW),Srikanta Maddara,2.0,0,19,0,6,0,2,1,0,9.50
+23247987,2026-03-21,1,Weekend Warriors (WW),Sudheer Nidiginti,1.0,0,11,1,3,0,1,0,1,11.00
+23247987,2026-03-21,1,Weekend Warriors (WW),Venkat A,2.0,0,7,2,8,1,0,0,0,3.50
+23247987,2026-03-21,1,Weekend Warriors (WW),Vinod Reddy,2.0,0,5,4,7,0,0,0,0,2.50
+23247987,2026-03-21,1,Weekend Warriors (WW),Karthik Reddy,1.0,0,10,0,4,0,1,0,2,10.00
+23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Leel,2.0,0,7,0,7,0,0,1,0,3.50
+23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Mahesh,2.0,0,10,1,8,0,0,1,0,5.00
+23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,10,2,5,0,0,0,1,5.00
+23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Gopi,1.0,0,3,1,5,0,0,2,0,3.00
+23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Jithin Tj,1.0,0,4,2,4,0,0,1,0,4.00
+23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Mithun,2.0,1,13,2,6,0,1,0,0,6.50
+23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Mahesh,2.0,0,21,1,6,1,2,0,0,10.50
+23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Gopi,1.0,0,13,0,3,0,2,0,0,13.00
+23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,24,0,5,1,2,2,0,12.00
+23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,15,0,7,1,1,2,0,7.50
+23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Mithun,2.0,0,9,2,5,0,0,2,0,4.50
+23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Leel,1.0,0,5,0,2,0,0,1,0,5.00
+23247977,2026-03-21,2,Weekend Warriors (WW),Pabitra,2.0,1,1,2,11,0,0,0,0,0.50
+23247977,2026-03-21,2,Weekend Warriors (WW),Karthik Reddy,2.0,0,10,0,6,0,0,1,0,5.00
+23247977,2026-03-21,2,Weekend Warriors (WW),Sudheer Nidiginti,1.0,0,3,0,4,0,0,0,0,3.00
+23247977,2026-03-21,2,Weekend Warriors (WW),Vinod Reddy,2.0,0,11,0,9,0,1,2,0,5.50
+23247977,2026-03-21,2,Weekend Warriors (WW),Srikanta Maddara,1.0,0,2,1,4,0,0,0,0,2.00
+23247977,2026-03-21,2,Weekend Warriors (WW),Ashik Jain  (c),1.0,0,11,0,4,0,1,2,1,11.00
+23247977,2026-03-21,2,Weekend Warriors (WW),Venkat A,1.0,0,6,0,1,0,0,0,0,6.00
+23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Gopi,2.0,0,15,0,4,0,1,0,0,7.50
+23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Mahesh,2.0,0,17,0,9,1,1,4,0,8.50
+23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,9,0,8,0,0,3,0,4.50
+23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Mithun,3.0,0,8,0,13,0,0,1,0,2.67
+23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),3.0,0,16,2,11,2,0,2,0,5.33
+23247962,2026-03-21,2,Weekend Warriors (WW),Pabitra,2.0,0,5,2,9,0,0,1,0,2.50
+23247962,2026-03-21,2,Weekend Warriors (WW),Srikanta Maddara,2.0,0,15,0,7,1,1,1,0,7.50
+23247962,2026-03-21,2,Weekend Warriors (WW),Venkat A,3.0,1,5,1,13,0,0,0,0,1.67
+23247962,2026-03-21,2,Weekend Warriors (WW),Vinod Reddy,3.0,1,7,2,16,0,1,0,0,2.33
+23247962,2026-03-21,2,Weekend Warriors (WW),Sudheer Nidiginti,1.0,0,11,0,4,1,0,3,3,11.00
+23247962,2026-03-21,2,Weekend Warriors (WW),Karthik Reddy,1.0,0,12,0,2,0,1,2,0,12.00
+23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Mahesh,2.0,0,7,3,8,0,0,2,0,3.50
+23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Gopi,2.0,0,16,0,7,0,1,1,1,8.00
+23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,6,1,7,0,0,0,0,3.00
+23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,1,12,0,8,0,1,0,0,6.00
+23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Arun,1.0,0,8,0,3,0,0,2,1,8.00
+23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Leel,1.0,0,15,0,3,0,2,1,0,15.00
+23110064,2026-03-14,2,Weekend Warriors (WW),Sudheer Nidiginti,2.0,0,13,0,5,1,0,1,1,6.50
+23110064,2026-03-14,2,Weekend Warriors (WW),Pabitra,2.0,0,18,0,6,0,2,0,0,9.00
+23110064,2026-03-14,2,Weekend Warriors (WW),Karthik Reddy,1.0,0,16,0,3,1,1,0,1,16.00
+23110064,2026-03-14,2,Weekend Warriors (WW),Srikanta Maddara,2.0,0,13,0,6,0,1,0,0,6.50
+23110064,2026-03-14,2,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,0,6,2,7,0,0,0,0,3.00
+23064208,2026-03-14,1,Weekend Warriors (WW),Venkat A,3.0,0,9,3,13,0,0,3,1,3.00
+23064208,2026-03-14,1,Weekend Warriors (WW),Pabitra,2.0,0,12,0,7,0,1,0,1,6.00
+23064208,2026-03-14,1,Weekend Warriors (WW),Srikanta Maddara,2.0,0,9,0,8,1,0,1,0,4.50
+23064208,2026-03-14,1,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,0,24,0,5,2,1,2,1,12.00
+23064208,2026-03-14,1,Weekend Warriors (WW),Sudheer Nidiginti,2.0,0,18,0,4,2,0,2,1,9.00
+23064208,2026-03-14,1,Weekend Warriors (WW),Ashok,1.0,0,10,0,2,0,0,1,2,10.00
+23064208,2026-03-14,2,Royal Cricket Blasters (RCB),Gopi,2.0,0,20,1,5,2,1,2,0,10.00
+23064208,2026-03-14,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),3.0,0,18,1,11,1,1,0,0,6.00
+23064208,2026-03-14,2,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,13,0,7,2,0,1,0,6.50
+23064208,2026-03-14,2,Royal Cricket Blasters (RCB),Leel,1.0,0,16,0,4,0,0,7,2,16.00
+23064208,2026-03-14,2,Royal Cricket Blasters (RCB),Arun,2.0,0,14,0,6,0,1,2,0,7.00
+23064208,2026-03-14,2,Royal Cricket Blasters (RCB),Vinay KS,0.0,0,1,0,1,0,0,0,0,3.00
+23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,6,1,8,0,0,1,0,3.00
+23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Gopi,3.0,1,8,1,12,0,0,1,0,2.67
+23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,1,6,0,11,0,1,0,0,3.00
+23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Mahesh,2.0,0,11,2,8,0,1,1,0,5.50
+23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Arun,2.0,0,11,1,7,0,0,2,1,5.50
+23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Leel,1.0,0,2,1,4,0,0,0,0,2.00
+23064193,2026-03-14,2,Weekend Warriors (WW),Lokesh kumar YC  (c),3.0,0,17,3,13,0,2,1,1,5.67
+23064193,2026-03-14,2,Weekend Warriors (WW),Pabitra,1.0,0,9,0,4,0,1,2,0,9.00
+23064193,2026-03-14,2,Weekend Warriors (WW),Venkat A,2.0,2,1,2,17,0,0,0,1,0.38
+23064193,2026-03-14,2,Weekend Warriors (WW),Sudheer Nidiginti,2.0,0,9,2,7,0,0,3,0,4.50
+23064193,2026-03-14,2,Weekend Warriors (WW),Srikanta Maddara,2.0,0,5,2,9,0,0,1,0,2.50
+22943981,2026-03-08,1,Weekend Warriors (WW),Pabitra,2.0,0,27,1,5,3,2,0,0,13.50
+22943981,2026-03-08,1,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,0,15,1,7,2,0,1,1,7.50
+22943981,2026-03-08,1,Weekend Warriors (WW),Srikanta Maddara,2.0,0,12,0,8,1,1,0,0,6.00
+22943981,2026-03-08,1,Weekend Warriors (WW),Venkat A,2.0,0,12,1,8,0,1,0,0,6.00
+22943981,2026-03-08,1,Weekend Warriors (WW),Sudhir Midtown,1.0,0,19,0,2,0,2,4,0,19.00
+22943981,2026-03-08,1,Weekend Warriors (WW),Ashok,1.0,0,14,0,1,1,1,0,0,14.00
+22943981,2026-03-08,2,Royal Cricket Blasters (RCB),Gopi,2.0,0,13,1,9,0,2,0,0,6.50
+22943981,2026-03-08,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,13,0,8,2,0,2,1,6.50
+22943981,2026-03-08,2,Royal Cricket Blasters (RCB),Jithin Tj,1.0,1,0,1,6,0,0,0,0,0.00
+22943981,2026-03-08,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,2.0,0,13,1,6,0,0,2,1,6.50
+22943981,2026-03-08,2,Royal Cricket Blasters (RCB),Vinay KS,2.0,0,14,3,7,0,1,2,0,7.00
+22943981,2026-03-08,2,Royal Cricket Blasters (RCB),Manjunath,1.0,0,6,2,5,0,0,5,0,6.00
+22943980,2026-03-08,1,Royal Cricket Blasters (RCB),Gopi,3.0,1,8,3,14,0,0,0,0,2.67
+22943980,2026-03-08,1,Royal Cricket Blasters (RCB),Jithin Tj,1.0,0,9,0,1,1,0,0,0,9.00
+22943980,2026-03-08,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,12,0,6,0,0,2,0,6.00
+22943980,2026-03-08,1,Royal Cricket Blasters (RCB),Arun,2.0,0,11,0,5,0,0,2,1,5.50
+22943980,2026-03-08,1,Royal Cricket Blasters (RCB),Leel,2.0,0,10,0,7,0,0,2,1,5.00
+22943980,2026-03-08,1,Royal Cricket Blasters (RCB),Mithun,2.0,0,5,0,9,0,0,1,0,2.50
+22943980,2026-03-08,2,Weekend Warriors (WW),Pabitra,2.0,0,11,2,9,0,0,2,3,5.50
+22943980,2026-03-08,2,Weekend Warriors (WW),Lokesh kumar YC  (c),3.0,0,9,1,13,0,0,1,0,3.00
+22943980,2026-03-08,2,Weekend Warriors (WW),Sudhir Midtown,2.0,0,12,3,9,0,1,2,1,6.00
+22943980,2026-03-08,2,Weekend Warriors (WW),Venkat A,3.0,1,4,2,16,0,0,1,0,1.33
+22943980,2026-03-08,2,Weekend Warriors (WW),Srikanta Maddara,2.0,0,15,1,9,0,1,1,2,7.50
+22943979,2026-03-08,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,15,0,6,1,0,4,0,7.50
+22943979,2026-03-08,1,Royal Cricket Blasters (RCB),Leel,2.0,0,12,1,8,0,0,6,1,6.00
+22943979,2026-03-08,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,5,0,8,0,0,0,0,2.50
+22943979,2026-03-08,1,Royal Cricket Blasters (RCB),Mithun,3.0,0,12,1,10,0,0,2,0,4.00
+22943979,2026-03-08,1,Royal Cricket Blasters (RCB),Gopi,2.0,0,10,1,6,0,0,3,0,5.00
+22943979,2026-03-08,1,Royal Cricket Blasters (RCB),Arun,1.0,0,4,0,3,0,0,0,1,4.00
+22943979,2026-03-08,2,Weekend Warriors (WW),Pabitra,2.0,0,4,0,9,0,0,0,0,2.00
+22943979,2026-03-08,2,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,0,17,0,7,0,2,1,0,8.50
+22943979,2026-03-08,2,Weekend Warriors (WW),Firoz,1.0,0,9,1,5,0,1,0,1,9.00
+22943979,2026-03-08,2,Weekend Warriors (WW),Venkat A,3.0,0,9,1,12,0,0,3,0,3.00
+22943979,2026-03-08,2,Weekend Warriors (WW),Sudhir Midtown,2.0,0,10,1,9,0,0,5,1,5.00
+22943979,2026-03-08,2,Weekend Warriors (WW),Srikanta Maddara,1.0,0,11,0,4,1,0,2,0,8.25
+22786419,2026-03-01,1,Weekend Warriors (WW),Pabitra,2.0,0,10,2,10,0,1,2,0,5.00
+22786419,2026-03-01,1,Weekend Warriors (WW),Sudheer Nidiginti,2.0,0,3,1,10,0,0,1,0,1.50
+22786419,2026-03-01,1,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,0,7,0,7,0,0,1,1,3.50
+22786419,2026-03-01,1,Weekend Warriors (WW),Venkat A,1.0,0,18,1,3,0,2,4,0,18.00
+22786419,2026-03-01,1,Weekend Warriors (WW),Srikanta Maddara,1.0,0,7,0,5,0,1,0,1,7.00
+22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh,2.0,0,6,2,7,0,0,1,0,3.00
+22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,5,2,7,0,0,0,0,2.50
+22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Jithin Tj,1.0,0,7,1,2,0,0,2,0,7.00
+22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Arun,2.0,0,11,0,4,0,0,2,0,5.50
+22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Leel,1.0,0,4,0,5,0,0,2,0,4.00
+22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Pavan,1.0,0,15,0,5,0,1,3,0,9.00
+22786418,2026-03-01,1,Weekend Warriors (WW),Pabitra,2.0,0,10,0,7,1,0,0,0,5.00
+22786418,2026-03-01,1,Weekend Warriors (WW),Firoz,1.0,0,18,0,2,1,2,0,0,18.00
+22786418,2026-03-01,1,Weekend Warriors (WW),Lokesh kumar YC  (c),3.0,0,17,2,11,0,1,3,0,5.67
+22786418,2026-03-01,1,Weekend Warriors (WW),Srikanta Maddara,2.0,0,20,0,7,1,2,1,0,10.00
+22786418,2026-03-01,1,Weekend Warriors (WW),Venkat A,3.0,0,20,1,10,0,2,1,0,6.67
+22786418,2026-03-01,1,Weekend Warriors (WW),Sudheer Nidiginti,1.0,0,15,1,1,3,0,0,0,15.00
+22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),3.0,0,8,1,12,0,0,1,0,2.67
+22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Leel,2.0,1,7,2,9,0,0,2,1,3.50
+22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh,3.0,0,14,1,8,0,0,1,0,4.67
+22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,17,0,6,0,2,0,0,8.50
+22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Vinay KS,1.0,0,14,0,2,1,1,0,0,14.00
+22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,1.0,0,3,0,5,0,0,0,2,3.00
+22786417,2026-03-01,1,Weekend Warriors (WW),Pabitra,2.0,0,5,0,9,0,0,0,0,2.50
+22786417,2026-03-01,1,Weekend Warriors (WW),Venkat A,2.0,0,3,1,11,0,0,1,0,1.50
+22786417,2026-03-01,1,Weekend Warriors (WW),Firoz,1.0,0,4,0,3,0,0,0,0,4.00
+22786417,2026-03-01,1,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,0,13,0,7,0,1,1,1,6.50
+22786417,2026-03-01,1,Weekend Warriors (WW),Srikanta Maddara,2.0,0,10,0,7,0,0,1,0,5.00
+22786417,2026-03-01,1,Weekend Warriors (WW),Sudheer Nidiginti,1.0,0,12,0,3,0,1,1,1,12.00
+22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh,2.0,0,9,0,7,0,0,2,0,4.50
+22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Deepak Kumar,1.0,0,2,0,5,0,0,2,0,2.00
+22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,6,2,8,0,0,1,0,3.00
+22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Arun,2.0,0,12,0,6,2,0,0,0,6.00
+22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Pavan,1.0,0,12,1,4,0,1,1,1,10.29
+22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Jithin Tj,1.0,0,6,0,1,0,0,0,0,6.00
+22632662,2026-02-22,1,Weekend Warriors (WW),Pabitra,2.0,0,5,1,9,0,0,0,1,2.50
+22632662,2026-02-22,1,Weekend Warriors (WW),Sudhir Midtown,2.0,0,12,1,10,0,0,6,3,6.00
+22632662,2026-02-22,1,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,1,3,0,11,0,0,1,0,1.50
+22632662,2026-02-22,1,Weekend Warriors (WW),Srikanta Maddara,2.0,0,20,1,5,1,1,1,0,10.00
+22632662,2026-02-22,1,Weekend Warriors (WW),Venkat A,1.0,0,6,0,1,0,0,0,0,6.00
+22632662,2026-02-22,1,Weekend Warriors (WW),Vinod Reddy,1.0,0,4,1,3,0,0,1,0,4.00
+22632662,2026-02-22,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,8,0,7,0,0,2,0,4.00
+22632662,2026-02-22,2,Royal Cricket Blasters (RCB),shaik azeed,2.0,0,16,0,6,0,1,4,0,8.00
+22632662,2026-02-22,2,Royal Cricket Blasters (RCB),Arun,2.0,0,14,2,9,0,1,4,0,7.00
+22632662,2026-02-22,2,Royal Cricket Blasters (RCB),Pavan,2.0,0,9,0,7,1,0,1,0,4.50
+22632662,2026-02-22,2,Royal Cricket Blasters (RCB),Vinay KS,0.0,0,5,0,1,0,0,1,0,15.00
+22632661,2026-02-22,1,Weekend Warriors (WW),Pabitra,2.0,0,13,0,8,1,1,1,0,6.50
+22632661,2026-02-22,1,Weekend Warriors (WW),Sudhir Midtown,2.0,0,8,0,6,0,0,1,0,4.00
+22632661,2026-02-22,1,Weekend Warriors (WW),Sudheer Nidiginti,2.0,0,19,0,7,0,2,1,1,9.50
+22632661,2026-02-22,1,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,0,15,1,6,1,1,0,0,7.50
+22632661,2026-02-22,1,Weekend Warriors (WW),Venkat A,2.0,0,8,0,6,0,0,0,1,4.00
+22632661,2026-02-22,1,Weekend Warriors (WW),Srikanta Maddara,1.0,0,2,0,4,0,0,0,0,2.00
+22632661,2026-02-22,1,Weekend Warriors (WW),Vinod Reddy,1.0,0,3,0,5,0,0,2,0,3.00
+22632661,2026-02-22,2,Royal Cricket Blasters (RCB),Deepak Kumar,2.0,0,10,1,6,0,0,2,0,5.00
+22632661,2026-02-22,2,Royal Cricket Blasters (RCB),Gopi,1.0,0,12,0,3,1,1,0,0,12.00
+22632661,2026-02-22,2,Royal Cricket Blasters (RCB),shaik azeed,2.0,0,8,0,7,0,0,3,0,4.00
+22632661,2026-02-22,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),2.0,0,12,0,6,0,1,1,0,6.00
+22632661,2026-02-22,2,Royal Cricket Blasters (RCB),Arun,2.0,1,6,0,8,0,0,0,1,3.00
+22632661,2026-02-22,2,Royal Cricket Blasters (RCB),Pavan,3.0,0,20,0,12,0,1,4,0,6.67
+22632660,2026-02-22,1,Weekend Warriors (WW),Lokesh kumar YC  (c),2.0,0,14,1,6,0,1,1,0,7.00
+22632660,2026-02-22,1,Weekend Warriors (WW),Sudheer Nidiginti,2.0,0,16,1,7,0,2,1,0,8.00
+22632660,2026-02-22,1,Weekend Warriors (WW),Vinod Reddy,3.0,0,11,0,9,0,0,1,0,3.67
+22632660,2026-02-22,1,Weekend Warriors (WW),Sudhir Midtown,1.0,0,14,0,3,0,2,1,0,14.00
+22632660,2026-02-22,1,Weekend Warriors (WW),Venkat A,2.0,0,8,0,7,0,0,0,0,4.00
+22632660,2026-02-22,1,Weekend Warriors (WW),Srikanta Maddara,1.0,0,2,0,5,0,0,1,0,2.00
+22632660,2026-02-22,1,Weekend Warriors (WW),Pabitra,1.0,0,9,0,4,0,1,0,1,9.00
+22632660,2026-02-22,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,2.0,0,21,1,4,0,2,0,0,10.50
+22632660,2026-02-22,2,Royal Cricket Blasters (RCB),Arun,2.0,0,15,0,4,2,0,0,0,7.50
+22632660,2026-02-22,2,Royal Cricket Blasters (RCB),shaik azeed,2.0,1,12,1,11,0,2,0,0,5.54
+22632660,2026-02-22,2,Royal Cricket Blasters (RCB),Pavan,1.0,0,5,0,4,0,0,3,0,5.00
+22632660,2026-02-22,2,Royal Cricket Blasters (RCB),Deepak Kumar,1.0,0,11,0,1,0,1,0,0,11.00
+22632660,2026-02-22,2,Royal Cricket Blasters (RCB),Gopi,2.0,0,11,1,7,0,0,0,0,5.50
