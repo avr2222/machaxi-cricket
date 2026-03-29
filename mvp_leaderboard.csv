@@ -1,49 +1,29 @@
 Player Name,Team Name,Player Role,Bowling Style,Batting Hand,Matches,Batting,Bowling,Fielding,Total
-Venkat A,Weekend Warriors (WW),-,-,-,14,41.5,121.0,6.0,168.5
-Arun,Royal Cricket Blasters (RCB),-,-,-,11,100.5,18.9,8.0,127.4
-Vinay KS,Royal Cricket Blasters (RCB),-,-,-,14,81.0,21.7,4.0,106.7
-Mahesh,Royal Cricket Blasters (RCB),-,-,-,8,13.5,76.6,10.0,100.1
-Gopi,Royal Cricket Blasters (RCB),-,-,-,11,25.5,66.6,0.0,92.1
-Pabitra,Weekend Warriors (WW),-,-,-,15,12.0,77.3,2.0,91.3
-Lokesh kumar YC  (c),Weekend Warriors (WW),-,-,-,12,8.0,82.3,0.0,90.3
-Leel,Royal Cricket Blasters (RCB),-,-,-,11,52.0,29.1,8.0,89.1
-Srinivas Vemulapalli  (c),Royal Cricket Blasters (RCB),-,-,-,14,2.0,85.4,0.0,87.4
-Jithin Tj,Royal Cricket Blasters (RCB),-,-,-,12,39.0,34.0,12.0,85.0
-Vinod Reddy,Weekend Warriors (WW),-,-,-,6,27.5,56.8,0.0,84.3
-RK,Weekend Warriors (WW),-,-,-,13,72.0,0.0,8.0,80.0
-Srikanta Maddara,Weekend Warriors (WW),-,-,-,15,37.5,33.2,2.0,72.7
-Sudheer Nidiginti,Weekend Warriors (WW),-,-,-,11,17.5,40.5,10.0,68.0
-Pavan,Royal Cricket Blasters (RCB),-,-,-,6,42.5,5.1,14.0,61.6
-Mithun,Royal Cricket Blasters (RCB),-,-,-,5,13.5,39.6,4.0,57.1
-seenu,Weekend Warriors (WW),-,-,-,5,46.0,0.0,4.0,50.0
-Sudhir Midtown,Weekend Warriors (WW),-,-,-,6,9.5,36.4,4.0,49.9
-Manjunath,Royal Cricket Blasters (RCB),-,-,-,3,17.5,15.9,6.0,39.4
-Murali Cn Cricket,Royal Cricket Blasters (RCB),-,-,-,11,25.5,7.5,6.0,39.0
-Balaji Balaraju,Weekend Warriors (WW),-,-,-,5,28.5,0.0,4.0,32.5
-Ashok adapala,Weekend Warriors (WW),-,-,-,2,4.5,0.0,28.0,32.5
-Rajkumar Muddasu,Weekend Warriors (WW),-,-,-,8,27.0,0.0,4.0,31.0
-Manjunath H,Royal Cricket Blasters (RCB),-,-,-,3,19.5,0.0,10.0,29.5
-Subbu,Weekend Warriors (WW),-,-,-,13,25.0,0.0,0.0,25.0
-Firoz,Weekend Warriors (WW),-,-,-,5,8.5,5.9,2.0,16.4
-Ashik Jain,Weekend Warriors (WW),-,-,-,1,12.0,0.0,4.0,16.0
-Manjunath H  (wk),Royal Cricket Blasters (RCB),-,-,-,3,13.5,0.0,0.0,13.5
-RK  (wk),Weekend Warriors (WW),-,-,-,2,13.0,0.0,0.0,13.0
-Arun 102.raaga,Royal Cricket Blasters (RCB),-,-,-,5,13.0,0.0,0.0,13.0
-Vishwanath Cricket,Royal Cricket Blasters (RCB),-,-,-,2,11.5,0.0,0.0,11.5
-Ashok adapala  (wk),Weekend Warriors (WW),-,-,-,4,9.5,0.0,0.0,9.5
-Karthik Reddy,Weekend Warriors (WW),-,-,-,5,9.5,0,0.0,9.5
-Deepak Kumar,Royal Cricket Blasters (RCB),-,-,-,3,0.0,6.9,2.0,8.9
-Vijay 208,Royal Cricket Blasters (RCB),-,-,-,4,2.5,0.0,6.0,8.5
-shaik azeed,Royal Cricket Blasters (RCB),-,-,-,3,1.5,6.8,0.0,8.3
-Srinivas Vemulapalli,Royal Cricket Blasters (RCB),-,-,-,1,0.0,6.3,2.0,8.3
-Balaji Balaraju  (wk),Weekend Warriors (WW),-,-,-,1,8.0,0.0,0.0,8.0
-Manjunath  (wk),Royal Cricket Blasters (RCB),-,-,-,2,7.0,0.0,0.0,7.0
-GIRISH G,Weekend Warriors (WW),-,-,-,3,3.5,0.0,2.0,5.5
-Ashok,Weekend Warriors (WW),-,-,-,5,1.5,0,4.0,5.5
-Satyam Goyal,Royal Cricket Blasters (RCB),-,-,-,6,5.0,0.0,0.0,5.0
-Manjunath  (c & wk),Royal Cricket Blasters (RCB),-,-,-,1,4.5,0.0,0.0,4.5
-Rajkumar Muddasu  (wk),Weekend Warriors (WW),-,-,-,1,3.5,0.0,0.0,3.5
-Ashok adapala  (c),Weekend Warriors (WW),-,-,-,1,3.5,0.0,0.0,3.5
-Kranthi 202 Midtown Raaga,Royal Cricket Blasters (RCB),-,-,-,3,0.5,0.0,2.0,2.5
-Ashik Jain  (c),Weekend Warriors (WW),-,-,-,2,2.5,0,0.0,2.5
-Vijay 208  (wk),Royal Cricket Blasters (RCB),-,-,-,1,0.5,0.0,0.0,0.5
+Mahesh,Royal Cricket Blasters (RCB),-,-,-,2,13.0,56.4,2.0,71.4
+Vinod Reddy,Weekend Warriors (WW),-,-,-,2,29.0,21.4,0.0,50.4
+Arun,Royal Cricket Blasters (RCB),-,-,-,2,26.0,13.6,2.0,41.6
+Ashik Jain,Weekend Warriors (WW),-,-,-,2,40.5,0.0,0.0,40.5
+Sarat Kumar,Weekend Warriors (WW),-,-,-,2,33.0,0.0,6.0,39.0
+Srikanta Maddara,Weekend Warriors (WW),-,-,-,2,13.0,20.9,2.0,35.9
+Mithun,Weekend Warriors (WW),-,-,-,2,1.0,34.9,0.0,35.9
+Leel,Royal Cricket Blasters (RCB),-,-,-,2,26.0,5.8,2.0,33.8
+Sudheer Nidiginti,Weekend Warriors (WW),-,-,-,2,0.0,19.9,2.0,21.9
+Deepak Kumar,Royal Cricket Blasters (RCB),-,-,-,2,9.5,6.8,4.0,20.3
+Srinivas Vemulapalli  (c),Royal Cricket Blasters (RCB),-,-,-,2,0.0,19.6,0.0,19.6
+Satyam Goyal,Royal Cricket Blasters (RCB),-,-,-,1,19.5,0.0,0.0,19.5
+Vishwanath Cricket,Royal Cricket Blasters (RCB),-,-,-,2,9.5,7.5,0.0,17.0
+shaik azeed,Royal Cricket Blasters (RCB),-,-,-,2,13.0,0,2.0,15.0
+Vinay KS,Royal Cricket Blasters (RCB),-,-,-,1,10.0,0.0,4.0,14.0
+Rajkumar Muddasu,Weekend Warriors (WW),-,-,-,2,9.0,0.0,0.0,9.0
+Kranthi 202 Midtown Raaga,Royal Cricket Blasters (RCB),-,-,-,1,4.0,0.0,4.0,8.0
+Lokesh kumar YC  (c),Weekend Warriors (WW),-,-,-,2,3.5,4.1,0.0,7.6
+Manjunath H,Royal Cricket Blasters (RCB),-,-,-,2,7.0,0.0,0.0,7.0
+Firoz,Weekend Warriors (WW),-,-,-,2,6.5,0.0,0.0,6.5
+Balaji Balaraju,Weekend Warriors (WW),-,-,-,2,6.0,0.0,0.0,6.0
+Gopi,Royal Cricket Blasters (RCB),-,-,-,2,0.0,5.8,0.0,5.8
+Ashok,Weekend Warriors (WW),-,-,-,2,1.0,0,4.0,5.0
+Subbu,Weekend Warriors (WW),-,-,-,1,0.5,0.0,4.0,4.5
+Karthik Reddy,Weekend Warriors (WW),-,-,-,2,2.5,0.0,2.0,4.5
+Murali Cn Cricket,Royal Cricket Blasters (RCB),-,-,-,1,0.5,0.0,4.0,4.5
+Vinay KS  (wk),Royal Cricket Blasters (RCB),-,-,-,1,3.5,0.0,0.0,3.5
+Arun 102.raaga,Royal Cricket Blasters (RCB),-,-,-,1,2.0,0.0,0.0,2.0

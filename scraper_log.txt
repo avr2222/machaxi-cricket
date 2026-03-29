@@ -1,6 +1,6 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-03-29 09:11:05
+Started: 2026-03-29 09:16:41
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
@@ -13,77 +13,35 @@ About to download new driver from https://storage.googleapis.com/chrome-for-test
 Driver downloading response is 200
 Get LATEST chromedriver version for google-chrome
 Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/146.0.7680.165]
-[API] Tournament discovery failed — will use Selenium fallback
-[Discovery] API failed — using Selenium browser
-[Selenium] Loading tournament page: https://cricheroes.com/tournament/1874258/machaxi-box-cricket-season-2/matches/past-matches
-[Selenium] Scrolled 1 round(s)
-[Selenium] Found 0 unique match URL(s)
-[Discovery] All discovery methods failed — falling back to 15 match(es) in tracker for --full-refresh
-[--full-refresh] Re-scraping all 15 match(es)
-Scraping 15 match(es)...
-[1/15] Match 23247987
-    [API] 22 batting, 12 bowling rows
-    [commentary] 131 deliveries, 72 dot balls
-[2/15] Match 23110064
-    [API] 12 batting, 11 bowling rows
-    [commentary] 127 deliveries, 63 dot balls
-[3/15] Match 22943981
-    [API] 15 batting, 12 bowling rows
-    [commentary] 139 deliveries, 72 dot balls
-[4/15] Match 22786419
-    [API] 19 batting, 11 bowling rows
-    [commentary] 126 deliveries, 65 dot balls
-[5/15] Match 23247977
-    [API] 16 batting, 13 bowling rows
-    [commentary] 134 deliveries, 67 dot balls
-[6/15] Match 23064208
-    [API] 15 batting, 12 bowling rows
-    [commentary] 163 deliveries, 73 dot balls
-[7/15] Match 22943980
-    [API] 21 batting, 11 bowling rows
-    [commentary] 168 deliveries, 99 dot balls
-[8/15] Match 22786418
-    [API] 19 batting, 12 bowling rows
-    [commentary] 157 deliveries, 80 dot balls
-[9/15] Match 23247962
-    [API] 19 batting, 11 bowling rows
-    [commentary] 166 deliveries, 96 dot balls
-[10/15] Match 23064193
-    [API] 24 batting, 11 bowling rows
-    [commentary] 152 deliveries, 100 dot balls
-[11/15] Match 22943979
-    [API] 19 batting, 12 bowling rows
-    [commentary] 173 deliveries, 88 dot balls
-[12/15] Match 22786417
-    [API] 14 batting, 12 bowling rows
-    [commentary] 130 deliveries, 71 dot balls
-[13/15] Match 22632662
-    [API] 18 batting, 11 bowling rows
-    [commentary] 139 deliveries, 69 dot balls
-[14/15] Match 22632661
-    [API] 18 batting, 13 bowling rows
-    [commentary] 163 deliveries, 84 dot balls
-[15/15] Match 22632660
-    [API] 15 batting, 13 bowling rows
-    [commentary] 144 deliveries, 72 dot balls
-Scraped: 15 matches | 266 batting | 177 bowling | 2212 deliveries | 0 errors
+[API] Discovered 17 matches via match/get-tournament-matches/3/-1/-1
+Matches found:   17
+Already scraped: 15
+To scrape now:   2
+Scraping 2 match(es)...
+[1/2] Match 23454111
+    [API] 20 batting, 14 bowling rows
+    [commentary] 175 deliveries, 69 dot balls
+[2/2] Match 23454074
+    [API] 21 batting, 12 bowling rows
+    [commentary] 200 deliveries, 73 dot balls
+Scraped: 2 matches | 41 batting | 26 bowling | 375 deliveries | 0 errors
 Writing raw CSV files...
-  Wrote   15 rows -> cricheroes_data/tournament_matches_summary.csv
-  Wrote  266 rows -> cricheroes_data/tournament_all_batting.csv
-  Wrote  177 rows -> cricheroes_data/tournament_all_bowling.csv
-  Wrote 1941 rows -> cricheroes_data/tournament_all_balls.csv
-  Wrote  600 rows -> cricheroes_data/tournament_dot_ball_analysis.csv
+  Wrote   17 rows -> cricheroes_data/tournament_matches_summary.csv
+  Wrote   41 rows -> cricheroes_data/tournament_all_batting.csv
+  Wrote   26 rows -> cricheroes_data/tournament_all_bowling.csv
+  Wrote  339 rows -> cricheroes_data/tournament_all_balls.csv
+  Wrote  110 rows -> cricheroes_data/tournament_dot_ball_analysis.csv
 Writing dashboard CSVs...
-  Wrote   15 rows -> data/match_meta.csv
-  Wrote  266 rows -> data/match_batting.csv
-  Wrote  177 rows -> data/match_bowling.csv
+  Wrote   17 rows -> data/match_meta.csv
+  Wrote   41 rows -> data/match_batting.csv
+  Wrote   26 rows -> data/match_bowling.csv
   Wrote    2 rows -> points_table.csv
   Points table:
-    #1 WW  9W 5L  19pts  NRR -0.078
-    #2 RCB  5W 9L  11pts  NRR +0.078
-  Wrote   49 rows -> batting_leaderboard.csv
-  Wrote   25 rows -> bowling_leaderboard.csv
-  Wrote   29 rows -> fielding_leaderboard.csv
-  Wrote   48 rows -> mvp_leaderboard.csv
+    #1 RCB  1W 1L  2pts  NRR +1.887
+    #2 WW  1W 1L  2pts  NRR -1.887
+  Wrote   26 rows -> batting_leaderboard.csv
+  Wrote   14 rows -> bowling_leaderboard.csv
+  Wrote   15 rows -> fielding_leaderboard.csv
+  Wrote   28 rows -> mvp_leaderboard.csv
   Wrote data/tournament_config.json
-Done: 2026-03-29 09:12:26
+Done: 2026-03-29 09:16:53
