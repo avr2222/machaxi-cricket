@@ -123,6 +123,20 @@ class CSVStore:
         with path.open(newline="", encoding="utf-8") as f:
             return list(csv.DictReader(f))
 
+    def write_replace_by_match(
+        self,
+        path: Path,
+        fields: list[str],
+        new_rows: list[dict],
+    ) -> int:
+        """Replace all rows for match IDs present in new_rows, keep the rest."""
+        new_match_ids = {str(r.get("match_id", "")) for r in new_rows if r.get("match_id")}
+        existing = [r for r in self.read(path) if r.get("match_id") not in new_match_ids]
+        merged = existing + new_rows
+        self._write(path, fields, merged)
+        log.info("  Wrote %4d rows -> %s", len(merged), path)
+        return len(merged)
+
     def write_merged(
         self,
         path: Path,

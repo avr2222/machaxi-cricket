@@ -138,29 +138,16 @@ class OutputWriter:
     ) -> None:
         od = self._cfg.output_dir
 
-        def _bat_key(r: BattingRow) -> str:
-            return f"{r.match_id}|{r.innings}|{r.batting_team}|{r.player}"
-
-        def _bowl_key(r: BowlingRow) -> str:
-            return f"{r.match_id}|{r.innings}|{r.bowling_team}|{r.player}"
-
-        def _ball_key(r: Ball) -> str:
-            return f"{r.match_id}|{r.innings}|{r.over_ball}|{r.batsman}|{r.bowler}"
-
         info_dicts = [vars(i) for i in all_info]
-        bat_dicts = [{**vars(r), "_key": _bat_key(r)} for r in all_batting]
-        bowl_dicts = [{**vars(r), "_key": _bowl_key(r)} for r in all_bowling]
-        ball_dicts = [{**vars(r), "_key": _ball_key(r)} for r in all_balls]
-        dot_dicts = [
-            {**r, "_key": f"{r['bowler']}|{r['batsman']}|{r['match_id']}"}
-            for r in dot_analysis
-        ]
+        bat_dicts = [vars(r) for r in all_batting]
+        bowl_dicts = [vars(r) for r in all_bowling]
+        ball_dicts = [vars(r) for r in all_balls]
 
         self._store.write_merged(od / "tournament_matches_summary.csv", SUMMARY_FIELDS, info_dicts, "match_id")
-        self._store.write_merged(od / "tournament_all_batting.csv", BATTING_FIELDS, bat_dicts, "_key")
-        self._store.write_merged(od / "tournament_all_bowling.csv", BOWLING_FIELDS, bowl_dicts, "_key")
-        self._store.write_merged(od / "tournament_all_balls.csv", BALLS_FIELDS, ball_dicts, "_key")
-        self._store.write_merged(od / "tournament_dot_ball_analysis.csv", DOTBALL_FIELDS, dot_dicts, "_key")
+        self._store.write_replace_by_match(od / "tournament_all_batting.csv", BATTING_FIELDS, bat_dicts)
+        self._store.write_replace_by_match(od / "tournament_all_bowling.csv", BOWLING_FIELDS, bowl_dicts)
+        self._store.write_replace_by_match(od / "tournament_all_balls.csv", BALLS_FIELDS, ball_dicts)
+        self._store.write_replace_by_match(od / "tournament_dot_ball_analysis.csv", DOTBALL_FIELDS, dot_analysis)
 
     def write_dashboard(
         self,
@@ -229,7 +216,6 @@ class OutputWriter:
                 "sixes": r.sixes, "strike_rate": r.strike_rate,
                 "dismissal_type": dtype, "dismissed_by": dis_by,
                 "caught_by": caught_by,
-                "_key": f"{r.match_id}|{r.innings}|{r.batting_team}|{r.player}",
             })
 
         # match_bowling
@@ -247,23 +233,25 @@ class OutputWriter:
                 "fours_conceded": bs.get("fours_conceded", r.fours_conceded),
                 "sixes_conceded": bs.get("sixes_conceded", r.sixes_conceded),
                 "wides": r.wides, "no_balls": r.no_balls, "economy": r.economy,
-                "_key": f"{r.match_id}|{r.innings}|{r.bowling_team}|{r.player}",
             })
 
-        # Write match-level CSVs
+        # Write match-level CSVs (merge with history)
         self._store.write_merged(dd / "match_meta.csv", META_FIELDS, meta_rows, "match_id")
-        self._store.write_merged(dd / "match_batting.csv", MATCH_BATTING_FIELDS, bat_rows, "_key")
-        self._store.write_merged(dd / "match_bowling.csv", MATCH_BOWLING_FIELDS, bowl_rows, "_key")
+        self._store.write_replace_by_match(dd / "match_batting.csv", MATCH_BATTING_FIELDS, bat_rows)
+        self._store.write_replace_by_match(dd / "match_bowling.csv", MATCH_BOWLING_FIELDS, bowl_rows)
 
-        # Points table (fully recomputed)
+        # Points table — recompute from full history
+        all_meta_hist = self._store.read(dd / "match_meta.csv")
+        all_bat_hist_pt = self._store.read(dd / "match_batting.csv")
+        all_bowl_hist_pt = self._store.read(dd / "match_bowling.csv")
         bat_by_match: dict[str, list[dict]] = defaultdict(list)
-        for r in bat_rows:
+        for r in all_bat_hist_pt:
             bat_by_match[r["match_id"]].append(r)
         bowl_by_match: dict[str, list[dict]] = defaultdict(list)
-        for r in bowl_rows:
+        for r in all_bowl_hist_pt:
             bowl_by_match[r["match_id"]].append(r)
 
-        pt_rows = compute_points_table(meta_rows, bat_by_match, bowl_by_match)
+        pt_rows = compute_points_table(all_meta_hist, bat_by_match, bowl_by_match)
         self._store.write(Path("points_table.csv"), POINTS_TABLE_FIELDS, pt_rows)
         self._log_points_table(pt_rows)
 
