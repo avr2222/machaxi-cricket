@@ -1,6 +1,6 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-03-29 15:02:18
+Started: 2026-04-05 15:03:45
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
@@ -13,9 +13,38 @@ About to download new driver from https://storage.googleapis.com/chrome-for-test
 Driver downloading response is 200
 Get LATEST chromedriver version for google-chrome
 Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/146.0.7680.165]
-[API] Discovered 17 matches via match/get-tournament-matches/3/-1/-1
-Matches found:   17
+[API] Discovered 20 matches via match/get-tournament-matches/3/-1/-1
+Matches found:   20
 Already scraped: 17
-To scrape now:   0
-Nothing new to scrape. All matches are up to date.
-Done: 2026-03-29 15:02:23
+To scrape now:   3
+Scraping 3 match(es)...
+[1/3] Match 23684171
+    [API] 16 batting, 11 bowling rows
+    [commentary] 135 deliveries, 71 dot balls
+[2/3] Match 23684100
+    [API] 16 batting, 11 bowling rows
+    [commentary] 134 deliveries, 64 dot balls
+[3/3] Match 23684034
+    [API] 18 batting, 11 bowling rows
+    [commentary] 147 deliveries, 74 dot balls
+Scraped: 3 matches | 50 batting | 33 bowling | 416 deliveries | 0 errors
+Writing raw CSV files...
+  Wrote   20 rows -> cricheroes_data/tournament_matches_summary.csv
+  Wrote  357 rows -> cricheroes_data/tournament_all_batting.csv
+  Wrote  236 rows -> cricheroes_data/tournament_all_bowling.csv
+  Wrote 3003 rows -> cricheroes_data/tournament_all_balls.csv
+  Wrote  823 rows -> cricheroes_data/tournament_dot_ball_analysis.csv
+Writing dashboard CSVs...
+  Wrote   20 rows -> data/match_meta.csv
+  Wrote  357 rows -> data/match_batting.csv
+  Wrote  236 rows -> data/match_bowling.csv
+  Wrote    2 rows -> points_table.csv
+  Points table:
+    #1 WW  12W 7L  25pts  NRR -0.230
+    #2 RCB  7W 12L  15pts  NRR +0.230
+  Wrote   52 rows -> batting_leaderboard.csv
+  Wrote   27 rows -> bowling_leaderboard.csv
+  Wrote   33 rows -> fielding_leaderboard.csv
+  Wrote   50 rows -> mvp_leaderboard.csv
+  Wrote data/tournament_config.json
+Done: 2026-04-05 15:03:59
