@@ -1,6 +1,6 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-04-05 15:03:45
+Started: 2026-04-06 16:57:48
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
@@ -14,20 +14,69 @@ Driver downloading response is 200
 Get LATEST chromedriver version for google-chrome
 Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/146.0.7680.165]
 [API] Discovered 20 matches via match/get-tournament-matches/3/-1/-1
-Matches found:   20
-Already scraped: 17
-To scrape now:   3
-Scraping 3 match(es)...
-[1/3] Match 23684171
+[--full-refresh] Re-scraping all 20 match(es)
+Scraping 20 match(es)...
+[1/20] Match 23684171
     [API] 16 batting, 11 bowling rows
     [commentary] 135 deliveries, 71 dot balls
-[2/3] Match 23684100
+[2/20] Match 23684100
     [API] 16 batting, 11 bowling rows
     [commentary] 134 deliveries, 64 dot balls
-[3/3] Match 23684034
+[3/20] Match 23684034
     [API] 18 batting, 11 bowling rows
     [commentary] 147 deliveries, 74 dot balls
-Scraped: 3 matches | 50 batting | 33 bowling | 416 deliveries | 0 errors
+[4/20] Match 23454111
+    [API] 20 batting, 14 bowling rows
+    [commentary] 175 deliveries, 69 dot balls
+[5/20] Match 23454074
+    [API] 21 batting, 12 bowling rows
+    [commentary] 200 deliveries, 73 dot balls
+[6/20] Match 23247987
+    [API] 22 batting, 12 bowling rows
+    [commentary] 131 deliveries, 72 dot balls
+[7/20] Match 23247977
+    [API] 16 batting, 13 bowling rows
+    [commentary] 134 deliveries, 67 dot balls
+[8/20] Match 23247962
+    [API] 19 batting, 11 bowling rows
+    [commentary] 166 deliveries, 96 dot balls
+[9/20] Match 23110064
+    [API] 12 batting, 11 bowling rows
+    [commentary] 127 deliveries, 63 dot balls
+[10/20] Match 23064208
+    [API] 15 batting, 12 bowling rows
+    [commentary] 163 deliveries, 73 dot balls
+[11/20] Match 23064193
+    [API] 24 batting, 11 bowling rows
+    [commentary] 152 deliveries, 100 dot balls
+[12/20] Match 22943981
+    [API] 15 batting, 12 bowling rows
+    [commentary] 139 deliveries, 72 dot balls
+[13/20] Match 22943980
+    [API] 21 batting, 11 bowling rows
+    [commentary] 168 deliveries, 99 dot balls
+[14/20] Match 22943979
+    [API] 19 batting, 12 bowling rows
+    [commentary] 173 deliveries, 88 dot balls
+[15/20] Match 22786419
+    [API] 19 batting, 11 bowling rows
+    [commentary] 126 deliveries, 65 dot balls
+[16/20] Match 22786418
+    [API] 19 batting, 12 bowling rows
+    [commentary] 157 deliveries, 80 dot balls
+[17/20] Match 22786417
+    [API] 14 batting, 12 bowling rows
+    [commentary] 130 deliveries, 71 dot balls
+[18/20] Match 22632662
+    [API] 18 batting, 11 bowling rows
+    [commentary] 139 deliveries, 69 dot balls
+[19/20] Match 22632661
+    [API] 18 batting, 13 bowling rows
+    [commentary] 163 deliveries, 84 dot balls
+[20/20] Match 22632660
+    [API] 15 batting, 13 bowling rows
+    [commentary] 144 deliveries, 72 dot balls
+Scraped: 20 matches | 357 batting | 236 bowling | 3003 deliveries | 0 errors
 Writing raw CSV files...
   Wrote   20 rows -> cricheroes_data/tournament_matches_summary.csv
   Wrote  357 rows -> cricheroes_data/tournament_all_batting.csv
@@ -47,4 +96,4 @@ Writing dashboard CSVs...
   Wrote   33 rows -> fielding_leaderboard.csv
   Wrote   50 rows -> mvp_leaderboard.csv
   Wrote data/tournament_config.json
-Done: 2026-04-05 15:03:59
+Done: 2026-04-06 16:59:09
