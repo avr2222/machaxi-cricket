@@ -241,6 +241,7 @@ function hideEmptyChart(canvasId) {
  */
 async function loadCSV(path) {
   const res  = await fetch(path);
+  if (!res.ok) throw new Error(`CSV fetch failed: ${res.status} ${path}`);
   const text = await res.text();
   return new Promise((resolve, reject) => {
     Papa.parse(text, {
