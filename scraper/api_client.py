@@ -229,6 +229,12 @@ class CricHeroesAPIClient:
             else f"{winning} won by {win_by}".strip() if winning
             else ""
         )
+        # MOM: try match_summary.player_of_the_match, then top-level
+        mom = (
+            (summary.get("player_of_the_match") if isinstance(summary, dict) else None)
+            or d.get("player_of_the_match")
+            or {}
+        )
         return MatchInfo(
             match_id=match_id,
             team1=d.get("team_a", {}).get("name", ""),
@@ -239,6 +245,8 @@ class CricHeroesAPIClient:
             venue=d.get("ground_name", ""),
             url=url,
             scraped_at=_now_utc(),
+            man_of_match=mom.get("player_name", "") if isinstance(mom, dict) else "",
+            man_of_match_team=mom.get("team_name", "") if isinstance(mom, dict) else "",
         )
 
     def _parse_innings(
