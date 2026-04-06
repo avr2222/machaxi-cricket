@@ -196,10 +196,33 @@ class CricHeroesAPIClient:
             return None, [], [], []
 
         d = data["data"]
-        info = self._parse_match_info(d, match_id, url)
+
+        # Fetch match summary separately to get player_of_the_match
+        mom = self._fetch_mom(match_id)
+
+        info = self._parse_match_info(d, match_id, url, mom)
         batting, bowling = self._parse_innings(d, match_id)
         innings_meta = self._parse_innings_meta(d)
         return info, batting, bowling, innings_meta
+
+    def _fetch_mom(self, match_id: str) -> dict:
+        """Try several endpoint patterns to get player_of_the_match."""
+        endpoints = [
+            f"scorecard/v2/get-match-summary/{match_id}",
+            f"match/get-match-summary/{match_id}",
+            f"match/v2/get-match-data/{match_id}",
+        ]
+        for ep in endpoints:
+            try:
+                resp = self._get(ep)
+                d = resp.get("data") or {}
+                if isinstance(d, dict):
+                    mom = d.get("player_of_the_match") or d.get("data", {}).get("player_of_the_match")
+                    if mom and isinstance(mom, dict) and mom.get("player_name"):
+                        return mom
+            except Exception:
+                pass
+        return {}
 
     def _parse_innings_meta(self, d: dict) -> list["InningsInfo"]:
         """Extract innings metadata (team_id, inning_num) from scorecard data."""
@@ -219,7 +242,7 @@ class CricHeroesAPIClient:
                     ))
         return meta
 
-    def _parse_match_info(self, d: dict, match_id: str, url: str) -> MatchInfo:
+    def _parse_match_info(self, d: dict, match_id: str, url: str, mom: dict | None = None) -> MatchInfo:
         raw_dt = d.get("start_datetime", "")
         winning = d.get("winning_team", "")
         win_by = d.get("win_by", "")
@@ -229,12 +252,8 @@ class CricHeroesAPIClient:
             else f"{winning} won by {win_by}".strip() if winning
             else ""
         )
-        # MOM: try match_summary.player_of_the_match, then top-level
-        mom = (
-            (summary.get("player_of_the_match") if isinstance(summary, dict) else None)
-            or d.get("player_of_the_match")
-            or {}
-        )
+        if not mom:
+            mom = {}
         return MatchInfo(
             match_id=match_id,
             team1=d.get("team_a", {}).get("name", ""),
@@ -245,8 +264,8 @@ class CricHeroesAPIClient:
             venue=d.get("ground_name", ""),
             url=url,
             scraped_at=_now_utc(),
-            man_of_match=mom.get("player_name", "") if isinstance(mom, dict) else "",
-            man_of_match_team=mom.get("team_name", "") if isinstance(mom, dict) else "",
+            man_of_match=mom.get("player_name", ""),
+            man_of_match_team=mom.get("team_name", ""),
         )
 
     def _parse_innings(
