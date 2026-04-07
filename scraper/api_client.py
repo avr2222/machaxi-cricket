@@ -384,3 +384,65 @@ class CricHeroesAPIClient:
                 commentary=b.get("commentary", ""),
             ))
         return balls
+
+    # ── Player career stats ───────────────────────────────────────────────────
+
+    def fetch_player_careers(
+        self, players: list[tuple[str, str, str]]
+    ) -> list[dict]:
+        """Fetch career totals for each player from their CricHeroes profile page.
+
+        ``players`` is a list of (player_id, name, team_name) tuples.
+        Returns a list of dicts ready to write as player_career.csv rows.
+        """
+        now = _now_utc()
+        rows: list[dict] = []
+        seen: set[str] = set()
+        for player_id, name, team_name in players:
+            if not player_id or player_id in seen:
+                continue
+            seen.add(player_id)
+            slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+            url = f"https://cricheroes.com/player-profile/{player_id}/{slug}/career"
+            try:
+                req = urllib.request.Request(url, headers={
+                    **self._cfg.api_headers,
+                    "Accept": "text/html,application/xhtml+xml,*/*",
+                })
+                with urllib.request.urlopen(req, timeout=20) as resp:
+                    html = resp.read().decode("utf-8", errors="replace")
+                m = re.search(
+                    r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>',
+                    html, re.DOTALL,
+                )
+                if not m:
+                    log.debug("[career] no __NEXT_DATA__ for player %s", player_id)
+                    continue
+                page = json.loads(m.group(1))
+                pinfo = (
+                    page.get("props", {})
+                    .get("pageProps", {})
+                    .get("playerInfo", {})
+                    .get("data", {})
+                )
+                if not pinfo:
+                    continue
+                rows.append({
+                    "player_id":      player_id,
+                    "name":           pinfo.get("name", name),
+                    "team_name":      team_name,
+                    "career_matches": int(pinfo.get("total_matches", 0)),
+                    "career_runs":    int(pinfo.get("total_runs", 0)),
+                    "career_wickets": int(pinfo.get("total_wickets", 0)),
+                    "fetched_at":     now,
+                })
+                log.info(
+                    "[career] %s: %d matches, %d runs, %d wickets",
+                    pinfo.get("name", name),
+                    int(pinfo.get("total_matches", 0)),
+                    int(pinfo.get("total_runs", 0)),
+                    int(pinfo.get("total_wickets", 0)),
+                )
+            except Exception as exc:
+                log.warning("[career] player %s (%s): %s", player_id, name, exc)
+        return rows

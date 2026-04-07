@@ -71,6 +71,11 @@ MVP_LB_FIELDS = [
     "Player Name", "Team Name", "Player Role", "Bowling Style",
     "Batting Hand", "Matches", "Batting", "Bowling", "Fielding", "Total",
 ]
+PLAYER_CAREER_FIELDS = [
+    "player_id", "name", "team_name",
+    "career_matches", "career_runs", "career_wickets",
+    "fetched_at",
+]
 
 
 # ── Tracker ───────────────────────────────────────────────────────────────────

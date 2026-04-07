@@ -28,15 +28,18 @@ let POINTS_TABLE = [];
 
 /* ── CSV file paths (relative to index.html) ── */
 const CSV_FILES = {
-  batting:      './batting_leaderboard.csv',
-  bowling:      './bowling_leaderboard.csv',
-  fielding:     './fielding_leaderboard.csv',
-  mvp:          './mvp_leaderboard.csv',
-  pointsTable:  './points_table.csv',
-  matchBatting: './data/match_batting.csv',
-  matchBowling: './data/match_bowling.csv',
-  matchMeta:    './data/match_meta.csv',
-  matchBalls:   './cricheroes_data/tournament_all_balls.csv'
+  batting:       './batting_leaderboard.csv',
+  bowling:       './bowling_leaderboard.csv',
+  fielding:      './fielding_leaderboard.csv',
+  mvp:           './mvp_leaderboard.csv',
+  pointsTable:   './points_table.csv',
+  matchBatting:  './data/match_batting.csv',
+  matchBowling:  './data/match_bowling.csv',
+  matchMeta:     './data/match_meta.csv',
+  matchBalls:    './cricheroes_data/tournament_all_balls.csv',
+  playerCareer:  './data/player_career.csv',
+  rawBatting:    './cricheroes_data/tournament_all_batting.csv',
+  rawBowling:    './cricheroes_data/tournament_all_bowling.csv',
 };
 
 /* ── Color palette (assigned by team index from points table) ── */
@@ -4701,7 +4704,115 @@ const _trimDismissal = name => (name || '')
   .replace(/\s+b\s+\w+$/i,    '')   // "X b Bowler"     → "X"  (trailing only)
   .trim();
 
-/** Re-render only the sections that depend on per-match scorecard data. */
+/* ============================================================
+   Career Milestone Banner
+   Detects which players crossed a magic number during this
+   season (career_total - tournament_contribution < threshold
+   <= career_total) and shows a scrolling banner.
+   ============================================================ */
+
+async function renderMilestoneBanner(careerRows) {
+  const banner = document.getElementById('milestoneBanner');
+  const inner  = document.getElementById('milestoneBannerInner');
+  if (!banner || !inner || !careerRows?.length) return;
+
+  /* ── Tournament totals per player_id from raw CSVs (have player_id column) ── */
+  const tourBat  = {};   // player_id -> {runs, sixes, matchIds}
+  const tourBowl = {};   // player_id -> {wickets, matchIds}
+
+  const [rawBat, rawBowl] = await Promise.all([
+    loadCSV(CSV_FILES.rawBatting).catch(() => []),
+    loadCSV(CSV_FILES.rawBowling).catch(() => []),
+  ]);
+
+  rawBat.forEach(r => {
+    const pid = (r.player_id || '').trim();
+    if (!pid) return;
+    if (!tourBat[pid]) tourBat[pid] = { runs: 0, sixes: 0, matchIds: new Set() };
+    tourBat[pid].runs  += num(r.runs);
+    tourBat[pid].sixes += num(r.sixes);
+    tourBat[pid].matchIds.add(r.match_id);
+  });
+  rawBowl.forEach(r => {
+    const pid = (r.player_id || '').trim();
+    if (!pid) return;
+    if (!tourBowl[pid]) tourBowl[pid] = { wickets: 0, matchIds: new Set() };
+    tourBowl[pid].wickets += num(r.wickets);
+    tourBowl[pid].matchIds.add(r.match_id);
+  });
+
+  /* ── Milestone thresholds ── */
+  const MATCH_MS   = [25, 50, 75, 100, 125, 150, 175, 200, 250, 300];
+  const RUN_MS     = [250, 500, 750, 1000, 1250, 1500, 2000, 2500];
+  const WICKET_MS  = [25, 50, 75, 100, 125, 150, 200, 250];
+  const SIX_MS     = [10, 20, 30, 40, 50, 75, 100];
+
+  function crossedThisseason(career, tourContrib, thresholds) {
+    /* career = current career total (includes this season)
+       tourContrib = what they added during this season
+       A milestone M was crossed this season if:
+         (career - tourContrib) < M <= career  */
+    const pre = career - tourContrib;
+    return thresholds.filter(m => pre < m && m <= career);
+  }
+
+  const items = [];
+
+  careerRows.forEach(r => {
+    const pid  = (r.player_id || '').trim();
+    const name = (r.name || '').trim();
+    const team = (r.team_name || '').trim();
+    const color = teamCssVar(team) || 'var(--team-0)';
+
+    const cb  = tourBat[pid]  || { runs: 0, sixes: 0, matchIds: new Set() };
+    const cbw = tourBowl[pid] || { wickets: 0, matchIds: new Set() };
+
+    const careerMatches  = num(r.career_matches);
+    const careerRuns     = num(r.career_runs);
+    const careerWickets  = num(r.career_wickets);
+    // Union of match IDs where they batted or bowled
+    const allMatchIds   = new Set([...cb.matchIds, ...cbw.matchIds]);
+    const tourMatches   = allMatchIds.size;
+    const tourRuns      = cb.runs;
+    const tourWickets   = cbw.wickets;
+    const tourSixes     = cb.sixes;
+
+    crossedThisseason(careerMatches, tourMatches, MATCH_MS).forEach(m =>
+      items.push({ name, team, color, icon: '🏏', label: `${m} CricHeroes Matches` })
+    );
+    crossedThisseason(careerRuns, tourRuns, RUN_MS).forEach(m =>
+      items.push({ name, team, color, icon: '🏏', label: `${m} Career Runs` })
+    );
+    crossedThisseason(careerWickets, tourWickets, WICKET_MS).forEach(m =>
+      items.push({ name, team, color, icon: '🎳', label: `${m} Career Wickets` })
+    );
+    // Sixes: career page doesn't track them, use tournament total as the single source
+    crossedThisseason(tourSixes, 0, SIX_MS).forEach(m =>
+      items.push({ name, team, color, icon: '💥', label: `${m} Sixes This Season` })
+    );
+  });
+
+  if (!items.length) return;
+
+  /* Build card HTML (duplicated for seamless infinite scroll) */
+  const cardHTML = items.map(it => `
+    <div class="milestone-card" style="--ms-color:${it.color}">
+      <span class="milestone-icon">${it.icon}</span>
+      <div class="milestone-text">
+        <span class="milestone-name">${esc(it.name)}</span>
+        <span class="milestone-label">${esc(it.label)}</span>
+      </div>
+    </div>`).join('');
+
+  // Duplicate so the marquee loops seamlessly
+  inner.innerHTML = cardHTML + cardHTML;
+  banner.classList.remove('hidden');
+
+  // Adjust animation speed based on number of items
+  const speed = Math.max(20, items.length * 6); // seconds for one loop
+  inner.style.animationDuration = `${speed}s`;
+}
+
 function renderScorecardSections() {
   renderWeekHeroes(state.matchBatting, state.matchBowling);
   renderFormTracker(state.matchBatting, state.matchBowling);
@@ -4842,6 +4953,9 @@ async function loadScorecards() {
       state.matchBatting.forEach(r => { r.player = _trimDismissal(r.player); });
       state.matchBowling.forEach(r => { r.player = _trimDismissal(r.player); });
       renderScorecardSections();
+      // Load career stats and render milestone banner
+      const careerRows = await loadCSV(CSV_FILES.playerCareer).catch(() => []);
+      renderMilestoneBanner(careerRows);
       return;   /* done — no PDF parsing needed */
     }
   } catch (_) { /* CSVs not available, fall through to PDF extraction */ }
@@ -4858,6 +4972,8 @@ async function loadScorecards() {
     state.matchBatting.forEach(r => { r.player = _trimDismissal(r.player); });
     state.matchBowling.forEach(r => { r.player = _trimDismissal(r.player); });
     renderScorecardSections();
+    const careerRows2 = await loadCSV(CSV_FILES.playerCareer).catch(() => []);
+    renderMilestoneBanner(careerRows2);
     hideExtractionToast();
   } catch (e) {
     console.warn('Scorecard load failed:', e);

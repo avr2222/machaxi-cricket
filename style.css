@@ -542,6 +542,97 @@ body.loading .chart-wrap::after {
 .standings-top .section-header { margin-bottom: 12px; }
 .standings-top .chart-card { background: var(--bg-card); }
 
+/* ── Career Milestone Banner ── */
+.milestone-banner {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #1a2540 0%, #172035 100%);
+  border-top: 2px solid rgba(255,200,50,0.35);
+  border-bottom: 2px solid rgba(255,200,50,0.35);
+  overflow: hidden;
+  height: 52px;
+  position: relative;
+}
+.milestone-banner.hidden { display: none; }
+
+.milestone-banner-label {
+  flex-shrink: 0;
+  padding: 0 14px 0 18px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #f5c842;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255,200,50,0.25);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #1a2540 70%, transparent);
+  z-index: 2;
+}
+
+.milestone-banner-track {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.milestone-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  animation: ms-scroll linear infinite;
+  will-change: transform;
+}
+
+@keyframes ms-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.milestone-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px 0 20px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  height: 52px;
+  flex-shrink: 0;
+}
+.milestone-card::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 28px;
+  border-radius: 2px;
+  background: var(--ms-color, #f5c842);
+  flex-shrink: 0;
+}
+.milestone-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+.milestone-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.milestone-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.milestone-label {
+  font-size: 11px;
+  color: #f5c842;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
 /* ── Current Week Heroes ── */
 .week-heroes-wrap {
   max-width: 1400px;

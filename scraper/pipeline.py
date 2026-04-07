@@ -40,6 +40,7 @@ from .storage import (
     MATCH_BOWLING_FIELDS,
     META_FIELDS,
     MVP_LB_FIELDS,
+    PLAYER_CAREER_FIELDS,
     POINTS_TABLE_FIELDS,
     SUMMARY_FIELDS,
     CSVStore,
@@ -397,6 +398,23 @@ class ScraperPipeline:
         writer.write_raw(all_info, all_batting, all_bowling, all_balls, dot_analysis)
         log.info("Writing dashboard CSVs...")
         writer.write_dashboard(all_info, all_batting, all_bowling, all_balls)
+
+        # Phase 5: Fetch & write career stats for every player seen this run
+        log.info("Fetching player career stats from CricHeroes…")
+        # Build (player_id, name, team_name) from batting + bowling rows
+        player_map: dict[str, tuple[str, str]] = {}  # player_id -> (name, team)
+        for r in all_batting:
+            if r.player_id and r.player_id not in player_map:
+                player_map[r.player_id] = (r.player, r.batting_team)
+        for r in all_bowling:
+            if r.player_id and r.player_id not in player_map:
+                player_map[r.player_id] = (r.player, r.bowling_team)
+        player_triples = [(pid, name, team) for pid, (name, team) in player_map.items()]
+        career_rows = api.fetch_player_careers(player_triples)
+        if career_rows:
+            career_path = self._cfg.data_dir / "player_career.csv"
+            self._store.write_merged(career_path, PLAYER_CAREER_FIELDS, career_rows, "player_id")
+            log.info("Wrote career stats for %d players", len(career_rows))
 
         if errors:
             log.error("Errors (%d):", len(errors))
