@@ -198,14 +198,14 @@ class CricHeroesAPIClient:
         d = data["data"]
 
         # Fetch match summary separately to get player_of_the_match
-        mom = self._fetch_mom(match_id)
+        mom = self._fetch_mom(match_id, url)
 
         info = self._parse_match_info(d, match_id, url, mom)
         batting, bowling = self._parse_innings(d, match_id)
         innings_meta = self._parse_innings_meta(d)
         return info, batting, bowling, innings_meta
 
-    def _fetch_mom(self, match_id: str) -> dict:
+    def _fetch_mom(self, match_id: str, match_url: str = "") -> dict:
         """Try several endpoint patterns to get player_of_the_match."""
         endpoints = [
             f"scorecard/v2/get-match-summary/{match_id}",
@@ -222,6 +222,31 @@ class CricHeroesAPIClient:
                         return mom
             except Exception:
                 pass
+
+        # Fallback: fetch match page HTML and parse __NEXT_DATA__
+        if match_url:
+            try:
+                req = urllib.request.Request(match_url, headers=self._cfg.api_headers)
+                with urllib.request.urlopen(req, timeout=20) as resp:
+                    html = resp.read().decode("utf-8", errors="replace")
+                m = re.search(
+                    r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>',
+                    html, re.DOTALL,
+                )
+                if m:
+                    page_data = json.loads(m.group(1))
+                    summary_data = (
+                        page_data.get("props", {})
+                        .get("pageProps", {})
+                        .get("summaryData", {})
+                        .get("data", {})
+                    )
+                    mom = summary_data.get("player_of_the_match") or {}
+                    if isinstance(mom, dict) and mom.get("player_name"):
+                        return mom
+            except Exception:
+                pass
+
         return {}
 
     def _parse_innings_meta(self, d: dict) -> list["InningsInfo"]:
