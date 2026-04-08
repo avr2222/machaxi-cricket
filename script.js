@@ -2657,6 +2657,8 @@ function renderTopHeroes(batting, bowling, fielding, _mvp, matchBatting, matchBo
   const tOvers    = topTied(bowling,  r => num(r.overs),           r => num(r.overs) > 0);
   const tCatches  = topTied(fielding, r => num(r.catches),         r => num(r.catches) > 0);
 
+  const _emptyTied  = { val: 0, players: [] };
+
   /* Run-out hero: derived from match_batting dismissed_by field
      (fielding leaderboard has run_outs=0 — API doesn't return it) */
   let tRunOut = _emptyTied;
@@ -2728,8 +2730,6 @@ function renderTopHeroes(batting, bowling, fielding, _mvp, matchBatting, matchBo
       players: tied.map(([name, d]) => ({ name, team_name: d.team }))
     };
   }
-
-  const _emptyTied  = { val: 0, players: [] };
 
   /* ── MOM from match_meta (official CricHeroes award) ── */
   let tMOM = _emptyTied;
