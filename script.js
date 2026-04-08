@@ -2656,7 +2656,36 @@ function renderTopHeroes(batting, bowling, fielding, _mvp, matchBatting, matchBo
   const tBowlSR   = topTiedAsc(bowling, r => num(r.SR),           r => num(r.SR) > 0 && num(r.total_wickets) >= 2);
   const tOvers    = topTied(bowling,  r => num(r.overs),           r => num(r.overs) > 0);
   const tCatches  = topTied(fielding, r => num(r.catches),         r => num(r.catches) > 0);
-  const tRunOut   = topTied(fielding, r => num(r.run_outs),        r => num(r.run_outs) > 0);
+
+  /* Run-out hero: derived from match_batting dismissed_by field
+     (fielding leaderboard has run_outs=0 — API doesn't return it) */
+  let tRunOut = _emptyTied;
+  {
+    // Build name → team from bowling rows (bowler's team = their team)
+    const bowlerTeam = {};
+    (matchBowling || []).forEach(r => {
+      const p = (r.player || '').trim();
+      if (p && !bowlerTeam[p]) bowlerTeam[p] = r.bowling_team || '';
+    });
+
+    const roMap = {};
+    (matchBatting || []).forEach(r => {
+      if ((r.dismissal_type || '') !== 'run_out') return;
+      const p = (r.dismissed_by || '').trim(); if (!p) return;
+      const team = bowlerTeam[p] || '';
+      if (!roMap[p]) roMap[p] = { n: 0, team };
+      roMap[p].n++;
+    });
+    const sorted = Object.entries(roMap).sort((a, b) => b[1].n - a[1].n);
+    if (sorted.length) {
+      const best = sorted[0][1].n;
+      const tied = sorted.filter(([, d]) => d.n === best);
+      tRunOut = {
+        val: best,
+        players: tied.map(([name, d]) => ({ name, team_name: d.team }))
+      };
+    }
+  }
 
   function heroCard(icon, label, tied, nameKey, teamKey, statLabel, extraClass = '') {
     if (!tied.players.length) return `<div class="hero-card hero-empty${extraClass ? ' ' + extraClass : ''}"><div class="hero-icon">${icon}</div><div class="hero-label">${label}</div><div class="hero-empty-msg">No data</div></div>`;
