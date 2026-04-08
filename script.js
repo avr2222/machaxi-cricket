@@ -4702,6 +4702,9 @@ const _trimDismissal = name => (name || '')
   .replace(/\s+c&?\s*.*/i,    '')   // "X c& Bowler"    → "X"
   .replace(/\s+run\s*out.*/i, '')   // "X run out …"    → "X"
   .replace(/\s+b\s+\w+$/i,    '')   // "X b Bowler"     → "X"  (trailing only)
+  .replace(/\s*\(c\s*&\s*wk\)/gi, '')  // role suffixes
+  .replace(/\s*\(wk\)/gi, '')
+  .replace(/\s*\(c\)/gi, '')
   .trim();
 
 /* ============================================================

@@ -18,6 +18,11 @@ def _now_utc() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _clean_player_name(name: str) -> str:
+    """Strip role suffixes like (wk), (c), (c & wk) from player names."""
+    return re.sub(r"\s*\(c\s*&\s*wk\)|\s*\(wk\)|\s*\(c\)", "", name, flags=re.I).strip()
+
+
 def _parse_date(raw: str) -> str:
     if not raw:
         return ""
@@ -310,7 +315,7 @@ class CricHeroesAPIClient:
                 for bat in sc.get("batting", []):
                     batting_rows.append(BattingRow(
                         match_id=match_id, innings=inn, batting_team=team_name,
-                        player=bat.get("name", ""),
+                        player=_clean_player_name(bat.get("name", "")),
                         player_id=str(bat.get("player_id", "")),
                         how_out=bat.get("how_to_out", ""),
                         runs=int(bat.get("runs", 0)),
@@ -324,7 +329,7 @@ class CricHeroesAPIClient:
                     tb = int(bowl.get("balls", 0))
                     bowling_rows.append(BowlingRow(
                         match_id=match_id, innings=inn, bowling_team=bowl_team,
-                        player=bowl.get("name", ""),
+                        player=_clean_player_name(bowl.get("name", "")),
                         player_id=str(bowl.get("player_id", "")),
                         overs=_overs_notation(w, tb),
                         maidens=int(bowl.get("maidens", 0)),

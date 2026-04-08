@@ -3,8 +3,8 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23684171,1,Weekend Warriors (WW),Srikanta Maddara,15990447,run out Vinay KS,25,20,1,2,125.00
 23684171,1,Weekend Warriors (WW),Ashok,23317824,b Gopi,4,8,0,0,50.00
 23684171,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,c Mithun b Leel,6,8,1,0,75.00
-23684171,1,Weekend Warriors (WW),Ashok adapala  (wk),35651267,run out Manjunath H,7,6,0,1,116.67
-23684171,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,not out,4,10,0,0,40.00
+23684171,1,Weekend Warriors (WW),Ashok adapala,35651267,run out Manjunath H,7,6,0,1,116.67
+23684171,1,Weekend Warriors (WW),Lokesh kumar YC,23317841,not out,4,10,0,0,40.00
 23684171,1,Weekend Warriors (WW),Pabitra,36285740,not out,1,1,0,0,100.00
 23684171,2,Royal Cricket Blasters (RCB),Leel,7577506,c&b Sudhir Midtown,2,8,0,0,25.00
 23684171,2,Royal Cricket Blasters (RCB),Vijay 208,37092656,c †Ashok adapala b Vinod Reddy,15,16,0,2,93.75
@@ -15,7 +15,7 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23684171,2,Royal Cricket Blasters (RCB),Mithun,39978351,c Sudhir Midtown b Lokesh kumar YC,0,2,0,0,0.00
 23684171,2,Royal Cricket Blasters (RCB),Gopi,34607385,c Pabitra b Vinod Reddy,1,2,0,0,50.00
 23684171,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,not out,2,5,0,0,40.00
-23684100,1,Weekend Warriors (WW),Ashok adapala  (wk),35651267,run out Leel,13,8,1,1,162.50
+23684100,1,Weekend Warriors (WW),Ashok adapala,35651267,run out Leel,13,8,1,1,162.50
 23684100,1,Weekend Warriors (WW),GIRISH G,43156222,b Srinivas Vemulapalli,0,4,0,0,0.00
 23684100,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,retired hurt,20,16,2,1,125.00
 23684100,1,Weekend Warriors (WW),Pabitra,36285740,run out Kranthi 202 Midtown Raaga,4,7,1,0,57.14
@@ -23,7 +23,7 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23684100,1,Weekend Warriors (WW),Sudhir Midtown,36566491,b Gopi,4,4,0,0,100.00
 23684100,1,Weekend Warriors (WW),Ashok,23317824,run out Vijay 208,1,4,0,0,25.00
 23684100,1,Weekend Warriors (WW),Srikanta Maddara,15990447,not out,13,14,0,1,92.86
-23684100,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,run out Gopi,1,1,0,0,100.00
+23684100,1,Weekend Warriors (WW),Lokesh kumar YC,23317841,run out Gopi,1,1,0,0,100.00
 23684100,2,Royal Cricket Blasters (RCB),Leel,7577506,b Pabitra,10,9,0,0,111.11
 23684100,2,Royal Cricket Blasters (RCB),Kranthi 202 Midtown Raaga,48699330,run out GIRISH G,11,12,1,0,91.67
 23684100,2,Royal Cricket Blasters (RCB),Manjunath H,36285742,c †Ashok adapala b Vinod Reddy,5,17,0,0,29.41
@@ -34,17 +34,17 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23684034,1,Weekend Warriors (WW),Firoz,45730696,run out Vijay 208,2,10,0,0,20.00
 23684034,1,Weekend Warriors (WW),Srikanta Maddara,15990447,b Arun,30,19,2,2,157.89
 23684034,1,Weekend Warriors (WW),Ashok,23317824,run out Arun,5,12,0,0,41.67
-23684034,1,Weekend Warriors (WW),Ashok adapala  (wk),35651267,c Murali Cn Cricket b Leel,3,7,0,0,42.86
+23684034,1,Weekend Warriors (WW),Ashok adapala,35651267,c Murali Cn Cricket b Leel,3,7,0,0,42.86
 23684034,1,Weekend Warriors (WW),Vinod Reddy,36285741,st †Manjunath H b Mithun,1,6,0,0,16.67
 23684034,1,Weekend Warriors (WW),Sudhir Midtown,36566491,run out Gopi,2,2,0,0,100.00
 23684034,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,run out Leel,1,1,0,0,100.00
 23684034,1,Weekend Warriors (WW),GIRISH G,43156222,run out Gopi,0,1,0,0,0.00
-23684034,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,not out,0,3,0,0,0.00
+23684034,1,Weekend Warriors (WW),Lokesh kumar YC,23317841,not out,0,3,0,0,0.00
 23684034,1,Weekend Warriors (WW),Pabitra,36285740,not out,2,2,0,0,100.00
 23684034,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,b Vinod Reddy,4,7,0,0,57.14
 23684034,2,Royal Cricket Blasters (RCB),Leel,7577506,run out Pabitra,1,3,0,0,33.33
 23684034,2,Royal Cricket Blasters (RCB),Vijay 208,37092656,c †Ashok adapala b Sudhir Midtown,0,3,0,0,0.00
-23684034,2,Royal Cricket Blasters (RCB),Manjunath H  (wk),36285742,st †Ashok adapala b Vinod Reddy,21,23,2,1,91.30
+23684034,2,Royal Cricket Blasters (RCB),Manjunath H,36285742,st †Ashok adapala b Vinod Reddy,21,23,2,1,91.30
 23684034,2,Royal Cricket Blasters (RCB),Arun,43156255,b Sudhir Midtown,1,4,0,0,25.00
 23684034,2,Royal Cricket Blasters (RCB),Mithun,39978351,b Lokesh kumar YC,2,6,0,0,33.33
 23684034,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,not out,7,10,0,0,70.00
@@ -60,9 +60,9 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23454111,1,Weekend Warriors (WW),Firoz,45730696,retired hurt,6,7,1,0,85.71
 23454111,1,Weekend Warriors (WW),Mithun,39978351,b Mahesh,2,4,0,0,50.00
 23454111,1,Weekend Warriors (WW),Ashok,23317824,c †Vinay KS b Mahesh,0,1,0,0,0.00
-23454111,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,not out,6,6,1,0,100.00
+23454111,1,Weekend Warriors (WW),Lokesh kumar YC,23317841,not out,6,6,1,0,100.00
 23454111,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,c †Vinay KS b Mahesh,0,1,0,0,0.00
-23454111,2,Royal Cricket Blasters (RCB),Vinay KS  (wk),36284615,c Sudheer Nidiginti b Mithun,6,8,1,0,75.00
+23454111,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,c Sudheer Nidiginti b Mithun,6,8,1,0,75.00
 23454111,2,Royal Cricket Blasters (RCB),shaik azeed,32475183,c Subbu b Mithun,20,9,2,1,222.22
 23454111,2,Royal Cricket Blasters (RCB),Manjunath H,36285742,c Sarat Kumar b Mithun,7,7,1,0,100.00
 23454111,2,Royal Cricket Blasters (RCB),Mahesh,27687690,b Vinod Reddy,18,11,2,1,163.64
@@ -90,7 +90,7 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23454074,2,Royal Cricket Blasters (RCB),Kranthi 202 Midtown Raaga,48699330,c Sarat Kumar b Vinod Reddy,7,6,1,0,116.67
 23454074,2,Royal Cricket Blasters (RCB),Arun 102.raaga,42545298,c Srikanta Maddara b Sudheer Nidiginti,4,5,0,0,80.00
 23454074,2,Royal Cricket Blasters (RCB),Mahesh,27687690,not out,3,3,0,0,100.00
-23247987,1,Royal Cricket Blasters (RCB),Manjunath H  (wk),36285742,c †Ashok adapala b Sudheer Nidiginti,11,11,0,1,100.00
+23247987,1,Royal Cricket Blasters (RCB),Manjunath H,36285742,c †Ashok adapala b Sudheer Nidiginti,11,11,0,1,100.00
 23247987,1,Royal Cricket Blasters (RCB),Jithin Tj,24920096,run out Sudheer Nidiginti,11,19,1,0,57.89
 23247987,1,Royal Cricket Blasters (RCB),Vinay KS,36284615,run out Venkat A,9,5,0,1,180.00
 23247987,1,Royal Cricket Blasters (RCB),Leel,7577506,c Sudheer Nidiginti b Venkat A,0,2,0,0,0.00
@@ -99,7 +99,7 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23247987,1,Royal Cricket Blasters (RCB),Kranthi 202 Midtown Raaga,48699330,c †Ashok adapala b Vinod Reddy,0,4,0,0,0.00
 23247987,1,Royal Cricket Blasters (RCB),Gopi,34607385,c Sudheer Nidiginti b Vinod Reddy,0,1,0,0,0.00
 23247987,1,Royal Cricket Blasters (RCB),Satyam Goyal,46521634,b Vinod Reddy,0,1,0,0,0.00
-23247987,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,not out,1,1,0,0,100.00
+23247987,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,36272025,not out,1,1,0,0,100.00
 23247987,2,Weekend Warriors (WW),Rajkumar Muddasu,32252331,run out Manjunath H,5,6,0,0,83.33
 23247987,2,Weekend Warriors (WW),Sudheer Nidiginti,42607076,c Kranthi 202 Midtown Raaga b Srinivas Vemulapalli,3,9,0,0,33.33
 23247987,2,Weekend Warriors (WW),Subbu,43374562,c Leel b Jithin Tj,2,5,0,0,40.00
@@ -110,14 +110,14 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23247987,2,Weekend Warriors (WW),Venkat A,5945797,b Srinivas Vemulapalli,10,12,0,0,83.33
 23247987,2,Weekend Warriors (WW),Vinod Reddy,36285741,run out Gopi,15,4,0,1,375.00
 23247987,2,Weekend Warriors (WW),Srikanta Maddara,15990447,c Manjunath H b Mithun,5,7,0,0,71.43
-23247987,2,Weekend Warriors (WW),Ashok adapala  (wk),35651267,b Mithun,0,3,0,0,0.00
-23247987,2,Weekend Warriors (WW),Ashik Jain  (c),24133065,not out,0,0,0,0,0.00
+23247987,2,Weekend Warriors (WW),Ashok adapala,35651267,b Mithun,0,3,0,0,0.00
+23247987,2,Weekend Warriors (WW),Ashik Jain,24133065,not out,0,0,0,0,0.00
 23247977,1,Weekend Warriors (WW),Karthik Reddy,36266644,c Jithin Tj b Mahesh,6,5,0,1,120.00
 23247977,1,Weekend Warriors (WW),Srikanta Maddara,15990447,run out Satyam Goyal,21,11,1,2,190.91
 23247977,1,Weekend Warriors (WW),Pabitra,36285740,b Mithun,13,12,1,1,108.33
 23247977,1,Weekend Warriors (WW),Venkat A,5945797,c Leel b Mithun,2,6,0,0,33.33
 23247977,1,Weekend Warriors (WW),Balaji Balaraju,23317827,not out,27,13,0,3,207.69
-23247977,1,Weekend Warriors (WW),Ashik Jain  (c),24133065,run out Arun 102.raaga,5,9,0,0,55.56
+23247977,1,Weekend Warriors (WW),Ashik Jain,24133065,run out Arun 102.raaga,5,9,0,0,55.56
 23247977,1,Weekend Warriors (WW),RK,28100363,run out Mithun,4,3,1,0,133.33
 23247977,1,Weekend Warriors (WW),Sudheer Nidiginti,42607076,not out,2,1,0,0,200.00
 23247977,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,c RK b Pabitra,0,3,0,0,0.00
@@ -127,12 +127,12 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23247977,2,Royal Cricket Blasters (RCB),Leel,7577506,run out Balaji Balaraju,10,12,0,0,83.33
 23247977,2,Royal Cricket Blasters (RCB),Gopi,34607385,run out † Ashok adapala / RK,14,15,0,1,93.33
 23247977,2,Royal Cricket Blasters (RCB),Mithun,39978351,not out,6,3,0,1,200.00
-23247977,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,run out Pabitra,0,0,0,0,0.00
+23247977,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,36272025,run out Pabitra,0,0,0,0,0.00
 23247962,1,Weekend Warriors (WW),Balaji Balaraju,23317827,retired hurt,16,27,0,1,59.26
 23247962,1,Weekend Warriors (WW),Subbu,43374562,run out Arun 102.raaga,5,7,0,0,71.43
 23247962,1,Weekend Warriors (WW),RK,28100363,b Srinivas Vemulapalli,0,4,0,0,0.00
-23247962,1,Weekend Warriors (WW),Rajkumar Muddasu  (wk),32252331,c Jithin Tj b Srinivas Vemulapalli,6,6,1,0,100.00
-23247962,1,Weekend Warriors (WW),Ashok adapala  (c),35651267,retired hurt,7,8,0,0,87.50
+23247962,1,Weekend Warriors (WW),Rajkumar Muddasu,32252331,c Jithin Tj b Srinivas Vemulapalli,6,6,1,0,100.00
+23247962,1,Weekend Warriors (WW),Ashok adapala,35651267,retired hurt,7,8,0,0,87.50
 23247962,1,Weekend Warriors (WW),Ashik Jain,24133065,run out Leel,19,17,2,1,111.76
 23247962,1,Weekend Warriors (WW),Venkat A,5945797,run out Mithun,0,1,0,0,0.00
 23247962,1,Weekend Warriors (WW),Karthik Reddy,36266644,not out,2,2,0,0,100.00
@@ -150,16 +150,16 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23110064,1,Weekend Warriors (WW),Ashok adapala,35651267,retired hurt,6,14,0,0,42.86
 23110064,1,Weekend Warriors (WW),Ashok,23317824,c Leel b Mahesh,0,1,0,0,0.00
 23110064,1,Weekend Warriors (WW),Pabitra,36285740,b Mahesh,4,8,0,0,50.00
-23110064,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,c †Manjunath H b Mahesh,0,2,0,0,0.00
+23110064,1,Weekend Warriors (WW),Lokesh kumar YC,23317841,c †Manjunath H b Mahesh,0,2,0,0,0.00
 23110064,1,Weekend Warriors (WW),RK,28100363,c Murali Cn Cricket b Srinivas Vemulapalli,31,28,0,3,110.71
 23110064,1,Weekend Warriors (WW),Rajkumar Muddasu,32252331,not out,15,9,0,1,166.67
 23110064,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,c seenu b Lokesh kumar YC,40,29,2,4,137.93
 23110064,2,Royal Cricket Blasters (RCB),Mahesh,27687690,run out Ashok,4,5,0,0,80.00
 23110064,2,Royal Cricket Blasters (RCB),GIRISH G,43156222,retired hurt,11,12,0,0,91.67
 23110064,2,Royal Cricket Blasters (RCB),Vijay 208,37092656,b Lokesh kumar YC,0,2,0,0,0.00
-23110064,2,Royal Cricket Blasters (RCB),Manjunath H  (wk),36285742,not out,3,3,0,0,100.00
+23110064,2,Royal Cricket Blasters (RCB),Manjunath H,36285742,not out,3,3,0,0,100.00
 23110064,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,not out,5,5,1,0,100.00
-23064208,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,run out Karthik Reddy,3,5,0,0,60.00
+23064208,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,36272025,run out Karthik Reddy,3,5,0,0,60.00
 23064208,1,Royal Cricket Blasters (RCB),Vinay KS,36284615,run out Ashok,1,6,0,0,16.67
 23064208,1,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,b Venkat A,8,4,0,1,200.00
 23064208,1,Royal Cricket Blasters (RCB),Leel,7577506,c Ashok adapala b Venkat A,0,1,0,0,0.00
@@ -184,20 +184,20 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 23064193,1,Weekend Warriors (WW),Ashok adapala,35651267,c †Manjunath H b Arun,3,9,0,0,33.33
 23064193,1,Weekend Warriors (WW),Srikanta Maddara,15990447,not out,5,9,0,0,55.56
 23064193,1,Weekend Warriors (WW),Subbu,43374562,run out Vijay 208,4,4,0,0,100.00
-23064193,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,not out,1,1,0,0,100.00
-23064193,2,Royal Cricket Blasters (RCB),Manjunath H  (wk),36285742,c Ashok adapala b Sudheer Nidiginti,7,14,0,1,50.00
+23064193,1,Weekend Warriors (WW),Lokesh kumar YC,23317841,not out,1,1,0,0,100.00
+23064193,2,Royal Cricket Blasters (RCB),Manjunath H,36285742,c Ashok adapala b Sudheer Nidiginti,7,14,0,1,50.00
 23064193,2,Royal Cricket Blasters (RCB),GIRISH G,43156222,run out Karthik Reddy,0,0,0,0,0.00
 23064193,2,Royal Cricket Blasters (RCB),Arun 102.raaga,42545298,c Venkat A b Lokesh kumar YC,1,9,0,0,11.11
 23064193,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,retired hurt,3,11,0,0,27.27
 23064193,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,run out Karthik Reddy,2,3,0,0,66.67
 23064193,2,Royal Cricket Blasters (RCB),Arun,43156255,c Lokesh kumar YC b Venkat A,0,3,0,0,0.00
 23064193,2,Royal Cricket Blasters (RCB),Leel,7577506,c Ashok adapala b Sudheer Nidiginti,1,4,0,0,25.00
-23064193,2,Royal Cricket Blasters (RCB),Vijay 208  (wk),37092656,c Ashok b Lokesh kumar YC,1,5,0,0,20.00
+23064193,2,Royal Cricket Blasters (RCB),Vijay 208,37092656,c Ashok b Lokesh kumar YC,1,5,0,0,20.00
 23064193,2,Royal Cricket Blasters (RCB),Kranthi 202 Midtown Raaga,48699330,c Sudheer Nidiginti b Srikanta Maddara,1,2,0,0,50.00
 23064193,2,Royal Cricket Blasters (RCB),Jithin Tj,24920096,c Lokesh kumar YC b Srikanta Maddara,2,5,0,0,40.00
 23064193,2,Royal Cricket Blasters (RCB),Mahesh,27687690,c seenu b Venkat A,1,6,0,0,16.67
 23064193,2,Royal Cricket Blasters (RCB),Gopi,34607385,c Sudheer Nidiginti b Lokesh kumar YC,13,4,0,2,325.00
-23064193,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,not out,0,0,0,0,0.00
+23064193,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,36272025,not out,0,0,0,0,0.00
 22943981,1,Royal Cricket Blasters (RCB),GIRISH G,43156222,c †Ashok adapala b Lokesh kumar YC,9,6,0,1,150.00
 22943981,1,Royal Cricket Blasters (RCB),Vinay KS,36284615,st †Ashok adapala b Pabitra,0,1,0,0,0.00
 22943981,1,Royal Cricket Blasters (RCB),Manjunath,36285742,not out,23,21,1,2,109.52
@@ -211,40 +211,40 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 22943981,2,Weekend Warriors (WW),Sudhir Midtown,36566491,st †Jithin Tj b Vinay KS,10,6,0,1,166.67
 22943981,2,Weekend Warriors (WW),Ashok,23317824,st †Jithin Tj b Manjunath,0,2,0,0,0.00
 22943981,2,Weekend Warriors (WW),Pabitra,36285740,not out,0,2,0,0,0.00
-22943981,2,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,c Arun b Vinay KS,0,2,0,0,0.00
-22943981,2,Weekend Warriors (WW),Ashok adapala  (wk),35651267,run out Vinay KS,1,1,0,0,100.00
+22943981,2,Weekend Warriors (WW),Lokesh kumar YC,23317841,c Arun b Vinay KS,0,2,0,0,0.00
+22943981,2,Weekend Warriors (WW),Ashok adapala,35651267,run out Vinay KS,1,1,0,0,100.00
 22943980,1,Weekend Warriors (WW),Pabitra,36285740,c Arun b Gopi,2,3,0,0,66.67
 22943980,1,Weekend Warriors (WW),Ashok,23317824,b Gopi,2,5,0,0,40.00
 22943980,1,Weekend Warriors (WW),Firoz,45730696,run out Murali Cn Cricket,9,9,1,0,100.00
 22943980,1,Weekend Warriors (WW),Subbu,43374562,run out Leel,0,4,0,0,0.00
-22943980,1,Weekend Warriors (WW),Ashok adapala  (wk),35651267,c †Manjunath b Gopi,6,13,0,0,46.15
+22943980,1,Weekend Warriors (WW),Ashok adapala,35651267,c †Manjunath b Gopi,6,13,0,0,46.15
 22943980,1,Weekend Warriors (WW),RK,28100363,run out GIRISH G,1,7,0,0,14.29
 22943980,1,Weekend Warriors (WW),Sudhir Midtown,36566491,run out † Manjunath,0,1,0,0,0.00
 22943980,1,Weekend Warriors (WW),Venkat A,5945797,not out,23,26,0,0,88.46
 22943980,1,Weekend Warriors (WW),Srikanta Maddara,15990447,retired hurt,1,4,0,0,25.00
 22943980,1,Weekend Warriors (WW),Mahesh,24500548,not out,2,2,0,0,100.00
 22943980,2,Royal Cricket Blasters (RCB),GIRISH G,43156222,st †Ashok adapala b Pabitra,3,9,0,0,33.33
-22943980,2,Royal Cricket Blasters (RCB),Manjunath  (wk),36285742,c Ashok adapala b Sudhir Midtown,8,13,0,1,61.54
+22943980,2,Royal Cricket Blasters (RCB),Manjunath,36285742,c Ashok adapala b Sudhir Midtown,8,13,0,1,61.54
 22943980,2,Royal Cricket Blasters (RCB),Arun,43156255,c Srikanta Maddara b Venkat A,0,3,0,0,0.00
 22943980,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,c Sudhir Midtown b Pabitra,0,1,0,0,0.00
 22943980,2,Royal Cricket Blasters (RCB),Leel,7577506,b Srikanta Maddara,12,15,0,1,80.00
 22943980,2,Royal Cricket Blasters (RCB),Mithun,39978351,run out Lokesh kumar YC,6,11,0,0,54.55
 22943980,2,Royal Cricket Blasters (RCB),Vinay KS,36284615,c RK b Venkat A,2,8,0,0,25.00
 22943980,2,Royal Cricket Blasters (RCB),Jithin Tj,24920096,run out † Ashok adapala,0,0,0,0,0.00
-22943980,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,c Ashok adapala b Lokesh kumar YC,0,2,0,0,0.00
+22943980,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,36272025,c Ashok adapala b Lokesh kumar YC,0,2,0,0,0.00
 22943980,2,Royal Cricket Blasters (RCB),Gopi,34607385,c&b Sudhir Midtown,4,10,0,0,40.00
 22943980,2,Royal Cricket Blasters (RCB),Satyam Goyal,46521634,c Firoz b Sudhir Midtown,3,6,0,0,50.00
 22943979,1,Weekend Warriors (WW),RK,28100363,run out Gopi,2,4,0,0,50.00
 22943979,1,Weekend Warriors (WW),Ashok,23317824,run out Arun,0,1,0,0,0.00
 22943979,1,Weekend Warriors (WW),Mahesh,24500548,run out Leel,11,18,1,0,61.11
 22943979,1,Weekend Warriors (WW),Subbu,43374562,b Leel,4,11,0,0,36.36
-22943979,1,Weekend Warriors (WW),Ashok adapala  (wk),35651267,retired hurt,12,17,0,0,70.59
+22943979,1,Weekend Warriors (WW),Ashok adapala,35651267,retired hurt,12,17,0,0,70.59
 22943979,1,Weekend Warriors (WW),Venkat A,5945797,c Manjunath b Gopi,5,10,0,0,50.00
 22943979,1,Weekend Warriors (WW),Srikanta Maddara,15990447,run out Srinivas Vemulapalli,1,4,0,0,25.00
 22943979,1,Weekend Warriors (WW),Firoz,45730696,c †Manjunath b Mithun,4,5,0,0,80.00
 22943979,1,Weekend Warriors (WW),Sudhir Midtown,36566491,not out,2,3,0,0,66.67
-22943979,1,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,not out,0,1,0,0,0.00
-22943979,2,Royal Cricket Blasters (RCB),Manjunath  (wk),36285742,b Venkat A,3,11,0,0,27.27
+22943979,1,Weekend Warriors (WW),Lokesh kumar YC,23317841,not out,0,1,0,0,0.00
+22943979,2,Royal Cricket Blasters (RCB),Manjunath,36285742,b Venkat A,3,11,0,0,27.27
 22943979,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,retired hurt,3,8,0,0,37.50
 22943979,2,Royal Cricket Blasters (RCB),GIRISH G,43156222,c Ashok b Firoz,0,1,0,0,0.00
 22943979,2,Royal Cricket Blasters (RCB),Arun,43156255,st †Ashok adapala b Sudhir Midtown,8,13,0,1,61.54
@@ -257,7 +257,7 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 22786419,1,Royal Cricket Blasters (RCB),Arun,43156255,c Mahesh b Sudheer Nidiginti,7,13,0,1,53.85
 22786419,1,Royal Cricket Blasters (RCB),Deepak Kumar,36285780,st †RK b Pabitra,0,1,0,0,0.00
 22786419,1,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,run out Lokesh kumar YC,5,10,0,0,50.00
-22786419,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli  (c),36272025,run out Subbu,0,3,0,0,0.00
+22786419,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,36272025,run out Subbu,0,3,0,0,0.00
 22786419,1,Royal Cricket Blasters (RCB),Vinay KS,36284615,run out Venkat A,7,8,0,1,87.50
 22786419,1,Royal Cricket Blasters (RCB),Pavan,22711554,c Pabitra b Venkat A,8,4,0,1,200.00
 22786419,1,Royal Cricket Blasters (RCB),Jithin Tj,24920096,run out GIRISH G,6,5,0,1,120.00
@@ -266,12 +266,12 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 22786419,2,Weekend Warriors (WW),GIRISH G,43156222,c Pavan b Mahesh,1,4,0,0,25.00
 22786419,2,Weekend Warriors (WW),Firoz,45730696,c Pavan b Mahesh,3,6,0,0,50.00
 22786419,2,Weekend Warriors (WW),Mahesh,24500548,c Pavan b Srinivas Vemulapalli,10,15,0,0,66.67
-22786419,2,Weekend Warriors (WW),RK  (wk),28100363,b Jithin Tj,2,4,0,0,50.00
+22786419,2,Weekend Warriors (WW),RK,28100363,b Jithin Tj,2,4,0,0,50.00
 22786419,2,Weekend Warriors (WW),Subbu,43374562,run out Jithin Tj,4,10,0,0,40.00
 22786419,2,Weekend Warriors (WW),Venkat A,5945797,c Pavan b Srinivas Vemulapalli,0,1,0,0,0.00
 22786419,2,Weekend Warriors (WW),Srikanta Maddara,15990447,run out Leel,3,9,0,0,33.33
 22786419,2,Weekend Warriors (WW),Sudheer Nidiginti,42607076,not out,5,5,0,0,100.00
-22786419,2,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,not out,10,4,0,1,250.00
+22786419,2,Weekend Warriors (WW),Lokesh kumar YC,23317841,not out,10,4,0,1,250.00
 22786418,1,Royal Cricket Blasters (RCB),Vijay 208,37092656,run out Firoz,3,4,0,0,75.00
 22786418,1,Royal Cricket Blasters (RCB),Arun,43156255,b Lokesh kumar YC,28,16,3,2,175.00
 22786418,1,Royal Cricket Blasters (RCB),Mahesh,27687690,c Sudheer Nidiginti b Lokesh kumar YC,2,5,0,0,40.00
@@ -290,7 +290,7 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 22786418,2,Weekend Warriors (WW),GIRISH G,43156222,c Vijay 208 b Leel,0,2,0,0,0.00
 22786418,2,Weekend Warriors (WW),Sudheer Nidiginti,42607076,run out Srinivas Vemulapalli,2,9,0,0,22.22
 22786418,2,Weekend Warriors (WW),Subbu,43374562,run out Deepak Kumar,0,1,0,0,0.00
-22786418,2,Weekend Warriors (WW),Lokesh kumar YC  (c),23317841,not out,2,6,0,0,33.33
+22786418,2,Weekend Warriors (WW),Lokesh kumar YC,23317841,not out,2,6,0,0,33.33
 22786417,1,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,run out Firoz,7,14,0,0,50.00
 22786417,1,Royal Cricket Blasters (RCB),Pavan,22711554,b Venkat A,0,1,0,0,0.00
 22786417,1,Royal Cricket Blasters (RCB),Vinay KS,36284615,retired hurt,6,15,0,0,40.00
@@ -341,7 +341,7 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 22632661,2,Weekend Warriors (WW),Mahesh,24500548,run out Gopi,0,0,0,0,0.00
 22632661,2,Weekend Warriors (WW),Venkat A,5945797,run out Arun 102.raaga,4,3,0,0,133.33
 22632661,2,Weekend Warriors (WW),Sudhir Midtown,36566491,not out,1,2,0,0,50.00
-22632660,1,Royal Cricket Blasters (RCB),Manjunath  (c & wk),36285742,retired hurt,9,20,0,0,45.00
+22632660,1,Royal Cricket Blasters (RCB),Manjunath,36285742,retired hurt,9,20,0,0,45.00
 22632660,1,Royal Cricket Blasters (RCB),Satyam Goyal,46521634,b Lokesh kumar YC,2,3,0,0,66.67
 22632660,1,Royal Cricket Blasters (RCB),Murali Cn Cricket,42607170,c †Balaji Balaraju b Sudheer Nidiginti,0,3,0,0,0.00
 22632660,1,Royal Cricket Blasters (RCB),Arun,43156255,run out Venkat A,29,17,0,4,170.59
@@ -349,8 +349,8 @@ match_id,innings,batting_team,player,player_id,how_out,runs,balls,fours,sixes,st
 22632660,1,Royal Cricket Blasters (RCB),Pavan,22711554,not out,18,20,0,2,90.00
 22632660,2,Weekend Warriors (WW),seenu,23317861,c Arun b shaik azeed,15,8,0,2,187.50
 22632660,2,Weekend Warriors (WW),Subbu,43374562,b Srinivas Vemulapalli,0,1,0,0,0.00
-22632660,2,Weekend Warriors (WW),RK  (wk),28100363,retired hurt,19,13,2,1,146.15
-22632660,2,Weekend Warriors (WW),Balaji Balaraju  (wk),23317827,run out Vishwanath Cricket,13,12,0,1,108.33
+22632660,2,Weekend Warriors (WW),RK,28100363,retired hurt,19,13,2,1,146.15
+22632660,2,Weekend Warriors (WW),Balaji Balaraju,23317827,run out Vishwanath Cricket,13,12,0,1,108.33
 22632660,2,Weekend Warriors (WW),Mahesh,24500548,not out,5,11,0,0,45.45
 22632660,2,Weekend Warriors (WW),Sudhir Midtown,36566491,b Gopi,0,1,0,0,0.00
 22632660,2,Weekend Warriors (WW),Srikanta Maddara,15990447,run out Arun 102.raaga,0,1,0,0,0.00
