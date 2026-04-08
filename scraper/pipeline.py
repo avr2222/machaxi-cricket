@@ -237,7 +237,10 @@ class OutputWriter:
             })
 
         # Write match-level CSVs (merge with history)
-        self._store.write_merged(dd / "match_meta.csv", META_FIELDS, meta_rows, "match_id")
+        self._store.write_merged(
+            dd / "match_meta.csv", META_FIELDS, meta_rows, "match_id",
+            preserve_if_blank=("man_of_match", "man_of_match_team"),
+        )
         self._store.write_replace_by_match(dd / "match_batting.csv", MATCH_BATTING_FIELDS, bat_rows)
         self._store.write_replace_by_match(dd / "match_bowling.csv", MATCH_BOWLING_FIELDS, bowl_rows)
 

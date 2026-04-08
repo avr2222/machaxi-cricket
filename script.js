@@ -4706,9 +4706,9 @@ const _trimDismissal = name => (name || '')
 
 /* ============================================================
    Career Milestone Banner
-   Detects which players crossed a magic number during this
-   season (career_total - tournament_contribution < threshold
-   <= career_total) and shows a scrolling banner.
+   Shows milestones crossed ONLY in the most recent match week.
+   Logic: milestone M was crossed this week if
+     (career_after_week - week_contribution) < M <= career_after_week
    ============================================================ */
 
 async function renderMilestoneBanner(careerRows) {
@@ -4716,44 +4716,70 @@ async function renderMilestoneBanner(careerRows) {
   const inner  = document.getElementById('milestoneBannerInner');
   if (!banner || !inner || !careerRows?.length) return;
 
-  /* ── Tournament totals per player_id from raw CSVs (have player_id column) ── */
-  const tourBat  = {};   // player_id -> {runs, sixes, matchIds}
-  const tourBowl = {};   // player_id -> {wickets, matchIds}
-
+  /* ── Load raw CSVs (have player_id column) ── */
   const [rawBat, rawBowl] = await Promise.all([
     loadCSV(CSV_FILES.rawBatting).catch(() => []),
     loadCSV(CSV_FILES.rawBowling).catch(() => []),
   ]);
+  if (!rawBat.length && !rawBowl.length) return;
 
+  /* ── Find the latest match date from match_meta ── */
+  const metaDateByMatchId = {};
+  (state.matchMeta || []).forEach(m => {
+    if (m.match_id && m.match_date) metaDateByMatchId[m.match_id] = m.match_date;
+  });
+  const allDates = Object.values(metaDateByMatchId).filter(Boolean).sort();
+  if (!allDates.length) return;
+  const latestDate = allDates[allDates.length - 1];
+
+  /* ── Collect this week's match IDs ── */
+  const thisWeekMatchIds = new Set(
+    Object.entries(metaDateByMatchId)
+      .filter(([, d]) => d === latestDate)
+      .map(([id]) => id)
+  );
+  if (!thisWeekMatchIds.size) return;
+
+  /* ── Per-player: this week's contribution only ── */
+  const weekBat  = {};   // player_id -> {runs, sixes, matchIds}
+  const weekBowl = {};   // player_id -> {wickets, matchIds}
+
+  rawBat.forEach(r => {
+    if (!thisWeekMatchIds.has(r.match_id)) return;
+    const pid = (r.player_id || '').trim();
+    if (!pid) return;
+    if (!weekBat[pid]) weekBat[pid] = { runs: 0, sixes: 0, matchIds: new Set() };
+    weekBat[pid].runs  += num(r.runs);
+    weekBat[pid].sixes += num(r.sixes);
+    weekBat[pid].matchIds.add(r.match_id);
+  });
+  rawBowl.forEach(r => {
+    if (!thisWeekMatchIds.has(r.match_id)) return;
+    const pid = (r.player_id || '').trim();
+    if (!pid) return;
+    if (!weekBowl[pid]) weekBowl[pid] = { wickets: 0, matchIds: new Set() };
+    weekBowl[pid].wickets += num(r.wickets);
+    weekBowl[pid].matchIds.add(r.match_id);
+  });
+
+  /* ── Also need all-season sixes per player (not on career page) ── */
+  const seasonSixes = {};
   rawBat.forEach(r => {
     const pid = (r.player_id || '').trim();
     if (!pid) return;
-    if (!tourBat[pid]) tourBat[pid] = { runs: 0, sixes: 0, matchIds: new Set() };
-    tourBat[pid].runs  += num(r.runs);
-    tourBat[pid].sixes += num(r.sixes);
-    tourBat[pid].matchIds.add(r.match_id);
-  });
-  rawBowl.forEach(r => {
-    const pid = (r.player_id || '').trim();
-    if (!pid) return;
-    if (!tourBowl[pid]) tourBowl[pid] = { wickets: 0, matchIds: new Set() };
-    tourBowl[pid].wickets += num(r.wickets);
-    tourBowl[pid].matchIds.add(r.match_id);
+    seasonSixes[pid] = (seasonSixes[pid] || 0) + num(r.sixes);
   });
 
   /* ── Milestone thresholds ── */
-  const MATCH_MS   = [25, 50, 75, 100, 125, 150, 175, 200, 250, 300];
-  const RUN_MS     = [250, 500, 750, 1000, 1250, 1500, 2000, 2500];
-  const WICKET_MS  = [25, 50, 75, 100, 125, 150, 200, 250];
-  const SIX_MS     = [10, 20, 30, 40, 50, 75, 100];
+  const MATCH_MS  = [25, 50, 75, 100, 125, 150, 175, 200, 250, 300];
+  const RUN_MS    = [250, 500, 750, 1000, 1250, 1500, 2000, 2500];
+  const WICKET_MS = [25, 50, 75, 100, 125, 150, 200, 250];
+  const SIX_MS    = [10, 20, 30, 40, 50, 75, 100];
 
-  function crossedThisseason(career, tourContrib, thresholds) {
-    /* career = current career total (includes this season)
-       tourContrib = what they added during this season
-       A milestone M was crossed this season if:
-         (career - tourContrib) < M <= career  */
-    const pre = career - tourContrib;
-    return thresholds.filter(m => pre < m && m <= career);
+  /* M was crossed this week if: (total_after - week_contrib) < M <= total_after */
+  function crossedThisWeek(totalAfter, weekContrib, thresholds) {
+    const totalBefore = totalAfter - weekContrib;
+    return thresholds.filter(m => totalBefore < m && m <= totalAfter);
   }
 
   const items = [];
@@ -4764,37 +4790,34 @@ async function renderMilestoneBanner(careerRows) {
     const team = (r.team_name || '').trim();
     const color = teamCssVar(team) || 'var(--team-0)';
 
-    const cb  = tourBat[pid]  || { runs: 0, sixes: 0, matchIds: new Set() };
-    const cbw = tourBowl[pid] || { wickets: 0, matchIds: new Set() };
+    const wb  = weekBat[pid]  || { runs: 0, sixes: 0, matchIds: new Set() };
+    const wbw = weekBowl[pid] || { wickets: 0, matchIds: new Set() };
 
-    const careerMatches  = num(r.career_matches);
-    const careerRuns     = num(r.career_runs);
-    const careerWickets  = num(r.career_wickets);
-    // Union of match IDs where they batted or bowled
-    const allMatchIds   = new Set([...cb.matchIds, ...cbw.matchIds]);
-    const tourMatches   = allMatchIds.size;
-    const tourRuns      = cb.runs;
-    const tourWickets   = cbw.wickets;
-    const tourSixes     = cb.sixes;
+    const careerMatches = num(r.career_matches);
+    const careerRuns    = num(r.career_runs);
+    const careerWickets = num(r.career_wickets);
+    const weekMatches   = new Set([...wb.matchIds, ...wbw.matchIds]).size;
+    const allSeasonSixes = seasonSixes[pid] || 0;
+    const weekSixes     = wb.sixes;
 
-    crossedThisseason(careerMatches, tourMatches, MATCH_MS).forEach(m =>
+    crossedThisWeek(careerMatches, weekMatches, MATCH_MS).forEach(m =>
       items.push({ name, team, color, icon: '🏏', label: `${m} CricHeroes Matches` })
     );
-    crossedThisseason(careerRuns, tourRuns, RUN_MS).forEach(m =>
+    crossedThisWeek(careerRuns, wb.runs, RUN_MS).forEach(m =>
       items.push({ name, team, color, icon: '🏏', label: `${m} Career Runs` })
     );
-    crossedThisseason(careerWickets, tourWickets, WICKET_MS).forEach(m =>
+    crossedThisWeek(careerWickets, wbw.wickets, WICKET_MS).forEach(m =>
       items.push({ name, team, color, icon: '🎳', label: `${m} Career Wickets` })
     );
-    // Sixes: career page doesn't track them, use tournament total as the single source
-    crossedThisseason(tourSixes, 0, SIX_MS).forEach(m =>
+    // Sixes: career page doesn't expose them — track season total vs pre-week total
+    crossedThisWeek(allSeasonSixes, weekSixes, SIX_MS).forEach(m =>
       items.push({ name, team, color, icon: '💥', label: `${m} Sixes This Season` })
     );
   });
 
   if (!items.length) return;
 
-  /* Build card HTML (duplicated for seamless infinite scroll) */
+  /* ── Build scrolling banner ── */
   const cardHTML = items.map(it => `
     <div class="milestone-card" style="--ms-color:${it.color}">
       <span class="milestone-icon">${it.icon}</span>
@@ -4804,12 +4827,11 @@ async function renderMilestoneBanner(careerRows) {
       </div>
     </div>`).join('');
 
-  // Duplicate so the marquee loops seamlessly
+  // Duplicate for seamless infinite scroll
   inner.innerHTML = cardHTML + cardHTML;
   banner.classList.remove('hidden');
 
-  // Adjust animation speed based on number of items
-  const speed = Math.max(20, items.length * 6); // seconds for one loop
+  const speed = Math.max(20, items.length * 6);
   inner.style.animationDuration = `${speed}s`;
 }
 

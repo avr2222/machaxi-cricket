@@ -148,13 +148,25 @@ class CSVStore:
         fields: list[str],
         new_rows: list[dict],
         key_col: str,
+        preserve_if_blank: tuple[str, ...] = (),
     ) -> int:
-        """Merge new_rows into existing file (keyed by key_col) then overwrite."""
+        """Merge new_rows into existing file (keyed by key_col) then overwrite.
+
+        ``preserve_if_blank``: field names whose existing (non-empty) value is
+        kept when the incoming row has that field blank.  Prevents a failed
+        scrape from overwriting previously-correct data with an empty string.
+        """
         existing = {r[key_col]: r for r in self.read(path) if r.get(key_col)}
         for row in new_rows:
             k = str(row.get(key_col, ""))
-            if k:
-                existing[k] = row
+            if not k:
+                continue
+            if k in existing and preserve_if_blank:
+                old = existing[k]
+                for field in preserve_if_blank:
+                    if not row.get(field) and old.get(field):
+                        row[field] = old[field]
+            existing[k] = row
         merged = list(existing.values())
         self._write(path, fields, merged)
         log.info("  Wrote %4d rows -> %s", len(merged), path)
