@@ -4,18 +4,18 @@ match_id,match_date,innings1_team,innings2_team,toss_winner,toss_decision,result
 22943981,2026-03-08,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Weekend Warriors,field,Royal Cricket Blasters (RCB) won by 40 runs,Royal Cricket Blasters,40 runs,Arun,Royal Cricket Blasters (RCB)
 22786419,2026-03-01,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Weekend Warriors (WW) won by 3 wickets,Weekend Warriors,3 wickets,Lokesh Kumar Yc,Weekend Warriors (WW)
 22632662,2026-02-22,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Weekend Warriors (WW) won by 7 wickets,Weekend Warriors,7 wickets,Venkat A,Weekend Warriors (WW)
-23247977,2026-03-21,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 43 runs,Weekend Warriors,43 runs,,
-23064208,2026-03-14,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Weekend Warriors (WW) won by 5 wickets,Weekend Warriors,5 wickets,,
-22943980,2026-03-08,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Royal Cricket Blasters,field,Weekend Warriors (WW) won by 4 runs,Weekend Warriors,4 runs,,
-22786418,2026-03-01,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Weekend Warriors,field,Royal Cricket Blasters (RCB) won by 37 runs,Royal Cricket Blasters,37 runs,,
-22632661,2026-02-22,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Need 1 run in 0 balls,,,,
-23247962,2026-03-21,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 11 runs,Weekend Warriors,11 runs,,
-23064193,2026-03-14,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Royal Cricket Blasters,field,Weekend Warriors (WW) won by 4 runs,Weekend Warriors,4 runs,,
-22943979,2026-03-08,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Royal Cricket Blasters (RCB) won by 4 wickets,Royal Cricket Blasters,4 wickets,,
-22786417,2026-03-01,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Weekend Warriors (WW) won by 5 wickets,Weekend Warriors,5 wickets,,
-22632660,2026-02-22,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Weekend Warriors (WW) won by 4 wickets,Weekend Warriors,4 wickets,,
-23454111,2026-03-28,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Royal Cricket Blasters (RCB) won by 5 wickets,Royal Cricket Blasters,5 wickets,,
-23454074,2026-03-28,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 4 runs,Weekend Warriors,4 runs,,
-23684171,2026-04-05,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 6 runs,Weekend Warriors,6 runs,,
-23684100,2026-04-05,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Royal Cricket Blasters (RCB) won by 5 wickets,Royal Cricket Blasters,5 wickets,,
-23684034,2026-04-05,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 7 runs,Weekend Warriors,7 runs,,
+23247977,2026-03-21,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 43 runs,Weekend Warriors,43 runs,Pabitra,Weekend Warriors (WW)
+23064208,2026-03-14,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Weekend Warriors (WW) won by 5 wickets,Weekend Warriors,5 wickets,Venkat A,Weekend Warriors (WW)
+22943980,2026-03-08,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Royal Cricket Blasters,field,Weekend Warriors (WW) won by 4 runs,Weekend Warriors,4 runs,Venkat A,Weekend Warriors (WW)
+22786418,2026-03-01,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Weekend Warriors,field,Royal Cricket Blasters (RCB) won by 37 runs,Royal Cricket Blasters,37 runs,Leela Anna,Royal Cricket Blasters (RCB)
+22632661,2026-02-22,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Need 1 run in 0 balls,,,Seenu,Weekend Warriors (WW)
+23247962,2026-03-21,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 11 runs,Weekend Warriors,11 runs,Vinod Reddy,Weekend Warriors (WW)
+23064193,2026-03-14,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Royal Cricket Blasters,field,Weekend Warriors (WW) won by 4 runs,Weekend Warriors,4 runs,Venkat A,Weekend Warriors (WW)
+22943979,2026-03-08,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Royal Cricket Blasters (RCB) won by 4 wickets,Royal Cricket Blasters,4 wickets,Leel,Royal Cricket Blasters (RCB)
+22786417,2026-03-01,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Weekend Warriors (WW) won by 5 wickets,Weekend Warriors,5 wickets,Firoz,Weekend Warriors (WW)
+22632660,2026-02-22,Royal Cricket Blasters (RCB),Weekend Warriors (WW),Royal Cricket Blasters,bat,Weekend Warriors (WW) won by 4 wickets,Weekend Warriors,4 wickets,Arun,Royal Cricket Blasters (RCB)
+23454111,2026-03-28,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Royal Cricket Blasters (RCB) won by 5 wickets,Royal Cricket Blasters,5 wickets,Mahesh,Royal Cricket Blasters (RCB)
+23454074,2026-03-28,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 4 runs,Weekend Warriors,4 runs,Sarat Kumar,Weekend Warriors (WW)
+23684171,2026-04-05,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 6 runs,Weekend Warriors,6 runs,Lokesh Kumar Yc,Weekend Warriors (WW)
+23684100,2026-04-05,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Royal Cricket Blasters (RCB) won by 5 wickets,Royal Cricket Blasters,5 wickets,Vinay Ks,Royal Cricket Blasters (RCB)
+23684034,2026-04-05,Weekend Warriors (WW),Royal Cricket Blasters (RCB),Weekend Warriors,bat,Weekend Warriors (WW) won by 7 runs,Weekend Warriors,7 runs,Srikanta Maddara,Weekend Warriors (WW)
