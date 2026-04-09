@@ -2663,20 +2663,21 @@ function renderTopHeroes(batting, bowling, fielding, _mvp, matchBatting, matchBo
      (fielding leaderboard has run_outs=0 — API doesn't return it) */
   let tRunOut = _emptyTied;
   {
-    // Build name → team from bowling rows (bowler's team = their team)
+    // Build normName → {displayName, team} from bowling rows
     const bowlerTeam = {};
     (matchBowling || []).forEach(r => {
       const p = (r.player || '').trim();
-      if (p && !bowlerTeam[p]) bowlerTeam[p] = r.bowling_team || '';
+      if (p && !bowlerTeam[normName(p)]) bowlerTeam[normName(p)] = { name: p, team: r.bowling_team || '' };
     });
 
     const roMap = {};
     (matchBatting || []).forEach(r => {
       if ((r.dismissal_type || '') !== 'run_out') return;
-      const p = (r.dismissed_by || '').trim(); if (!p) return;
-      const team = bowlerTeam[p] || '';
-      if (!roMap[p]) roMap[p] = { n: 0, team };
-      roMap[p].n++;
+      const raw = (r.dismissed_by || '').trim(); if (!raw) return;
+      const key = normName(raw);
+      const bowler = bowlerTeam[key] || { name: raw, team: '' };
+      if (!roMap[key]) roMap[key] = { n: 0, name: bowler.name, team: bowler.team };
+      roMap[key].n++;
     });
     const sorted = Object.entries(roMap).sort((a, b) => b[1].n - a[1].n);
     if (sorted.length) {
@@ -2684,7 +2685,7 @@ function renderTopHeroes(batting, bowling, fielding, _mvp, matchBatting, matchBo
       const tied = sorted.filter(([, d]) => d.n === best);
       tRunOut = {
         val: best,
-        players: tied.map(([name, d]) => ({ name, team_name: d.team }))
+        players: tied.map(([, d]) => ({ name: d.name, team_name: d.team }))
       };
     }
   }
@@ -2734,13 +2735,21 @@ function renderTopHeroes(batting, bowling, fielding, _mvp, matchBatting, matchBo
   /* ── MOM from match_meta (official CricHeroes award) ── */
   let tMOM = _emptyTied;
   {
+    /* Key by normName so "Lokesh Kumar Yc" and "Lokesh kumar YC" merge.
+       Store the canonical display name (first seen) for each norm key. */
     const momMap = {};
+    const momDisplay = {};
     (state.matchMeta || []).forEach(m => {
-      const p = (m.man_of_match || '').trim(); if (!p) return;
-      if (!momMap[p]) momMap[p] = { n: 0, team: m.man_of_match_team || '' };
-      momMap[p].n++;
+      const raw = (m.man_of_match || '').trim(); if (!raw) return;
+      const key = normName(raw);
+      if (!momMap[key]) { momMap[key] = { n: 0, team: m.man_of_match_team || '' }; momDisplay[key] = raw; }
+      momMap[key].n++;
     });
-    tMOM = matchTiedFromMap(Object.entries(momMap).sort((a, b) => b[1].n - a[1].n));
+    // Rebuild entries with display name as key for matchTiedFromMap
+    const entries = Object.entries(momMap)
+      .map(([k, v]) => [momDisplay[k], v])
+      .sort((a, b) => b[1].n - a[1].n);
+    tMOM = matchTiedFromMap(entries);
   }
 
   /* ── Best Batter / Best Bowler counts (per match) ── */
