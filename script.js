@@ -4071,9 +4071,16 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
   });
   fielding.forEach(r => {
     const name = r.name?.trim(); if (!name) return;
-    const key = name + '|' + (r.team_name || '');
-    if (!playerMap[key]) playerMap[key] = { name, team: r.team_name || '' };
-    const prev = playerMap[key];
+    const team = r.team_name?.trim() || '';
+    const key = name + '|' + team;
+    // If team is blank, try to match an existing entry by name only
+    let resolvedKey = key;
+    if (!team) {
+      const fallback = Object.keys(playerMap).find(k => k.split('|')[0] === name);
+      if (fallback) resolvedKey = fallback;
+    }
+    if (!playerMap[resolvedKey]) playerMap[resolvedKey] = { name, team };
+    const prev = playerMap[resolvedKey];
     if (!prev.field || num(r.total_match) > num(prev.field.total_match || 0)) prev.field = r;
   });
   mvp.forEach(r => {

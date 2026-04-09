@@ -35,7 +35,7 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 23454111,2026-03-28,1,Royal Cricket Blasters (RCB),shaik azeed,1.0,0,24,0,1,3,2,0,0,24.00
 23454111,2026-03-28,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,2.0,0,29,1,4,2,3,0,0,14.50
 23454111,2026-03-28,1,Royal Cricket Blasters (RCB),Leel,2.0,0,20,0,4,4,0,1,0,10.00
-23454111,2026-03-28,1,Royal Cricket Blasters (RCB),Mahesh,2.0,1,1,5,12,0,0,0,0,0.50
+23454111,2026-03-28,1,Royal Cricket Blasters (RCB),Mahesh Amaran,2.0,1,1,5,12,0,0,0,0,0.50
 23454111,2026-03-28,1,Royal Cricket Blasters (RCB),Arun,3.0,0,23,1,9,2,1,0,1,7.67
 23454111,2026-03-28,1,Royal Cricket Blasters (RCB),Gopi,2.0,0,18,1,4,1,1,1,0,9.00
 23454111,2026-03-28,1,Royal Cricket Blasters (RCB),Deepak Kumar,2.0,0,13,1,9,2,0,3,0,6.50
@@ -51,7 +51,7 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 23454074,2026-03-28,1,Royal Cricket Blasters (RCB),Arun,2.0,0,15,1,5,2,0,4,0,7.50
 23454074,2026-03-28,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,3.0,0,27,2,8,3,1,0,0,9.00
 23454074,2026-03-28,1,Royal Cricket Blasters (RCB),Deepak Kumar,1.0,0,10,0,2,0,1,1,0,10.00
-23454074,2026-03-28,1,Royal Cricket Blasters (RCB),Mahesh,3.0,0,15,2,8,2,0,0,0,5.00
+23454074,2026-03-28,1,Royal Cricket Blasters (RCB),Mahesh Amaran,3.0,0,15,2,8,2,0,0,0,5.00
 23454074,2026-03-28,1,Royal Cricket Blasters (RCB),Gopi,3.0,0,15,0,7,1,0,1,0,5.00
 23454074,2026-03-28,2,Weekend Warriors (WW),Mithun,3.0,0,32,2,6,3,2,1,0,10.67
 23454074,2026-03-28,2,Weekend Warriors (WW),Vinod Reddy,3.0,0,13,2,10,1,0,3,0,4.33
@@ -65,12 +65,12 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 23247987,2026-03-21,1,Weekend Warriors (WW),Vinod Reddy,2.0,0,5,4,7,0,0,0,0,2.50
 23247987,2026-03-21,1,Weekend Warriors (WW),Karthik Reddy,1.0,0,10,0,4,0,1,0,2,10.00
 23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Leel,2.0,0,7,0,7,0,0,1,0,3.50
-23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Mahesh,2.0,0,10,1,8,0,0,1,0,5.00
+23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Mahesh Amaran,2.0,0,10,1,8,0,0,1,0,5.00
 23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,2.0,0,10,2,5,0,0,0,1,5.00
 23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Gopi,1.0,0,3,1,5,0,0,2,0,3.00
 23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Jithin Tj,1.0,0,4,2,4,0,0,1,0,4.00
 23247987,2026-03-21,2,Royal Cricket Blasters (RCB),Mithun,2.0,1,13,2,6,0,1,0,0,6.50
-23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Mahesh,2.0,0,21,1,6,1,2,0,0,10.50
+23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Mahesh Amaran,2.0,0,21,1,6,1,2,0,0,10.50
 23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Gopi,1.0,0,13,0,3,0,2,0,0,13.00
 23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,24,0,5,1,2,2,0,12.00
 23247977,2026-03-21,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,2.0,0,15,0,7,1,1,2,0,7.50
@@ -84,7 +84,7 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 23247977,2026-03-21,2,Weekend Warriors (WW),Ashik Jain,1.0,0,11,0,4,0,1,2,1,11.00
 23247977,2026-03-21,2,Weekend Warriors (WW),Venkat A,1.0,0,6,0,1,0,0,0,0,6.00
 23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Gopi,2.0,0,15,0,4,0,1,0,0,7.50
-23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Mahesh,2.0,0,17,0,9,1,1,4,0,8.50
+23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Mahesh Amaran,2.0,0,17,0,9,1,1,4,0,8.50
 23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,9,0,8,0,0,3,0,4.50
 23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Mithun,3.0,0,8,0,13,0,0,1,0,2.67
 23247962,2026-03-21,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,3.0,0,16,2,11,2,0,2,0,5.33
@@ -94,7 +94,7 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 23247962,2026-03-21,2,Weekend Warriors (WW),Vinod Reddy,3.0,1,7,2,16,0,1,0,0,2.33
 23247962,2026-03-21,2,Weekend Warriors (WW),Sudheer Nidiginti,1.0,0,11,0,4,1,0,3,3,11.00
 23247962,2026-03-21,2,Weekend Warriors (WW),Karthik Reddy,1.0,0,12,0,2,0,1,2,0,12.00
-23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Mahesh,2.0,0,7,3,8,0,0,2,0,3.50
+23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Mahesh Amaran,2.0,0,7,3,8,0,0,2,0,3.50
 23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Gopi,2.0,0,16,0,7,0,1,1,1,8.00
 23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,2.0,0,6,1,7,0,0,0,0,3.00
 23110064,2026-03-14,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,1,12,0,8,0,1,0,0,6.00
@@ -120,7 +120,7 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,6,1,8,0,0,1,0,3.00
 23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Gopi,3.0,1,8,1,12,0,0,1,0,2.67
 23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,2.0,1,6,0,11,0,1,0,0,3.00
-23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Mahesh,2.0,0,11,2,8,0,1,1,0,5.50
+23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Mahesh Amaran,2.0,0,11,2,8,0,1,1,0,5.50
 23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Arun,2.0,0,11,1,7,0,0,2,1,5.50
 23064193,2026-03-14,1,Royal Cricket Blasters (RCB),Leel,1.0,0,2,1,4,0,0,0,0,2.00
 23064193,2026-03-14,2,Weekend Warriors (WW),Lokesh kumar YC,3.0,0,17,3,13,0,2,1,1,5.67
@@ -168,7 +168,7 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 22786419,2026-03-01,1,Weekend Warriors (WW),Lokesh kumar YC,2.0,0,7,0,7,0,0,1,1,3.50
 22786419,2026-03-01,1,Weekend Warriors (WW),Venkat A,1.0,0,18,1,3,0,2,4,0,18.00
 22786419,2026-03-01,1,Weekend Warriors (WW),Srikanta Maddara,1.0,0,7,0,5,0,1,0,1,7.00
-22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh,2.0,0,6,2,7,0,0,1,0,3.00
+22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh Amaran,2.0,0,6,2,7,0,0,1,0,3.00
 22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,2.0,0,5,2,7,0,0,0,0,2.50
 22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Jithin Tj,1.0,0,7,1,2,0,0,2,0,7.00
 22786419,2026-03-01,2,Royal Cricket Blasters (RCB),Arun,2.0,0,11,0,4,0,0,2,0,5.50
@@ -182,7 +182,7 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 22786418,2026-03-01,1,Weekend Warriors (WW),Sudheer Nidiginti,1.0,0,15,1,1,3,0,0,0,15.00
 22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,3.0,0,8,1,12,0,0,1,0,2.67
 22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Leel,2.0,1,7,2,9,0,0,2,1,3.50
-22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh,3.0,0,14,1,8,0,0,1,0,4.67
+22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh Amaran,3.0,0,14,1,8,0,0,1,0,4.67
 22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Jithin Tj,2.0,0,17,0,6,0,2,0,0,8.50
 22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Vinay KS,1.0,0,14,0,2,1,1,0,0,14.00
 22786418,2026-03-01,2,Royal Cricket Blasters (RCB),Murali Cn Cricket,1.0,0,3,0,5,0,0,0,2,3.00
@@ -192,7 +192,7 @@ match_id,match_date,innings,bowling_team,player,overs,maidens,runs,wickets,dot_b
 22786417,2026-03-01,1,Weekend Warriors (WW),Lokesh kumar YC,2.0,0,13,0,7,0,1,1,1,6.50
 22786417,2026-03-01,1,Weekend Warriors (WW),Srikanta Maddara,2.0,0,10,0,7,0,0,1,0,5.00
 22786417,2026-03-01,1,Weekend Warriors (WW),Sudheer Nidiginti,1.0,0,12,0,3,0,1,1,1,12.00
-22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh,2.0,0,9,0,7,0,0,2,0,4.50
+22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Mahesh Amaran,2.0,0,9,0,7,0,0,2,0,4.50
 22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Deepak Kumar,1.0,0,2,0,5,0,0,2,0,2.00
 22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Srinivas Vemulapalli,2.0,0,6,2,8,0,0,1,0,3.00
 22786417,2026-03-01,2,Royal Cricket Blasters (RCB),Arun,2.0,0,12,0,6,2,0,0,0,6.00
