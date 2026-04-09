@@ -4049,38 +4049,47 @@ function renderFullStatsTable(batting, bowling, fielding, mvp) {
   const wrap = document.getElementById('fullStatsTableWrap');
   if (!wrap) return;
 
-  /* Build a map of all unique player names */
+  /* Build a map keyed by "name|team" to keep same-name players on different teams separate.
+     For duplicates within same name+team, prefer the row with the higher total_match. */
   const playerMap = {};
 
   batting.forEach(r => {
-    const key = r.name?.trim(); if (!key) return;
-    if (!playerMap[key]) playerMap[key] = { name: key, team: r.team_name || '' };
-    playerMap[key].bat = r;
+    const name = r.name?.trim(); if (!name) return;
+    const key = name + '|' + (r.team_name || '');
+    const prev = playerMap[key];
+    if (!prev) { playerMap[key] = { name, team: r.team_name || '', bat: r }; return; }
+    // keep row with higher total_match
+    if (num(r.total_match) > num(prev.bat?.total_match || 0)) prev.bat = r;
+    else if (!prev.bat) prev.bat = r;
   });
   bowling.forEach(r => {
-    const key = r.name?.trim(); if (!key) return;
-    if (!playerMap[key]) playerMap[key] = { name: key, team: r.team_name || '' };
-    playerMap[key].bowl = r;
+    const name = r.name?.trim(); if (!name) return;
+    const key = name + '|' + (r.team_name || '');
+    if (!playerMap[key]) playerMap[key] = { name, team: r.team_name || '' };
+    const prev = playerMap[key];
+    if (!prev.bowl || num(r.total_match) > num(prev.bowl.total_match || 0)) prev.bowl = r;
   });
   fielding.forEach(r => {
-    const key = r.name?.trim(); if (!key) return;
-    if (!playerMap[key]) playerMap[key] = { name: key, team: r.team_name || '' };
-    playerMap[key].field = r;
+    const name = r.name?.trim(); if (!name) return;
+    const key = name + '|' + (r.team_name || '');
+    if (!playerMap[key]) playerMap[key] = { name, team: r.team_name || '' };
+    const prev = playerMap[key];
+    if (!prev.field || num(r.total_match) > num(prev.field.total_match || 0)) prev.field = r;
   });
   mvp.forEach(r => {
     const mvpNorm = normName(r['Player Name']); if (!mvpNorm) return;
     const keys = Object.keys(playerMap);
-    // 1. Normalized exact
-    let match = keys.find(k => normName(k) === mvpNorm);
+    // 1. Normalized exact (name portion only)
+    let match = keys.find(k => normName(k.split('|')[0]) === mvpNorm);
     // 2. Prefix (shorter side > 3 chars)
     if (!match) match = keys.find(k => {
-      const kn = normName(k);
+      const kn = normName(k.split('|')[0]);
       const shorter = kn.length < mvpNorm.length ? kn : mvpNorm;
       const longer  = kn.length < mvpNorm.length ? mvpNorm : kn;
       return shorter.length > 3 && longer.startsWith(shorter);
     });
     // 3. First word only
-    if (!match) match = keys.find(k => normName(k).split(' ')[0] === mvpNorm.split(' ')[0]);
+    if (!match) match = keys.find(k => normName(k.split('|')[0]).split(' ')[0] === mvpNorm.split(' ')[0]);
     if (match) playerMap[match].mvp = r;
   });
 
