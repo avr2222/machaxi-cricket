@@ -1,21 +1,21 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-04-12 15:07:56
+Started: 2026-04-19 15:09:02
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
 Get LATEST chromedriver version for google-chrome
-There is no [linux64] chromedriver "146.0.7680.165" for browser google-chrome "146.0.7680" in cache
+There is no [linux64] chromedriver "147.0.7727.57" for browser google-chrome "147.0.7727" in cache
 Get LATEST chromedriver version for google-chrome
-WebDriver version 146.0.7680.165 selected
-Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/146.0.7680.165/linux64/chromedriver-linux64.zip
-About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/146.0.7680.165/linux64/chromedriver-linux64.zip
+WebDriver version 147.0.7727.57 selected
+Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/147.0.7727.57/linux64/chromedriver-linux64.zip
+About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/147.0.7727.57/linux64/chromedriver-linux64.zip
 Driver downloading response is 200
 Get LATEST chromedriver version for google-chrome
-Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/146.0.7680.165]
+Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/147.0.7727.57]
 [API] Discovered 20 matches via match/get-tournament-matches/3/-1/-1
 Matches found:   20
 Already scraped: 20
 To scrape now:   0
 Nothing new to scrape. All matches are up to date.
-Done: 2026-04-12 15:08:02
+Done: 2026-04-19 15:09:08
