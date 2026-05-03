@@ -933,3 +933,108 @@ match_id,innings,batting_team,bowler,batsman,total_balls,dot_balls,dot_pct,runs_
 24209832,2,Royal Cricket Blasters (RCB),Firoz,shaik azeed,2,0,0.0,3,0,0,0
 24209873,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Pavan,1,0,0.0,1,0,0,0
 24209873,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Vinay KS,1,0,0.0,1,0,0,0
+24376119,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Arun,12,7,58.3,13,0,1,0
+24376119,2,Weekend Warriors (WW),Jithin Tj,seenu,8,7,87.5,1,0,0,0
+24376080,1,Weekend Warriors (WW),Jithin Tj,Rajkumar Muddasu,6,6,100.0,0,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Venkat A,Pavan,8,6,75.0,3,0,0,0
+24376080,1,Weekend Warriors (WW),Satyam Goyal,Subbu,5,5,100.0,0,0,0,1
+24376080,1,Weekend Warriors (WW),shaik azeed,seenu,8,5,62.5,8,0,1,0
+24376119,1,Royal Cricket Blasters (RCB),Ashok,Arun,8,5,62.5,9,2,0,0
+24376119,2,Weekend Warriors (WW),Murali Cn Cricket,Ashok,6,5,83.3,2,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Pabitra,Manjunath H,5,5,100.0,0,0,0,1
+24376150,2,Weekend Warriors (WW),Jithin Tj,Balaji Balaraju,6,5,83.3,6,0,1,0
+24376080,1,Weekend Warriors (WW),Pavan,seenu,6,4,66.7,4,0,0,1
+24376119,1,Royal Cricket Blasters (RCB),Venkat A,Arun,4,4,100.0,0,0,0,1
+24376119,1,Royal Cricket Blasters (RCB),Venkat A,shaik azeed,4,4,100.0,0,0,0,1
+24376119,2,Weekend Warriors (WW),Pavan,Venkat A,9,4,44.4,20,1,2,0
+24376150,1,Royal Cricket Blasters (RCB),Balaji Balaraju,Pavan,6,4,66.7,3,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Ashok,Sridhar b,4,4,100.0,0,0,0,1
+24376150,2,Weekend Warriors (WW),Murali Cn Cricket,seenu,6,4,66.7,4,0,0,0
+24376080,1,Weekend Warriors (WW),Jithin Tj,Sudhir Midtown,3,3,100.0,0,0,0,1
+24376080,1,Weekend Warriors (WW),Arun,Balaji Balaraju,3,3,100.0,0,0,0,1
+24376080,1,Weekend Warriors (WW),Pavan,Srikanta Maddara,3,3,100.0,0,0,0,1
+24376080,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Phanindra Y,4,3,75.0,1,0,0,0
+24376080,2,Royal Cricket Blasters (RCB),Ashok,Murali Cn Cricket,4,3,75.0,2,0,0,0
+24376080,2,Royal Cricket Blasters (RCB),Sudhir Midtown,Sridhar b,6,3,50.0,6,0,0,0
+24376080,2,Royal Cricket Blasters (RCB),Pabitra,Leel,6,3,50.0,14,0,2,0
+24376119,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Murali Cn Cricket,4,3,75.0,2,0,0,0
+24376119,1,Royal Cricket Blasters (RCB),Venkat A,Leel,3,3,100.0,0,0,0,1
+24376119,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Pavan,5,3,60.0,10,1,1,0
+24376119,1,Royal Cricket Blasters (RCB),Srikanta Maddara,Pavan,6,3,50.0,18,0,3,0
+24376119,1,Royal Cricket Blasters (RCB),Ashok,Satyam Goyal,3,3,100.0,0,0,0,1
+24376119,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Satyam Goyal,6,3,50.0,14,0,2,0
+24376119,2,Weekend Warriors (WW),Arun,Ashok,7,3,42.9,8,1,0,0
+24376119,2,Weekend Warriors (WW),Jithin Tj,Venkat A,3,3,100.0,0,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Leel,5,3,60.0,5,1,0,0
+24376150,2,Weekend Warriors (WW),Pavan,Balaji Balaraju,5,3,60.0,5,1,0,1
+24376150,2,Weekend Warriors (WW),Arun,Balaji Balaraju,5,3,60.0,2,0,0,0
+24376150,2,Weekend Warriors (WW),shaik azeed,seenu,3,3,100.0,0,0,0,1
+24376150,2,Weekend Warriors (WW),Pavan,Venkat A,3,3,100.0,0,0,0,1
+24376150,2,Weekend Warriors (WW),Leel,Balaji Balaraju,5,3,60.0,7,0,1,0
+24376080,1,Weekend Warriors (WW),Arun,Sudhir Midtown,3,2,66.7,2,0,0,0
+24376080,1,Weekend Warriors (WW),shaik azeed,Rajkumar Muddasu,3,2,66.7,1,0,0,1
+24376080,2,Royal Cricket Blasters (RCB),Ashok,Phanindra Y,3,2,66.7,1,0,0,1
+24376080,2,Royal Cricket Blasters (RCB),Venkat A,Sridhar b,5,2,40.0,9,0,1,0
+24376119,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Sridhar b,2,2,100.0,0,0,0,1
+24376119,1,Royal Cricket Blasters (RCB),Venkat A,Pavan,5,2,40.0,9,0,1,1
+24376119,2,Weekend Warriors (WW),Murali Cn Cricket,seenu,5,2,40.0,9,0,1,0
+24376119,2,Weekend Warriors (WW),Pavan,seenu,5,2,40.0,6,1,0,0
+24376119,2,Weekend Warriors (WW),Pavan,Ashok,3,2,66.7,6,0,1,0
+24376119,2,Weekend Warriors (WW),Arun,seenu,3,2,66.7,1,0,0,1
+24376119,2,Weekend Warriors (WW),Arun,Venkat A,3,2,66.7,6,0,1,1
+24376119,2,Weekend Warriors (WW),Arun,Balaji Balaraju,4,2,50.0,7,0,1,0
+24376119,2,Weekend Warriors (WW),shaik azeed,Sudheer Nidiginti,3,2,66.7,6,0,1,0
+24376150,1,Royal Cricket Blasters (RCB),Pabitra,Pavan,3,2,66.7,6,0,1,1
+24376150,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Pavan,4,2,50.0,3,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Pavan,3,2,66.7,2,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Venkat A,Leel,4,2,50.0,7,0,1,0
+24376150,1,Royal Cricket Blasters (RCB),Lokesh kumar YC,Arun,4,2,50.0,4,0,0,1
+24376150,2,Weekend Warriors (WW),Jithin Tj,Srikanta Maddara,4,2,50.0,3,0,0,0
+24376150,2,Weekend Warriors (WW),shaik azeed,Sudhir Midtown,2,2,100.0,0,0,0,1
+24376080,1,Weekend Warriors (WW),Jithin Tj,Ashok,1,1,100.0,0,0,0,1
+24376080,1,Weekend Warriors (WW),Satyam Goyal,Balaji Balaraju,2,1,50.0,1,0,0,0
+24376080,1,Weekend Warriors (WW),Leel,Subbu,4,1,25.0,9,0,1,0
+24376080,1,Weekend Warriors (WW),Pavan,Subbu,3,1,33.3,2,0,0,0
+24376080,1,Weekend Warriors (WW),Arun,Subbu,3,1,33.3,2,0,0,0
+24376080,1,Weekend Warriors (WW),Arun,Srikanta Maddara,2,1,50.0,1,0,0,0
+24376080,1,Weekend Warriors (WW),Arun,Venkat A,1,1,100.0,0,0,0,1
+24376080,1,Weekend Warriors (WW),shaik azeed,Subbu,1,1,100.0,0,0,0,0
+24376080,2,Royal Cricket Blasters (RCB),Srikanta Maddara,Murali Cn Cricket,2,1,50.0,1,0,0,0
+24376080,2,Royal Cricket Blasters (RCB),Ashok,Leel,1,1,100.0,0,0,0,1
+24376080,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Sridhar b,3,1,33.3,3,0,0,0
+24376119,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Jithin Tj,2,1,50.0,1,0,0,1
+24376119,1,Royal Cricket Blasters (RCB),Ashok,Manjunath H,1,1,100.0,0,0,0,1
+24376119,2,Weekend Warriors (WW),shaik azeed,Venkat A,3,1,33.3,8,2,0,0
+24376119,2,Weekend Warriors (WW),shaik azeed,seenu,3,1,33.3,3,0,0,0
+24376119,2,Weekend Warriors (WW),Pavan,Balaji Balaraju,1,1,100.0,0,0,0,1
+24376119,2,Weekend Warriors (WW),Jithin Tj,Sudheer Nidiginti,1,1,100.0,0,0,0,1
+24376119,2,Weekend Warriors (WW),shaik azeed,Srikanta Maddara,1,1,100.0,0,0,0,1
+24376119,2,Weekend Warriors (WW),shaik azeed,Balaji Balaraju,2,1,50.0,1,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Pabitra,Jithin Tj,2,1,50.0,1,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Leel,2,1,50.0,6,0,1,1
+24376150,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Leel,4,1,25.0,9,0,1,0
+24376150,1,Royal Cricket Blasters (RCB),Ashok,Pavan,2,1,50.0,4,1,0,0
+24376150,2,Weekend Warriors (WW),Arun,Ashok,1,1,100.0,0,0,0,1
+24376150,2,Weekend Warriors (WW),shaik azeed,Ashok,1,1,100.0,0,0,0,0
+24376150,2,Weekend Warriors (WW),shaik azeed,Srikanta Maddara,3,1,33.3,2,0,0,0
+24376150,2,Weekend Warriors (WW),Jithin Tj,seenu,2,1,50.0,6,0,1,0
+24376150,2,Weekend Warriors (WW),Pavan,seenu,2,1,50.0,1,0,0,0
+24376080,1,Weekend Warriors (WW),Jithin Tj,Sudheer Nidiginti,1,0,0.0,2,0,0,0
+24376080,1,Weekend Warriors (WW),Jithin Tj,Pabitra,1,0,0.0,1,0,0,0
+24376080,1,Weekend Warriors (WW),Leel,Balaji Balaraju,2,0,0.0,8,2,0,0
+24376080,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Murali Cn Cricket,2,0,0.0,2,0,0,0
+24376080,2,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Phanindra Y,1,0,0.0,1,0,0,0
+24376080,2,Royal Cricket Blasters (RCB),Lokesh kumar YC,Leel,3,0,0.0,12,1,1,0
+24376080,2,Royal Cricket Blasters (RCB),Venkat A,Leel,1,0,0.0,4,1,0,0
+24376119,1,Royal Cricket Blasters (RCB),Sudhir Midtown,Murali Cn Cricket,4,0,0.0,10,0,1,0
+24376119,1,Royal Cricket Blasters (RCB),Venkat A,Sridhar b,1,0,0.0,1,0,0,0
+24376119,1,Royal Cricket Blasters (RCB),Venkat A,Jithin Tj,1,0,0.0,1,0,0,0
+24376119,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Jithin Tj,1,0,0.0,1,0,0,0
+24376119,2,Weekend Warriors (WW),Arun,Sudheer Nidiginti,2,0,0.0,5,1,0,0
+24376150,1,Royal Cricket Blasters (RCB),Pabitra,Satyam Goyal,1,0,0.0,6,0,1,0
+24376150,1,Royal Cricket Blasters (RCB),Sudheer Nidiginti,Pavan,2,0,0.0,3,0,0,0
+24376150,1,Royal Cricket Blasters (RCB),Pabitra,Sridhar b,1,0,0.0,6,0,1,0
+24376150,2,Weekend Warriors (WW),Pavan,Srikanta Maddara,3,0,0.0,4,0,0,0
+24376150,2,Weekend Warriors (WW),Arun,Srikanta Maddara,6,0,0.0,13,0,1,0
+24376150,2,Weekend Warriors (WW),shaik azeed,Balaji Balaraju,3,0,0.0,7,1,0,0
+24376150,2,Weekend Warriors (WW),Leel,Sudhir Midtown,1,0,0.0,4,1,0,0

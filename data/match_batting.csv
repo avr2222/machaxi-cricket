@@ -405,3 +405,46 @@ match_id,match_date,innings,batting_team,position,player,runs,balls,fours,sixes,
 24209776,2026-04-25,2,Royal Cricket Blasters (RCB),8,Arun,3,10,0,0,30.00,run_out,seenu,
 24209776,2026-04-25,2,Royal Cricket Blasters (RCB),9,Jithin Tj,2,3,0,0,66.67,not_out,,
 24209776,2026-04-25,2,Royal Cricket Blasters (RCB),10,Mahesh,1,1,0,0,100.00,not_out,,
+24376150,2026-05-02,1,Royal Cricket Blasters (RCB),1,Manjunath H,0,5,0,0,0.00,caught,Pabitra,Balaji Balaraju
+24376150,2026-05-02,1,Royal Cricket Blasters (RCB),2,Arun,4,4,0,0,100.00,caught,Lokesh kumar YC,Ashok
+24376150,2026-05-02,1,Royal Cricket Blasters (RCB),3,Sridhar b,6,6,0,1,100.00,caught,Ashok,Ashok
+24376150,2026-05-02,1,Royal Cricket Blasters (RCB),4,Leel,27,15,1,3,180.00,run_out,Pabitra,
+24376150,2026-05-02,1,Royal Cricket Blasters (RCB),5,Pavan,24,29,1,1,82.76,caught,Pabitra,Sudheer Nidiginti
+24376150,2026-05-02,1,Royal Cricket Blasters (RCB),6,Jithin Tj,1,2,0,0,50.00,not_out,,
+24376150,2026-05-02,1,Royal Cricket Blasters (RCB),7,Satyam Goyal,6,1,0,1,600.00,not_out,,
+24376150,2026-05-02,2,Weekend Warriors (WW),1,Balaji Balaraju,27,23,2,2,117.39,not_out,,
+24376150,2026-05-02,2,Weekend Warriors (WW),2,Sudhir Midtown,4,3,1,0,133.33,caught,shaik azeed,Manjunath H
+24376150,2026-05-02,2,Weekend Warriors (WW),3,Srikanta Maddara,22,16,0,1,137.50,not_out,,
+24376150,2026-05-02,2,Weekend Warriors (WW),4,Venkat A,0,3,0,0,0.00,caught,Pavan,Manjunath H
+24376150,2026-05-02,2,Weekend Warriors (WW),5,seenu,11,13,0,1,84.62,caught,shaik azeed,Manjunath H
+24376150,2026-05-02,2,Weekend Warriors (WW),6,Ashok,0,2,0,0,0.00,caught,Arun,Jithin Tj
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),1,Arun,22,25,2,1,88.00,run_out,Balaji Balaraju,
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),2,Satyam Goyal,14,10,0,2,140.00,bowled,Ashok,
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),3,Manjunath H,0,1,0,0,0.00,caught,Ashok,seenu
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),4,shaik azeed,0,4,0,0,0.00,caught,Venkat A,seenu
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),5,Pavan,37,18,1,5,205.56,bowled,Venkat A,
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),6,Jithin Tj,3,4,0,0,75.00,run_out,Balaji Balaraju,
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),7,Leel,0,3,0,0,0.00,caught,Venkat A,seenu
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),8,Sridhar b,1,3,0,0,33.33,bowled,Lokesh kumar YC,
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),9,Murali Cn Cricket,12,9,0,1,133.33,not_out,,
+24376119,2026-05-02,1,Royal Cricket Blasters (RCB),10,Phanindra Y,0,0,0,0,0.00,not_out,,
+24376119,2026-05-02,2,Weekend Warriors (WW),1,Balaji Balaraju,8,7,0,1,114.29,caught,Pavan,Arun
+24376119,2026-05-02,2,Weekend Warriors (WW),2,Srikanta Maddara,0,1,0,0,0.00,caught,shaik azeed,Manjunath H
+24376119,2026-05-02,2,Weekend Warriors (WW),3,Sudheer Nidiginti,11,6,1,1,183.33,caught,Jithin Tj,Murali Cn Cricket
+24376119,2026-05-02,2,Weekend Warriors (WW),4,seenu,20,24,1,1,83.33,not_out,,
+24376119,2026-05-02,2,Weekend Warriors (WW),5,Venkat A,34,18,3,3,188.89,caught,Arun,Manjunath H
+24376119,2026-05-02,2,Weekend Warriors (WW),6,Ashok,16,16,1,1,100.00,not_out,,
+24376080,2026-05-02,1,Weekend Warriors (WW),1,seenu,12,14,0,1,85.71,run_out,Pavan,
+24376080,2026-05-02,1,Weekend Warriors (WW),2,Rajkumar Muddasu,1,9,0,0,11.11,bowled,shaik azeed,
+24376080,2026-05-02,1,Weekend Warriors (WW),3,Subbu,13,16,0,1,81.25,retired_hurt,,
+24376080,2026-05-02,1,Weekend Warriors (WW),4,Venkat A,0,1,0,0,0.00,run_out,Murali Cn Cricket,
+24376080,2026-05-02,1,Weekend Warriors (WW),5,Srikanta Maddara,1,6,0,0,16.67,bowled,Pavan,
+24376080,2026-05-02,1,Weekend Warriors (WW),6,Balaji Balaraju,9,7,2,0,128.57,caught,Arun,shaik azeed
+24376080,2026-05-02,1,Weekend Warriors (WW),7,Ashok,1,2,0,0,50.00,run_out,Pavan,
+24376080,2026-05-02,1,Weekend Warriors (WW),8,Sudhir Midtown,2,6,0,0,33.33,stumped,Jithin Tj,Murali Cn Cricket
+24376080,2026-05-02,1,Weekend Warriors (WW),9,Sudheer Nidiginti,2,1,0,0,200.00,not_out,,
+24376080,2026-05-02,1,Weekend Warriors (WW),10,Pabitra,1,1,0,0,100.00,not_out,,
+24376080,2026-05-02,2,Royal Cricket Blasters (RCB),1,Leel,30,10,2,3,300.00,retired_hurt,,
+24376080,2026-05-02,2,Royal Cricket Blasters (RCB),2,Sridhar b,18,14,0,1,128.57,retired_hurt,,
+24376080,2026-05-02,2,Royal Cricket Blasters (RCB),3,Phanindra Y,3,7,0,0,42.86,not_out,,
+24376080,2026-05-02,2,Royal Cricket Blasters (RCB),4,Murali Cn Cricket,5,8,0,0,62.50,not_out,,
