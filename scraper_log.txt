@@ -1,6 +1,6 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-05-03 15:11:58
+Started: 2026-05-10 15:32:10
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
@@ -15,58 +15,7 @@ Get LATEST chromedriver version for google-chrome
 Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/147.0.7727.117]
 [API] Discovered 26 matches via match/get-tournament-matches/3/-1/-1
 Matches found:   26
-Already scraped: 23
-To scrape now:   3
-Scraping 3 match(es)...
-[1/3] Match 24376150
-    [API] 13 batting, 13 bowling rows
-    [commentary] 136 deliveries, 69 dot balls
-[2/3] Match 24376119
-    [API] 16 batting, 11 bowling rows
-    [commentary] 172 deliveries, 86 dot balls
-[3/3] Match 24376080
-    [API] 14 batting, 13 bowling rows
-    [commentary] 120 deliveries, 60 dot balls
-Scraped: 3 matches | 43 batting | 37 bowling | 428 deliveries | 0 errors
-Writing raw CSV files...
-  Wrote   26 rows -> cricheroes_data/tournament_matches_summary.csv
-  Wrote  449 rows -> cricheroes_data/tournament_all_batting.csv
-  Wrote  306 rows -> cricheroes_data/tournament_all_bowling.csv
-  Wrote 3831 rows -> cricheroes_data/tournament_all_balls.csv
-  Wrote 1039 rows -> cricheroes_data/tournament_dot_ball_analysis.csv
-Writing dashboard CSVs...
-  Wrote   26 rows -> data/match_meta.csv
-  Wrote  449 rows -> data/match_batting.csv
-  Wrote  306 rows -> data/match_bowling.csv
-  Wrote    2 rows -> points_table.csv
-  Points table:
-    #1 WW  13W 12L  27pts  NRR -0.400
-    #2 RCB  12W 13L  25pts  NRR +0.400
-  Wrote   45 rows -> batting_leaderboard.csv
-  Wrote   30 rows -> bowling_leaderboard.csv
-  Wrote   35 rows -> fielding_leaderboard.csv
-  Wrote   43 rows -> mvp_leaderboard.csv
-  Wrote data/tournament_config.json
-Fetching player career stats from CricHeroes…
-[career] player 36285742 (Manjunath H): HTTP Error 403: Forbidden
-[career] player 43156255 (Arun): HTTP Error 403: Forbidden
-[career] player 15635658 (Sridhar b): HTTP Error 403: Forbidden
-[career] player 7577506 (Leel): HTTP Error 403: Forbidden
-[career] player 22711554 (Pavan): HTTP Error 403: Forbidden
-[career] player 24920096 (Jithin Tj): HTTP Error 403: Forbidden
-[career] player 46521634 (Satyam Goyal): HTTP Error 403: Forbidden
-[career] player 23317827 (Balaji Balaraju): HTTP Error 403: Forbidden
-[career] player 36566491 (Sudhir Midtown): HTTP Error 403: Forbidden
-[career] player 15990447 (Srikanta Maddara): HTTP Error 403: Forbidden
-[career] player 5945797 (Venkat A): HTTP Error 403: Forbidden
-[career] player 23317861 (seenu): HTTP Error 403: Forbidden
-[career] player 23317824 (Ashok): HTTP Error 403: Forbidden
-[career] player 32475183 (shaik azeed): HTTP Error 403: Forbidden
-[career] player 42607170 (Murali Cn Cricket): HTTP Error 403: Forbidden
-[career] player 24879142 (Phanindra Y): HTTP Error 403: Forbidden
-[career] player 42607076 (Sudheer Nidiginti): HTTP Error 403: Forbidden
-[career] player 32252331 (Rajkumar Muddasu): HTTP Error 403: Forbidden
-[career] player 43374562 (Subbu): HTTP Error 403: Forbidden
-[career] player 36285740 (Pabitra): HTTP Error 403: Forbidden
-[career] player 23317841 (Lokesh kumar YC): HTTP Error 403: Forbidden
-Done: 2026-05-03 15:12:19
+Already scraped: 26
+To scrape now:   0
+Nothing new to scrape. All matches are up to date.
+Done: 2026-05-10 15:32:17
