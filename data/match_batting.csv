@@ -448,3 +448,53 @@ match_id,match_date,innings,batting_team,position,player,runs,balls,fours,sixes,
 24376080,2026-05-02,2,Royal Cricket Blasters (RCB),2,Sridhar b,18,14,0,1,128.57,retired_hurt,,
 24376080,2026-05-02,2,Royal Cricket Blasters (RCB),3,Phanindra Y,3,7,0,0,42.86,not_out,,
 24376080,2026-05-02,2,Royal Cricket Blasters (RCB),4,Murali Cn Cricket,5,8,0,0,62.50,not_out,,
+24757708,2026-05-17,1,Weekend Warriors (WW),1,Vinod Reddy,3,8,0,0,37.50,caught,Pavan,(sub) Chinmay M
+24757708,2026-05-17,1,Weekend Warriors (WW),2,Srikanta Maddara,4,14,0,0,28.57,bowled,Mahesh,
+24757708,2026-05-17,1,Weekend Warriors (WW),3,RK,13,15,1,0,86.67,run_out,Mahesh,
+24757708,2026-05-17,1,Weekend Warriors (WW),4,Rajkumar Muddasu,7,7,1,0,100.00,bowled,Srinivas Vemulapalli,
+24757708,2026-05-17,1,Weekend Warriors (WW),5,Venkat A,0,1,0,0,0.00,caught,Srinivas Vemulapalli,(sub) Chinmay M
+24757708,2026-05-17,1,Weekend Warriors (WW),6,Sudhir Midtown,1,3,0,0,33.33,run_out,Vinay KS,
+24757708,2026-05-17,1,Weekend Warriors (WW),7,Subbu,4,8,0,0,50.00,not_out,,
+24757708,2026-05-17,1,Weekend Warriors (WW),8,Ashok adapala,4,5,0,0,80.00,caught,Pavan,Vinay KS
+24757708,2026-05-17,1,Weekend Warriors (WW),9,Lokesh kumar YC,2,1,0,0,200.00,not_out,,
+24757708,2026-05-17,2,Royal Cricket Blasters (RCB),1,Arun,7,10,1,0,70.00,caught,Venkat A,Vinod Reddy
+24757708,2026-05-17,2,Royal Cricket Blasters (RCB),2,Sridhar b,0,6,0,0,0.00,run_out,Sudheer Nidiginti,
+24757708,2026-05-17,2,Royal Cricket Blasters (RCB),3,Mahesh,0,1,0,0,0.00,stumped,Venkat A,Ashok adapala
+24757708,2026-05-17,2,Royal Cricket Blasters (RCB),4,Chinmay M,2,10,0,0,20.00,run_out,Ashok adapala,
+24757708,2026-05-17,2,Royal Cricket Blasters (RCB),5,Vinay KS,10,11,1,0,90.91,run_out,Srikanta Maddara,
+24757708,2026-05-17,2,Royal Cricket Blasters (RCB),6,Pavan,14,19,0,1,73.68,not_out,,
+24757708,2026-05-17,2,Royal Cricket Blasters (RCB),7,Manjunath H,1,1,0,0,100.00,run_out,Srikanta Maddara,
+24757708,2026-05-17,2,Royal Cricket Blasters (RCB),8,Gopi,0,2,0,0,0.00,not_out,,
+24757671,2026-05-17,1,Weekend Warriors (WW),1,Rajkumar Muddasu,5,5,0,0,100.00,caught,b Chinmay M,Sridhar
+24757671,2026-05-17,1,Weekend Warriors (WW),2,Ashok adapala,2,7,0,0,28.57,caught,Mahesh,Chinmay M
+24757671,2026-05-17,1,Weekend Warriors (WW),3,Srikanta Maddara,0,1,0,0,0.00,run_out,Deepak Kumar,
+24757671,2026-05-17,1,Weekend Warriors (WW),4,Sudhir Midtown,3,5,0,0,60.00,run_out,Vinay KS,
+24757671,2026-05-17,1,Weekend Warriors (WW),5,RK,4,12,0,0,33.33,retired_hurt,,
+24757671,2026-05-17,1,Weekend Warriors (WW),6,Vinod Reddy,8,5,1,0,160.00,caught,Arun,Gopi
+24757671,2026-05-17,1,Weekend Warriors (WW),7,Venkat A,8,13,0,0,61.54,not_out,,
+24757671,2026-05-17,1,Weekend Warriors (WW),8,Subbu,2,5,0,0,40.00,caught,Srinivas Vemulapalli,Vinay KS
+24757671,2026-05-17,1,Weekend Warriors (WW),9,Sudheer Nidiginti,7,8,0,0,87.50,not_out,,
+24757671,2026-05-17,2,Royal Cricket Blasters (RCB),1,Chinmay M,28,19,0,4,147.37,caught,Vinod Reddy,Ashok adapala
+24757671,2026-05-17,2,Royal Cricket Blasters (RCB),2,Vinay KS,16,17,0,1,94.12,run_out,Srikanta Maddara,
+24757671,2026-05-17,2,Royal Cricket Blasters (RCB),3,Sridhar b,0,1,0,0,0.00,caught,Vinod Reddy,Lokesh kumar YC
+24757671,2026-05-17,2,Royal Cricket Blasters (RCB),4,Manjunath H,7,15,0,0,46.67,run_out,Vinod Reddy,
+24757671,2026-05-17,2,Royal Cricket Blasters (RCB),5,Gopi,1,5,0,0,20.00,caught,Srikanta Maddara,Sudhir Midtown
+24757671,2026-05-17,2,Royal Cricket Blasters (RCB),6,Pavan,0,0,0,0,0.00,not_out,,
+24757671,2026-05-17,2,Royal Cricket Blasters (RCB),7,Arun,1,1,0,0,100.00,not_out,,
+24757625,2026-05-17,1,Weekend Warriors (WW),1,Subbu,1,4,0,0,25.00,caught,Srinivas Vemulapalli,Pavan
+24757625,2026-05-17,1,Weekend Warriors (WW),2,Srikanta Maddara,0,1,0,0,0.00,bowled,Mahesh,
+24757625,2026-05-17,1,Weekend Warriors (WW),3,RK,13,15,0,0,86.67,caught,Gopi,Arun
+24757625,2026-05-17,1,Weekend Warriors (WW),4,Vinod Reddy,10,13,0,1,76.92,caught,Pavan,Arun
+24757625,2026-05-17,1,Weekend Warriors (WW),5,Ashok adapala,0,1,0,0,0.00,caught,Pavan,Arun
+24757625,2026-05-17,1,Weekend Warriors (WW),6,Rajkumar Muddasu,7,6,0,1,116.67,run_out,Gopi,
+24757625,2026-05-17,1,Weekend Warriors (WW),7,Venkat A,6,11,1,0,54.55,not_out,,
+24757625,2026-05-17,1,Weekend Warriors (WW),8,Sudheer Nidiginti,2,8,0,0,25.00,run_out,Mahesh,
+24757625,2026-05-17,1,Weekend Warriors (WW),9,Sudhir Midtown,1,1,0,0,100.00,run_out,Sridhar b,
+24757625,2026-05-17,1,Weekend Warriors (WW),10,Lokesh kumar YC,0,0,0,0,0.00,run_out,Srinivas Vemulapalli,
+24757625,2026-05-17,2,Royal Cricket Blasters (RCB),1,Manjunath H,3,6,0,0,50.00,caught,Lokesh kumar YC,Sudheer Nidiginti
+24757625,2026-05-17,2,Royal Cricket Blasters (RCB),2,Chinmay M,0,1,0,0,0.00,caught,Sudhir Midtown,Sudhir Midtown
+24757625,2026-05-17,2,Royal Cricket Blasters (RCB),3,Sridhar b,2,5,0,0,40.00,caught,Sudhir Midtown,Rajkumar Muddasu
+24757625,2026-05-17,2,Royal Cricket Blasters (RCB),4,Vinay KS,10,8,0,1,125.00,run_out,Lokesh kumar YC,
+24757625,2026-05-17,2,Royal Cricket Blasters (RCB),5,Mahesh,5,11,0,0,45.45,not_out,,
+24757625,2026-05-17,2,Royal Cricket Blasters (RCB),6,Arun,5,7,1,0,71.43,run_out,Srikanta Maddara,
+24757625,2026-05-17,2,Royal Cricket Blasters (RCB),7,Pavan,23,21,3,1,109.52,not_out,,
