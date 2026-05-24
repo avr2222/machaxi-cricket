@@ -1,26 +1,26 @@
 player_id,name,team_id,team_name,total_match,innings,total_wickets,balls,highest_wicket,economy,SR,maidens,avg,runs,bowling_style,overs,dot_balls
-,Lokesh kumar YC,,Weekend Warriors (WW),26,26,22,336,3,6.09,15.27,2,15.5,341,-,56.0,197
-,Srinivas Vemulapalli,,Royal Cricket Blasters (RCB),23,23,21,300,2,5.52,14.29,1,13.14,276,-,50.0,171
-,Venkat A,,Weekend Warriors (WW),20,20,20,252,3,4.19,12.6,5,8.8,176,-,42.0,172
-,Vinod Reddy,,Weekend Warriors (WW),14,14,18,180,4,4.97,10.0,1,8.28,149,-,30.0,115
+,Lokesh kumar YC,,Weekend Warriors (WW),29,29,26,372,3,5.94,14.31,2,14.15,368,-,62.0,222
+,Srinivas Vemulapalli,,Royal Cricket Blasters (RCB),26,26,24,330,2,5.67,13.75,1,13.0,312,-,55.0,182
+,Vinod Reddy,,Weekend Warriors (WW),17,17,23,216,4,4.67,9.39,1,7.3,168,-,36.0,145
+,Venkat A,,Weekend Warriors (WW),23,23,21,288,3,4.29,13.71,5,9.81,206,-,48.0,197
 ,Mahesh Amaran,,Royal Cricket Blasters (RCB),10,10,17,132,5,5.05,7.76,1,6.53,111,-,22.0,81
+,Arun,,Royal Cricket Blasters (RCB),27,27,16,294,2,5.8,18.38,1,17.75,284,-,49.0,171
 ,Pabitra,,Weekend Warriors (WW),23,23,16,258,2,6.05,16.12,1,16.25,260,-,43.0,169
-,Arun,,Royal Cricket Blasters (RCB),24,24,14,270,2,5.78,19.29,1,18.57,260,-,45.0,153
-,Gopi,,Royal Cricket Blasters (RCB),19,19,13,216,3,6.86,16.62,2,19.0,247,-,36.0,118
+,Gopi,,Royal Cricket Blasters (RCB),22,22,14,246,3,6.51,17.57,2,19.07,267,-,41.0,136
+,Sudhir Midtown,,Weekend Warriors (WW),18,18,12,174,3,6.83,14.5,0,16.5,198,-,29.0,117
 ,Srikanta Maddara,,Weekend Warriors (WW),25,25,12,246,2,7.12,20.5,0,24.33,292,-,41.0,141
-,Sudhir Midtown,,Weekend Warriors (WW),15,15,10,150,3,6.96,15.0,0,17.4,174,-,25.0,101
-,Sudheer Nidiginti,,Weekend Warriors (WW),22,22,10,198,3,8.33,19.8,1,27.5,275,-,33.0,104
+,Sudheer Nidiginti,,Weekend Warriors (WW),24,24,11,210,3,8.11,19.09,1,25.82,284,-,35.0,113
 ,Pavan,,Royal Cricket Blasters (RCB),14,14,10,150,2,7.72,15.0,0,19.3,193,-,25.0,91
-,Leel,,Royal Cricket Blasters (RCB),17,17,8,132,2,7.91,16.5,1,21.75,174,-,22.0,77
+,Leel,,Royal Cricket Blasters (RCB),18,18,8,138,2,8.13,17.25,1,23.38,187,-,23.0,81
 ,shaik azeed,,Royal Cricket Blasters (RCB),11,11,8,126,2,6.76,15.75,1,17.75,142,-,21.0,81
 ,Jithin Tj,,Royal Cricket Blasters (RCB),18,18,8,186,2,5.48,23.25,5,21.25,170,-,31.0,116
 ,Mithun,,Royal Cricket Blasters (RCB),8,8,6,108,2,3.67,18.0,2,11.0,66,-,18.0,67
-,Mithun,,Weekend Warriors (WW),2,2,5,36,3,11.17,7.2,0,13.4,67,-,6.0,16
+,Mithun,,Weekend Warriors (WW),5,5,6,72,3,7.75,12.0,0,15.5,93,-,12.0,42
+,Mahesh,,Royal Cricket Blasters (RCB),9,9,5,102,1,5.18,20.4,0,17.6,88,-,17.0,60
 ,Vinay KS,,Royal Cricket Blasters (RCB),5,5,3,24,3,12.25,8.0,0,16.33,49,-,4.0,14
 ,Ashok,,Weekend Warriors (WW),7,7,3,42,2,10.0,14.0,0,23.33,70,-,7.0,26
+,Deepak Kumar,,Royal Cricket Blasters (RCB),9,9,3,78,1,5.77,26.0,0,25.0,75,-,13.0,43
 ,Firoz,,Weekend Warriors (WW),6,6,3,42,2,10.29,14.0,0,24.0,72,-,7.0,28
-,Mahesh,,Royal Cricket Blasters (RCB),6,6,3,66,1,5.0,22.0,0,18.33,55,-,11.0,43
-,Deepak Kumar,,Royal Cricket Blasters (RCB),7,7,2,54,1,6.44,27.0,0,29.0,58,-,9.0,29
 ,Manjunath,,Royal Cricket Blasters (RCB),1,1,2,6,2,6.0,3.0,0,3.0,6,-,1.0,5
 ,Murali Cn Cricket,,Royal Cricket Blasters (RCB),7,7,1,54,1,7.56,54.0,0,68.0,68,-,9.0,35
 ,Vishwanath Cricket,,Royal Cricket Blasters (RCB),1,1,1,6,1,7.0,6.0,0,7.0,7,-,1.0,2
