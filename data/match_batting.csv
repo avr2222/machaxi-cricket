@@ -554,3 +554,41 @@ match_id,match_date,innings,batting_team,position,player,runs,balls,fours,sixes,
 24934493,2026-05-24,2,Royal Cricket Blasters (RCB),7,Manjunath H,1,4,0,0,25.00,bowled,Vinod Reddy,
 24934493,2026-05-24,2,Royal Cricket Blasters (RCB),8,Chinmay M,0,2,0,0,0.00,caught,Vinod Reddy,Ashok adapala
 24934493,2026-05-24,2,Royal Cricket Blasters (RCB),9,Mahesh,10,8,0,1,125.00,not_out,,
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),1,Somasekhar v,7,2,0,1,350.00,run_out,Lokesh kumar YC,
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),2,Sridhar b,6,3,0,1,200.00,caught,Sudhir Midtown,Venkat A
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),3,Leel,3,6,0,0,50.00,caught,Vinod Reddy,Vinod Reddy
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),4,Reddy Virat,2,3,0,0,66.67,caught,Sudhir Midtown,Ashok adapala
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),5,Mahesh,8,11,0,0,72.73,caught,Sudhir Midtown,Rajkumar Muddasu
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),6,Chinmay M,13,7,0,2,185.71,caught,Venkat A,Ashok adapala
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),7,Vinay KS,3,9,0,0,33.33,bowled,Sudheer Nidiginti,
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),8,shaik azeed,3,5,0,0,60.00,run_out,Balaji Balaraju,
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),9,Puneeth,10,11,1,0,90.91,not_out,,
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),10,Manjunath H,1,2,0,0,50.00,run_out,Ashok adapala,
+25136743,2026-05-31,1,Royal Cricket Blasters (RCB),11,Kranthi 202 Midtown Raaga,0,0,0,0,0.00,run_out,Ashok adapala,
+25136743,2026-05-31,2,Weekend Warriors (WW),1,Balaji Balaraju,5,5,1,0,100.00,caught,Mahesh,Reddy Virat
+25136743,2026-05-31,2,Weekend Warriors (WW),2,Ashok adapala,14,8,0,1,175.00,run_out,Arun,
+25136743,2026-05-31,2,Weekend Warriors (WW),3,Srikanta Maddara,7,14,0,0,50.00,caught,Arun,Puneeth
+25136743,2026-05-31,2,Weekend Warriors (WW),4,seenu,12,10,0,1,120.00,run_out,Kranthi 202 Midtown Raaga,
+25136743,2026-05-31,2,Weekend Warriors (WW),5,Vinod Reddy,7,10,0,0,70.00,run_out,Jithin Tj,
+25136743,2026-05-31,2,Weekend Warriors (WW),6,Venkat A,11,13,1,0,84.62,run_out,Sridhar b,
+25136743,2026-05-31,2,Weekend Warriors (WW),7,Rajkumar Muddasu,1,1,0,0,100.00,not_out,,
+25136743,2026-05-31,2,Weekend Warriors (WW),8,Mithun,0,0,0,0,0.00,not_out,,
+25136688,2026-05-31,1,Royal Cricket Blasters (RCB),1,Leel,24,13,3,1,184.62,caught,Sudheer Nidiginti,Sudhir Midtown
+25136688,2026-05-31,1,Royal Cricket Blasters (RCB),2,Jithin Tj,7,6,0,1,116.67,caught,Lokesh kumar YC,Balaji Balaraju
+25136688,2026-05-31,1,Royal Cricket Blasters (RCB),3,Vinay KS,28,21,3,2,133.33,bowled,Sudheer Nidiginti,
+25136688,2026-05-31,1,Royal Cricket Blasters (RCB),4,Arun,38,22,1,4,172.73,run_out,Venkat A,
+25136688,2026-05-31,1,Royal Cricket Blasters (RCB),5,Reddy Virat,5,6,0,0,83.33,run_out,Lokesh kumar YC,
+25136688,2026-05-31,1,Royal Cricket Blasters (RCB),6,shaik azeed,2,4,0,0,50.00,run_out,Srikanta Maddara,
+25136688,2026-05-31,1,Royal Cricket Blasters (RCB),7,Manjunath H,1,1,0,0,100.00,not_out,,
+25136688,2026-05-31,1,Royal Cricket Blasters (RCB),8,Somasekhar v,0,1,0,0,0.00,run_out,Venkat A,
+25136688,2026-05-31,2,Weekend Warriors (WW),1,Vinod Reddy,18,23,1,2,78.26,retired_hurt,,
+25136688,2026-05-31,2,Weekend Warriors (WW),2,RK,0,1,0,0,0.00,caught,b Jithin Tj,Sridhar
+25136688,2026-05-31,2,Weekend Warriors (WW),3,Balaji Balaraju,8,9,1,0,88.89,caught,Reddy Virat,Reddy Virat
+25136688,2026-05-31,2,Weekend Warriors (WW),4,seenu,0,2,0,0,0.00,caught,Reddy Virat,Puneeth
+25136688,2026-05-31,2,Weekend Warriors (WW),5,Rajkumar Muddasu,0,1,0,0,0.00,caught,Reddy Virat,Manjunath H
+25136688,2026-05-31,2,Weekend Warriors (WW),6,Srikanta Maddara,8,13,0,1,61.54,caught,Gopi,Arun
+25136688,2026-05-31,2,Weekend Warriors (WW),7,Karthik Reddy,0,7,0,0,0.00,caught,Sridhar b,Somasekhar v
+25136688,2026-05-31,2,Weekend Warriors (WW),8,Subbu,0,6,0,0,0.00,bowled,shaik azeed,
+25136688,2026-05-31,2,Weekend Warriors (WW),9,Mithun,5,7,1,0,71.43,not_out,,
+25136688,2026-05-31,2,Weekend Warriors (WW),10,Ashok adapala,1,2,0,0,50.00,caught,shaik azeed,shaik azeed
+25136688,2026-05-31,2,Weekend Warriors (WW),11,Lokesh kumar YC,1,1,0,0,100.00,not_out,,

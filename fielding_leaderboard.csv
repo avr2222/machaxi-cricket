@@ -1,38 +1,40 @@
 player_id,name,team_id,team_name,total_match,catches,caught_behind,run_outs,assist_run_outs,stumpings,caught_and_bowl,total_catches,total_dismissal
-,Ashok adapala,,Weekend Warriors (WW),13,15,0,0,0,6,0,15,21
-,Manjunath H,,Royal Cricket Blasters (RCB),9,12,0,0,0,2,0,12,14
+,Ashok adapala,,Weekend Warriors (WW),14,17,0,0,0,6,0,17,23
+,Manjunath H,,Royal Cricket Blasters (RCB),10,13,0,0,0,2,0,13,15
 ,Pavan,,Royal Cricket Blasters (RCB),6,11,0,0,0,0,0,11,11
+,Arun,,Royal Cricket Blasters (RCB),8,10,0,0,0,0,0,10,10
 ,seenu,,Weekend Warriors (WW),6,9,0,0,0,1,0,9,10
-,Arun,,Royal Cricket Blasters (RCB),7,9,0,0,0,0,0,9,9
 ,Vinay KS,,Royal Cricket Blasters (RCB),7,8,0,0,0,0,0,8,8
 ,Murali Cn Cricket,,Royal Cricket Blasters (RCB),7,7,0,0,0,1,0,7,8
 ,Sudheer Nidiginti,,Weekend Warriors (WW),6,8,0,0,0,0,0,8,8
+,Sudhir Midtown,,Weekend Warriors (WW),5,7,0,0,0,0,0,7,7
 ,Jithin Tj,,Royal Cricket Blasters (RCB),5,4,0,0,0,3,0,4,7
-,Sudhir Midtown,,Weekend Warriors (WW),4,6,0,0,0,0,0,6,6
 ,Leel,,Royal Cricket Blasters (RCB),5,6,0,0,0,0,0,6,6
 ,Lokesh kumar YC,,Weekend Warriors (WW),4,6,0,0,0,0,0,6,6
 ,Ashok,,Weekend Warriors (WW),4,6,0,0,0,0,0,6,6
 ,Srikanta Maddara,,Weekend Warriors (WW),5,6,0,0,0,0,0,6,6
+,Vinod Reddy,,Weekend Warriors (WW),4,6,0,0,0,0,0,6,6
+,Rajkumar Muddasu,,Weekend Warriors (WW),5,5,0,0,0,0,0,5,5
+,Venkat A,,Weekend Warriors (WW),4,5,0,0,0,0,0,5,5
 ,Mahesh Reddy,,Weekend Warriors (WW),3,5,0,0,0,0,0,5,5
-,Vinod Reddy,,Weekend Warriors (WW),3,5,0,0,0,0,0,5,5
 ,Mithun,,Weekend Warriors (WW),3,4,0,0,0,0,0,4,4
 ,Deepak Kumar,,Royal Cricket Blasters (RCB),3,3,0,0,0,1,0,3,4
+,shaik azeed,,Royal Cricket Blasters (RCB),4,4,0,0,0,0,0,4,4
 ,RK,,Weekend Warriors (WW),4,3,0,0,0,1,0,3,4
-,Rajkumar Muddasu,,Weekend Warriors (WW),4,4,0,0,0,0,0,4,4
-,Venkat A,,Weekend Warriors (WW),3,4,0,0,0,0,0,4,4
+,Balaji Balaraju,,Weekend Warriors (WW),4,4,0,0,0,0,0,4,4
 ,Pabitra,,Weekend Warriors (WW),2,3,0,0,0,0,0,3,3
 ,Sarat Kumar,,Weekend Warriors (WW),2,3,0,0,0,0,0,3,3
-,shaik azeed,,Royal Cricket Blasters (RCB),3,3,0,0,0,0,0,3,3
 ,Kranthi 202 Midtown Raaga,,Royal Cricket Blasters (RCB),2,3,0,0,0,0,0,3,3
-,Balaji Balaraju,,Weekend Warriors (WW),3,3,0,0,0,0,0,3,3
 ,Vijay 208,,Royal Cricket Blasters (RCB),3,3,0,0,0,0,0,3,3
 ,Manjunath,,Royal Cricket Blasters (RCB),2,3,0,0,0,0,0,3,3
+,Sridhar,,,3,3,0,0,0,0,0,3,3
 ,Subbu,,Weekend Warriors (WW),1,2,0,0,0,0,0,2,2
 ,Ashik Jain,,Weekend Warriors (WW),2,2,0,0,0,0,0,2,2
 ,Firoz,,Weekend Warriors (WW),2,2,0,0,0,0,0,2,2
 ,(sub) Chinmay M,,,1,2,0,0,0,0,0,2,2
-,Sridhar,,,2,2,0,0,0,0,0,2,2
 ,Chinmay M,,Royal Cricket Blasters (RCB),2,2,0,0,0,0,0,2,2
+,Reddy Virat,,Royal Cricket Blasters (RCB),2,2,0,0,0,0,0,2,2
+,Puneeth,,Royal Cricket Blasters (RCB),2,2,0,0,0,0,0,2,2
 ,Mahesh Amaran,,Royal Cricket Blasters (RCB),1,1,0,0,0,0,0,1,1
 ,Karthik Reddy,,Weekend Warriors (WW),1,1,0,0,0,0,0,1,1
 ,GIRISH G,,Weekend Warriors (WW),1,1,0,0,0,0,0,1,1
@@ -40,3 +42,4 @@ player_id,name,team_id,team_name,total_match,catches,caught_behind,run_outs,assi
 ,Phanindra Y,,Royal Cricket Blasters (RCB),1,1,0,0,0,0,0,1,1
 ,Gopi,,Royal Cricket Blasters (RCB),1,1,0,0,0,0,0,1,1
 ,Mahesh,,Royal Cricket Blasters (RCB),1,1,0,0,0,0,0,1,1
+,Somasekhar v,,Royal Cricket Blasters (RCB),1,1,0,0,0,0,0,1,1
