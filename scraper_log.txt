@@ -1,47 +1,20 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-06-07 15:52:34
+Started: 2026-06-14 16:07:17
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
-There is no [linux64] chromedriver "148.0.7778.178" for browser google-chrome "148.0.7778" in cache
-There is no [linux64] chromedriver "148.0.7778.178" for browser google-chrome "148.0.7778" in cache
+There is no [linux64] chromedriver "149.0.7827.115" for browser google-chrome "149.0.7827" in cache
+There is no [linux64] chromedriver "149.0.7827.115" for browser google-chrome "149.0.7827" in cache
 Get LATEST chromedriver version for google-chrome
-WebDriver version 148.0.7778.178 selected
-Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/148.0.7778.178/linux64/chromedriver-linux64.zip
-About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/148.0.7778.178/linux64/chromedriver-linux64.zip
+WebDriver version 149.0.7827.115 selected
+Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.115/linux64/chromedriver-linux64.zip
+About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.115/linux64/chromedriver-linux64.zip
 Driver downloading response is 200
-Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/148.0.7778.178]
+Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/149.0.7827.115]
 [API] Discovered 35 matches via match/get-tournament-matches/3/-1/-1
 Matches found:   35
-Already scraped: 34
-To scrape now:   1
-Scraping 1 match(es)...
-[1/1] Match 25136783
-[API] get-scorecard 25136783 returned status=false
-    [API] empty — browser fallback: https://cricheroes.com/scorecard/25136783/machaxi-box-cricket-season-2/weekend-warriors-(ww)-vs-royal-cricket-blasters-(rcb)/scorecard
-    __NEXT_DATA__ empty — trying HTML tables
-    [HTML] 0 batting, 0 bowling rows
-    [commentary] 0 deliveries, 0 dot balls
-Scraped: 1 matches | 0 batting | 0 bowling | 0 deliveries | 0 errors
-Writing raw CSV files...
-  Wrote   35 rows -> cricheroes_data/tournament_matches_summary.csv
-  Wrote  593 rows -> cricheroes_data/tournament_all_batting.csv
-  Wrote  398 rows -> cricheroes_data/tournament_all_bowling.csv
-  Wrote 4930 rows -> cricheroes_data/tournament_all_balls.csv
-  Wrote 1347 rows -> cricheroes_data/tournament_dot_ball_analysis.csv
-Writing dashboard CSVs...
-  Wrote   35 rows -> data/match_meta.csv
-  Wrote  593 rows -> data/match_batting.csv
-  Wrote  398 rows -> data/match_bowling.csv
-  Wrote    2 rows -> points_table.csv
-  Points table:
-    #1 WW  17W 15L  36pts  NRR -0.432
-    #2 RCB  15W 17L  32pts  NRR +0.432
-  Wrote   49 rows -> batting_leaderboard.csv
-  Wrote   33 rows -> bowling_leaderboard.csv
-  Wrote   44 rows -> fielding_leaderboard.csv
-  Wrote   47 rows -> mvp_leaderboard.csv
-  Wrote data/tournament_config.json
-Fetching player career stats from CricHeroes…
-Done: 2026-06-07 15:52:47
+Already scraped: 35
+To scrape now:   0
+Nothing new to scrape. All matches are up to date.
+Done: 2026-06-14 16:07:26
