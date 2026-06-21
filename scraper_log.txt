@@ -1,20 +1,20 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-06-14 16:07:17
+Started: 2026-06-21 16:15:30
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
-There is no [linux64] chromedriver "149.0.7827.115" for browser google-chrome "149.0.7827" in cache
-There is no [linux64] chromedriver "149.0.7827.115" for browser google-chrome "149.0.7827" in cache
+There is no [linux64] chromedriver "149.0.7827.155" for browser google-chrome "149.0.7827" in cache
+There is no [linux64] chromedriver "149.0.7827.155" for browser google-chrome "149.0.7827" in cache
 Get LATEST chromedriver version for google-chrome
-WebDriver version 149.0.7827.115 selected
-Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.115/linux64/chromedriver-linux64.zip
-About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.115/linux64/chromedriver-linux64.zip
+WebDriver version 149.0.7827.155 selected
+Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.155/linux64/chromedriver-linux64.zip
+About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.155/linux64/chromedriver-linux64.zip
 Driver downloading response is 200
-Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/149.0.7827.115]
+Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/149.0.7827.155]
 [API] Discovered 35 matches via match/get-tournament-matches/3/-1/-1
 Matches found:   35
 Already scraped: 35
 To scrape now:   0
 Nothing new to scrape. All matches are up to date.
-Done: 2026-06-14 16:07:26
+Done: 2026-06-21 16:15:40
