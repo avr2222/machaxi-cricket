@@ -1,6 +1,6 @@
 ============================================================
 CricHeroes Tournament Scraper
-Started: 2026-10-18 17:29:30
+Started: 2026-10-25 17:46:33
 ============================================================
 ====== WebDriver manager ======
 Get LATEST chromedriver version for google-chrome
@@ -17,4 +17,4 @@ Matches found:   35
 Already scraped: 35
 To scrape now:   0
 Nothing new to scrape. All matches are up to date.
-Done: 2026-10-18 17:29:33
+Done: 2026-10-25 17:46:36
